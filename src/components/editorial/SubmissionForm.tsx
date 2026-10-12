@@ -1,21 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { CURSOS_LISTA, salvarArtigoSubmetido } from '@/lib/data/mock-articles';
-import {
-  comprimirImagemParaWebp,
-  formatarBytes,
-  ResultadoCompressao,
-} from '@/lib/storage/image-compression';
-import {
-  salvarRascunho,
-  carregarRascunho,
-  limparRascunho,
-} from '@/lib/storage/draft-storage';
-import { esquemasSubmissaoArtigo } from '@/lib/utils/validations';
+import React from 'react';
+import { CURSOS_LISTA } from '@/lib/data/mock-articles';
+import { formatarBytes } from '@/lib/storage/image-compression';
 import { SiglaCurso } from '@/types/editorial';
 import { MarkdownRenderer } from '@/components/editorial/MarkdownRenderer';
+import { useArtigoSubmission } from '@/hooks/useArtigoSubmission';
 import {
   UploadCloud,
   CheckCircle,
@@ -30,159 +20,39 @@ import {
 } from 'lucide-react';
 
 export default function SubmissionForm() {
-  const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const {
+    titulo,
+    setTitulo,
+    resumo,
+    setResumo,
+    corpoMarkdown,
+    setCorpoMarkdown,
+    cursoSigla,
+    setCursoSigla,
+    autorNome,
+    setAutorNome,
+    autorMatricula,
+    setAutorMatricula,
+    coautores,
+    setCoautores,
+    linkExternoMidia,
+    setLinkExternoMidia,
 
-  // Estados dos campos do formulário
-  const [titulo, setTitulo] = useState('');
-  const [resumo, setResumo] = useState('');
-  const [corpoMarkdown, setCorpoMarkdown] = useState('');
-  const [cursoSigla, setCursoSigla] = useState<SiglaCurso>('SIS');
-  const [autorNome, setAutorNome] = useState('');
-  const [autorMatricula, setAutorMatricula] = useState('');
-  const [coautores, setCoautores] = useState('');
-  const [linkExternoMidia, setLinkExternoMidia] = useState('');
+    fileInputRef,
+    processandoImagem,
+    resultadoCompressao,
+    erroImagem,
+    handleSelecionarArquivo,
 
-  // Estados de imagem e compressão
-  const [processandoImagem, setProcessandoImagem] = useState(false);
-  const [resultadoCompressao, setResultadoCompressao] = useState<ResultadoCompressao | null>(null);
-  const [erroImagem, setErroImagem] = useState<string | null>(null);
-
-  // Estados de submissão e validação
-  const [errosValidacao, setErrosValidacao] = useState<Record<string, string>>({});
-  const [submetendo, setSubmetendo] = useState(false);
-  const [rascunhoCarregado, setRascunhoCarregado] = useState(false);
-  const [abaPreview, setAbaPreview] = useState<'editor' | 'preview'>('editor');
-
-  // Carregar rascunho anterior da sessão (Modo Computador Compartilhado)
-  useEffect(() => {
-    const rascunho = carregarRascunho();
-    if (rascunho) {
-      if (rascunho.titulo) setTitulo(rascunho.titulo);
-      if (rascunho.resumo) setResumo(rascunho.resumo);
-      if (rascunho.corpoMarkdown) setCorpoMarkdown(rascunho.corpoMarkdown);
-      if (rascunho.cursoSigla) setCursoSigla(rascunho.cursoSigla as SiglaCurso);
-      if (rascunho.autorNome) setAutorNome(rascunho.autorNome);
-      if (rascunho.autorMatricula) setAutorMatricula(rascunho.autorMatricula);
-      if (rascunho.coautores) setCoautores(rascunho.coautores);
-      if (rascunho.linkExternoMidia) setLinkExternoMidia(rascunho.linkExternoMidia);
-      setRascunhoCarregado(true);
-    }
-  }, []);
-
-  // Salvar rascunho automaticamente a cada alteração
-  useEffect(() => {
-    salvarRascunho({
-      titulo,
-      resumo,
-      corpoMarkdown,
-      cursoSigla,
-      autorNome,
-      autorMatricula,
-      coautores,
-      linkExternoMidia,
-    });
-  }, [titulo, resumo, corpoMarkdown, cursoSigla, autorNome, autorMatricula, coautores, linkExternoMidia]);
-
-  // Handler de seleção de imagem com pipeline de compressão no navegador
-  async function handleSelecionarArquivo(e: React.ChangeEvent<HTMLInputElement>) {
-    const arquivo = e.target.files?.[0];
-    if (!arquivo) return;
-
-    setErroImagem(null);
-    setProcessandoImagem(true);
-
-    try {
-      const res = await comprimirImagemParaWebp(arquivo, 1200, 0.8);
-      setResultadoCompressao(res);
-      // Limpa erro de imagem se houver
-      setErrosValidacao((prev) => {
-        const novo = { ...prev };
-        delete novo.capaBase64Webp;
-        return novo;
-      });
-    } catch (err: any) {
-      setErroImagem(err?.message || 'Falha ao processar e comprimir a imagem.');
-      setResultadoCompressao(null);
-    } finally {
-      setProcessandoImagem(false);
-    }
-  }
-
-  // Handler de descarte de rascunho
-  function handleLimparRascunho() {
-    if (confirm('Tem certeza que deseja descartar este rascunho e limpar os campos?')) {
-      limparRascunho();
-      setTitulo('');
-      setResumo('');
-      setCorpoMarkdown('');
-      setAutorNome('');
-      setAutorMatricula('');
-      setCoautores('');
-      setLinkExternoMidia('');
-      setResultadoCompressao(null);
-      setRascunhoCarregado(false);
-      setErrosValidacao({});
-    }
-  }
-
-  // Envio da submissão com validação
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setErrosValidacao({});
-
-    const dados = {
-      titulo,
-      resumo,
-      corpoMarkdown,
-      cursoSigla,
-      autorNome,
-      autorMatricula,
-      coautores: coautores || undefined,
-      linkExternoMidia: linkExternoMidia || undefined,
-      capaBase64Webp: resultadoCompressao?.dataUrlWebp || '',
-    };
-
-    const validacao = esquemasSubmissaoArtigo.safeParse(dados);
-
-    if (!validacao.success) {
-      const erros: Record<string, string> = {};
-      validacao.error.errors.forEach((err) => {
-        if (err.path[0]) {
-          erros[err.path[0].toString()] = err.message;
-        }
-      });
-      setErrosValidacao(erros);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-
-    setSubmetendo(true);
-
-    try {
-      salvarArtigoSubmetido({
-        titulo,
-        resumo,
-        corpoMarkdown,
-        cursoSigla,
-        autorNome,
-        autorMatricula,
-        coautores: coautores || undefined,
-        linkExternoMidia: linkExternoMidia || undefined,
-        capaBase64Webp: resultadoCompressao!.dataUrlWebp,
-        capaTamanhoBytes: resultadoCompressao!.tamanhoComprimidoBytes,
-      });
-
-      // Limpeza de rascunho pós-envio (Shared Computer Defense)
-      limparRascunho();
-
-      // Redireciona para o painel do autor
-      router.push('/meus-artigos?status=sucesso');
-    } catch (err) {
-      alert('Ocorreu um erro ao registrar a submissão. Tente novamente.');
-      setSubmetendo(false);
-    }
-  }
+    errosValidacao,
+    submetendo,
+    rascunhoCarregado,
+    abaPreview,
+    setAbaPreview,
+    handleLimparRascunho,
+    handleCancelar,
+    handleSubmit,
+  } = useArtigoSubmission();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -569,7 +439,7 @@ export default function SubmissionForm() {
       <div className="flex items-center justify-between pt-4 border-t border-slate-200">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={handleCancelar}
           className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
         >
           Cancelar
