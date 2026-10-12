@@ -14,7 +14,6 @@ import {
   Building,
   Search,
 } from 'lucide-react';
-import { PushNotificationToggle } from '@/components/seguranca/PushNotificationToggle';
 
 export default function PainelCoordenacaoPage() {
   const {
@@ -52,10 +51,7 @@ export default function PainelCoordenacaoPage() {
           </div>
         )}
 
-        {/* Barra de Notificações e Modo Terminal */}
-        <div className="flex justify-end">
-          <PushNotificationToggle />
-        </div>
+
 
         {/* Topo Institucional */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

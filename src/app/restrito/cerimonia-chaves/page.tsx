@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { CUSTODIANTES_INSTITUCIONAIS } from '@/lib/crypto/shamir-secret-sharing';
 import CerimoniaChavesModal from '@/components/seguranca/CerimoniaChavesModal';
-import { PushNotificationToggle } from '@/components/seguranca/PushNotificationToggle';
 
 export default function CerimoniaChavesPage() {
   const [modalAberto, setModalAberto] = useState(false);
@@ -23,17 +22,15 @@ export default function CerimoniaChavesPage() {
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        {/* Topo de Navegação e Controles */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Topo de Navegação */}
+        <div>
           <Link
             href="/restrito"
             className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#0B3B60] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            <span>Voltar ao Ambiente Administrativo</span>
+            <span>Voltar ao Painel Geral da Direção</span>
           </Link>
-
-          <PushNotificationToggle />
         </div>
 
         {/* Banner Institucional da Cerimônia */}

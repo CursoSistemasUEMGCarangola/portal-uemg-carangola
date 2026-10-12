@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
 import GabineteDespachoModal from '@/components/ouvidoria/GabineteDespachoModal';
 import { OuvidoriaMetricasCards } from '@/components/ouvidoria/OuvidoriaMetricasCards';
@@ -12,12 +11,7 @@ import {
   Search,
   CheckCircle,
   Clock,
-  ExternalLink,
-  Scale,
-  FileText,
-  Key,
 } from 'lucide-react';
-import { PushNotificationToggle } from '@/components/seguranca/PushNotificationToggle';
 
 export default function GabineteOuvidoriaPage() {
   const {
@@ -48,46 +42,18 @@ export default function GabineteOuvidoriaPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Cabeçalho da Página */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60]">
-                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Gabinete da Direção Geral • Ouvidoria Segura</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
-                Painel do Gabinete da Direção
-              </h1>
-              <p className="text-sm text-slate-600 max-w-2xl leading-relaxed">
-                Gestão com criptografia assimétrica de envelope, despacho oficial e homologação
-                desacoplada para o Mural de Transparência da UEMG Carangola.
-              </p>
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60]">
+              <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Gabinete da Direção Geral • Ouvidoria Segura</span>
             </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <PushNotificationToggle />
-              <Link
-                href="/restrito/cerimonia-chaves"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
-              >
-                <Key className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-                <span>Cerimônia de Chaves</span>
-              </Link>
-              <Link
-                href="/mural-de-transparencia"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#0B3B60] bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors"
-              >
-                <Scale className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
-                <span>Mural Público</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-              </Link>
-              <Link
-                href="/restrito/publicacoes"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
-              >
-                <FileText className="w-4 h-4 text-slate-600" aria-hidden="true" />
-                <span>Painel de Publicações</span>
-              </Link>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
+              Painel do Gabinete da Direção
+            </h1>
+            <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
+              Gestão com criptografia assimétrica de envelope, despacho oficial e homologação
+              desacoplada para o Mural de Transparência da UEMG Carangola.
+            </p>
           </div>
 
           {/* Cards de Métricas */}
