@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  Building,
-  BookOpen,
-  Key,
   ExternalLink,
   ShieldCheck,
 } from 'lucide-react';
@@ -19,24 +16,6 @@ const ITENS_MENU = [
     descricao: 'Visão executiva e atribuições',
     href: '/restrito',
     icone: LayoutDashboard,
-  },
-  {
-    rotulo: 'Gabinete & Ouvidoria',
-    descricao: 'Despachos e manifestações',
-    href: '/restrito/ouvidoria',
-    icone: Building,
-  },
-  {
-    rotulo: 'Coordenações & Cursos',
-    descricao: 'Curadoria de artigos acadêmicos',
-    href: '/restrito/publicacoes',
-    icone: BookOpen,
-  },
-  {
-    rotulo: 'Cerimônia de Chaves',
-    descricao: 'Custódia criptográfica Shamir',
-    href: '/restrito/cerimonia-chaves',
-    icone: Key,
   },
 ];
 
