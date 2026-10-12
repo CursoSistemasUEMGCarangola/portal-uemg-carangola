@@ -25,7 +25,7 @@ export const PROTOCOLOS_SEED: ProtocoloInterno[] = [
     codigoProtocolo: '#CAR-2026-8942',
     tokenHash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', // Hash conhecido de teste
     tipo: 'solicitacao',
-    cursoSigla: 'SIN',
+    cursoSigla: 'SIS',
     isAnonimo: false,
     envelopeCifrado: {
       ciphertextBase64: 'U2FsdGVkX1+vupppZksvRf5pq5g5XjO2',

@@ -53,7 +53,7 @@ export const CURSOS_LISTA: Curso[] = [
   {
     id: 'c8',
     nome: 'Sistemas de Informação',
-    sigla: 'SIN',
+    sigla: 'SIS',
     descricao: 'Bacharelado em Sistemas de Informação — Engenharia de software, governança de TI e inovação tecnológica.',
     corBadge: 'bg-blue-100 text-blue-800 border-blue-300',
   },
@@ -161,9 +161,9 @@ Ao ancorar o ciclo de vida do software no Projeto de Extensão Contínuo do curs
 Mais do que um portal web, a plataforma consolida-se como um laboratório vivo de soberania digital, onde a teoria de algoritmos, a segurança da informação e a ética pública convergem para fortalecer a cidadania universitária e a memória acadêmica da UEMG na Zona da Mata Mineira.
 `,
     capaUrl: '/icons/icon-512.png',
-    curso: CURSOS_LISTA[7], // SIN
+    curso: CURSOS_LISTA[7], // SIS
     autorNome: 'Prof. Me. Nilton Freitas Junior',
-    autorMatricula: 'SI-UEMG-DOC-01',
+    autorMatricula: 'SIS-UEMG-DOC-01',
     autorRole: 'Docente / Coordenador',
     coautores: 'Colegiado de Sistemas de Informação (UEMG Carangola)',
     linkExternoMidia: 'https://github.com/niltonfjunior2/portal-uemg-carangola',
@@ -374,9 +374,9 @@ A articulação entre universidade pública e gestão municipal de assistência 
     
 A Lei Geral de Proteção de Dados (Lei 13.709/2018) impõe responsabilidades objetivas às autarquias estaduais. Este trabalho avalia mecanismos de segregação de privilégios e criptografia de ponta a ponta.`,
     capaUrl: '/icons/icon-512.png',
-    curso: CURSOS_LISTA[7], // SIN
+    curso: CURSOS_LISTA[7], // SIS
     autorNome: 'Gabriel Silva Ramos',
-    autorMatricula: '2023-SIN-0842',
+    autorMatricula: '2023-SIS-0842',
     autorRole: 'Discente',
     coautores: 'Prof. Me. Lucas Ferreira Alvim (Orientador)',
     tempoLeituraMinutos: 4,

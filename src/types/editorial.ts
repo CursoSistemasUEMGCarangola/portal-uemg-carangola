@@ -1,4 +1,4 @@
-export type SiglaCurso = 'BIO' | 'GEO' | 'HIS' | 'LET' | 'MAT' | 'PED' | 'SSO' | 'SIN';
+export type SiglaCurso = 'BIO' | 'GEO' | 'HIS' | 'LET' | 'MAT' | 'PED' | 'SSO' | 'SIS';
 
 export interface Curso {
   id: string;

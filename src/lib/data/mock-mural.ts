@@ -13,7 +13,7 @@ export const MURAL_SEED: ItemMuralPublico[] = [
   {
     id: 'mural-seed-1',
     protocoloReferencia: '#CAR-2026-8942',
-    cursoSigla: 'SIN',
+    cursoSigla: 'SIS',
     tipo: 'solicitacao',
     manifestacaoResumo:
       'Demanda da comunidade discente solicitando ampliação das bancadas e modernização dos computadores no Laboratório de Práticas Tecnológicas da unidade.',

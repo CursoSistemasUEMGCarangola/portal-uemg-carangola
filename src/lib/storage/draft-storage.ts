@@ -25,7 +25,7 @@ export function salvarRascunho(dados: Partial<RascunhoArtigo>): void {
       titulo: dados.titulo || '',
       resumo: dados.resumo || '',
       corpoMarkdown: dados.corpoMarkdown || '',
-      cursoSigla: dados.cursoSigla || 'SIN',
+      cursoSigla: dados.cursoSigla || 'SIS',
       autorNome: dados.autorNome || '',
       autorMatricula: dados.autorMatricula || '',
       coautores: dados.coautores || '',

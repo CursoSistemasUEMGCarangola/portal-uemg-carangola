@@ -37,7 +37,7 @@ export default function SubmissionForm() {
   const [titulo, setTitulo] = useState('');
   const [resumo, setResumo] = useState('');
   const [corpoMarkdown, setCorpoMarkdown] = useState('');
-  const [cursoSigla, setCursoSigla] = useState<SiglaCurso>('SIN');
+  const [cursoSigla, setCursoSigla] = useState<SiglaCurso>('SIS');
   const [autorNome, setAutorNome] = useState('');
   const [autorMatricula, setAutorMatricula] = useState('');
   const [coautores, setCoautores] = useState('');
@@ -266,7 +266,7 @@ export default function SubmissionForm() {
               required
               value={autorMatricula}
               onChange={(e) => setAutorMatricula(e.target.value)}
-              placeholder="Ex: 2024-SIN-1029 ou MASP-123456"
+              placeholder="Ex: 2024-SIS-1029 ou MASP-123456"
               className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] focus:border-transparent outline-none"
             />
             {errosValidacao.autorMatricula && (

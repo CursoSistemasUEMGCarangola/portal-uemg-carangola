@@ -24,7 +24,7 @@ import {
 import { PushNotificationToggle } from '@/components/seguranca/PushNotificationToggle';
 
 export default function PainelCoordenacaoPage() {
-  const [cursoSelecionado, setCursoSelecionado] = useState<SiglaCurso>('SIN');
+  const [cursoSelecionado, setCursoSelecionado] = useState<SiglaCurso>('SIS');
   const [artigos, setArtigos] = useState<Artigo[]>([]);
   const [filtroAba, setFiltroAba] = useState<'pendentes' | 'todos' | 'publicados'>('pendentes');
   const [busca, setBusca] = useState('');

@@ -12,7 +12,7 @@ export const esquemasSubmissaoArtigo = z.object({
   corpoMarkdown: z
     .string()
     .min(50, 'O corpo do artigo deve conter pelo menos 50 caracteres formatados.'),
-  cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIN'], {
+  cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIS'], {
     errorMap: () => ({ message: 'Selecione um curso válido da UEMG Carangola.' }),
   }),
   autorNome: z
