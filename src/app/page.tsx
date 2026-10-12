@@ -14,31 +14,31 @@ export default function HomePage() {
     <div className="w-full">
       {/* Hero Institucional com Fachada da Unidade como Fundo */}
       <section className="relative overflow-hidden bg-[#002244] text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-blue-900">
-        {/* Imagem de Fundo (Fachada UEMG Carangola) com Visibilidade Real e Foco Arquitetônico */}
+        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade em 70% */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/UEMG-fachada-2.jpg"
             alt="Fachada UEMG Carangola"
             fill
-            className="object-cover object-center opacity-60"
+            className="object-cover object-center opacity-70"
             priority
           />
-          {/* Overlay inteligente: denso à esquerda protegendo o texto e aberto à direita destacando a fachada */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#001c38]/95 via-[#002244]/80 to-[#002244]/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-[#002244]/30" />
+          {/* Overlay azul com mais transparência para favorecer a visibilidade da fachada */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#001c38]/85 via-[#002244]/65 to-[#002244]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-[#001833]/40" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold mb-6 border border-blue-400/30 backdrop-blur-sm">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/25 text-blue-200 text-xs font-semibold mb-6 border border-blue-400/40 backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
             <span>Unidade Acadêmica de Carangola — Zona da Mata Mineira</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-sm">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-md">
             Divulgação Científica e Governança Participativa em um Ponto Único
           </h1>
 
-          <p className="text-base sm:text-xl text-slate-200 max-w-3xl leading-relaxed mb-10 drop-shadow-sm">
+          <p className="text-base sm:text-xl text-slate-100 max-w-3xl leading-relaxed mb-10 drop-shadow-md">
             Conectamos a produção acadêmica dos nossos 8 cursos de graduação ao canal direto
             de diálogo com a Direção Geral, assegurando transparência ativa e engajamento comunitário.
           </p>
