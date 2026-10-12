@@ -14,18 +14,18 @@ export default function HomePage() {
     <div className="w-full">
       {/* Hero Institucional com Fachada da Unidade como Fundo */}
       <section className="relative overflow-hidden bg-[#002244] text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-blue-900">
-        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade Suave e Mistura Harmônica */}
+        {/* Imagem de Fundo (Fachada UEMG Carangola) com Visibilidade Real e Foco Arquitetônico */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/UEMG-fachada-2.jpg"
             alt="Fachada UEMG Carangola"
             fill
-            className="object-cover object-center opacity-20 mix-blend-luminosity scale-105"
+            className="object-cover object-center opacity-60"
             priority
           />
-          {/* Overlay com gradiente institucional profundo para legibilidade impecável dos textos */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#002244]/95 via-[#002244]/85 to-[#0B3B60]/90" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-transparent opacity-80" />
+          {/* Overlay inteligente: denso à esquerda protegendo o texto e aberto à direita destacando a fachada */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#001c38]/95 via-[#002244]/80 to-[#002244]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-[#002244]/30" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
