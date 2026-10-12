@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookOpen, MessageSquare, Shield, CheckCircle2, ArrowRight, Sparkles, Building2 } from 'lucide-react';
+import { BookOpen, MessageSquare, Shield, CheckCircle2, ArrowRight, Building2 } from 'lucide-react';
 import { ARTIGOS_MOCK, CURSOS_LISTA } from '@/lib/data/mock-articles';
 import { FeaturedArticle } from '@/components/editorial/FeaturedArticle';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
@@ -29,11 +29,6 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/25 text-blue-200 text-xs font-semibold mb-6 border border-blue-400/40 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
-            <span>Unidade Acadêmica de Carangola — Zona da Mata Mineira</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-md">
             Divulgação Científica e Governança Participativa em um Ponto Único
           </h1>
