@@ -51,10 +51,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Intercepta rotas excluindo arquivos estáticos e de mídia
-     */
-    '/((?!_next/static|_next/image|favicon.ico|images/|icons/|robots.txt|sitemap.xml).*)',
-  ],
+  matcher: ['/restrito/:path*'],
 };
