@@ -7,15 +7,15 @@ import { SiglaCurso } from '@/types/editorial';
 import { FeaturedArticle } from '@/components/editorial/FeaturedArticle';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
 
-const FAIXA_CORES: Record<SiglaCurso, { dot: string; borderTop: string }> = {
-  BIO: { dot: 'bg-emerald-600', borderTop: 'border-t-emerald-600' },
-  GEO: { dot: 'bg-amber-600', borderTop: 'border-t-amber-600' },
-  HIS: { dot: 'bg-purple-600', borderTop: 'border-t-purple-600' },
-  LET: { dot: 'bg-violet-600', borderTop: 'border-t-violet-600' },
-  MAT: { dot: 'bg-cyan-600', borderTop: 'border-t-cyan-600' },
-  PED: { dot: 'bg-sky-500', borderTop: 'border-t-sky-500' },
-  SSO: { dot: 'bg-teal-700', borderTop: 'border-t-teal-700' },
-  SIS: { dot: 'bg-[#0B3B60]', borderTop: 'border-t-[#0056B3]' },
+const FAIXA_CORES: Record<SiglaCurso, { borderTop: string }> = {
+  BIO: { borderTop: 'border-t-emerald-600' },
+  GEO: { borderTop: 'border-t-amber-600' },
+  HIS: { borderTop: 'border-t-purple-600' },
+  LET: { borderTop: 'border-t-violet-600' },
+  MAT: { borderTop: 'border-t-cyan-600' },
+  PED: { borderTop: 'border-t-sky-500' },
+  SSO: { borderTop: 'border-t-teal-700' },
+  SIS: { borderTop: 'border-t-[#0056B3]' },
 };
 
 export default function HomePage() {
@@ -201,14 +201,6 @@ export default function HomePage() {
                 <h3 className="text-sm sm:text-base font-extrabold leading-snug tracking-tight">
                   {curso.nome}
                 </h3>
-
-                <div className="flex items-center gap-1.5 mt-3 pt-2.5 border-t border-current/15 text-[11px] font-semibold opacity-90">
-                  <span
-                    className={`w-2.5 h-2.5 rounded-full ${estiloFaixa.dot} shadow-xs ring-1 ring-white shrink-0`}
-                    aria-hidden="true"
-                  />
-                  <span className="truncate">Faixa: {curso.corFaixa}</span>
-                </div>
               </Link>
             );
           })}
