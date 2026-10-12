@@ -14,26 +14,25 @@ export default function HomePage() {
     <div className="w-full">
       {/* Hero Institucional com Fachada da Unidade como Fundo */}
       <section className="relative overflow-hidden bg-[#002244] text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-blue-900">
-        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade em 90% */}
+        {/* Imagem de Fundo (Fachada UEMG Carangola) com Iluminação e Nitidez Total */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/UEMG-fachada-2.jpg"
             alt="Fachada UEMG Carangola"
             fill
-            className="object-cover object-center opacity-90"
+            className="object-cover object-center"
             priority
           />
-          {/* Overlay azul com mais transparência para favorecer a visibilidade da fachada */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#001c38]/85 via-[#002244]/65 to-[#002244]/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-[#001833]/40" />
+          {/* Degradê suave e localizado apenas à esquerda: protege os textos sem encobrir a fachada */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#001428]/80 via-[#001c38]/45 to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-md">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
             Divulgação Científica e Governança Participativa em um Ponto Único
           </h1>
 
-          <p className="text-base sm:text-xl text-slate-100 max-w-3xl leading-relaxed mb-10 drop-shadow-md">
+          <p className="text-base sm:text-xl text-white max-w-3xl leading-relaxed mb-10 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
             Conectamos a produção acadêmica dos nossos 8 cursos de graduação ao canal direto
             de diálogo com a Direção Geral, assegurando transparência ativa e engajamento comunitário.
           </p>
