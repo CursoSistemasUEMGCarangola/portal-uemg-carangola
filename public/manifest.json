@@ -1,0 +1,23 @@
+{
+  "name": "Portal UEMG Carangola — Publicações Acadêmicas & Canal da Direção",
+  "short_name": "UEMG Carangola",
+  "description": "Plataforma institucional de divulgação científica e canal de diálogo participativo da UEMG Unidade Carangola",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F9FC",
+  "theme_color": "#0B3B60",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "government", "news"]
+}
