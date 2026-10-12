@@ -102,16 +102,20 @@ function hexParaBytes(hex: string): Uint8Array {
 }
 
 async function calcularSha256Hex(dados: Uint8Array): Promise<string> {
-  if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', dados as unknown as BufferSource);
+  if (typeof globalThis !== 'undefined' && globalThis.crypto?.subtle) {
+    const hashBuffer = await globalThis.crypto.subtle.digest('SHA-256', dados as unknown as BufferSource);
     return bytesParaHex(new Uint8Array(hashBuffer));
   }
-  // Fallback determinístico caso fora do browser
-  let h = 0x811c9dc5;
-  for (let i = 0; i < dados.length; i++) {
-    h = Math.imul(h ^ dados[i], 0x01000193);
+  throw new Error('Ambiente de execução sem suporte à Web Crypto API para cálculo de SHA-256.');
+}
+
+function obterBytesAleatoriosSeguros(tamanho: number): Uint8Array {
+  const bytes = new Uint8Array(tamanho);
+  if (typeof globalThis !== 'undefined' && globalThis.crypto?.getRandomValues) {
+    globalThis.crypto.getRandomValues(bytes);
+    return bytes;
   }
-  return (h >>> 0).toString(16).padStart(8, '0');
+  throw new Error('Ambiente sem gerador de números pseudoaleatórios criptograficamente seguro (CSPRNG).');
 }
 
 /**
@@ -133,15 +137,8 @@ export async function executarCerimoniaParticaoShamir(
   const share2Bytes = new Uint8Array(tamanho);
   const share3Bytes = new Uint8Array(tamanho);
 
-  // Array de bytes aleatórios com entropia criptográfica
-  const coeficientesAleatorios = new Uint8Array(tamanho);
-  if (typeof window !== 'undefined' && window.crypto) {
-    window.crypto.getRandomValues(coeficientesAleatorios);
-  } else {
-    for (let i = 0; i < tamanho; i++) {
-      coeficientesAleatorios[i] = Math.floor(Math.random() * 255) + 1;
-    }
-  }
+  // Array de bytes aleatórios gerados estritamente via CSPRNG
+  const coeficientesAleatorios = obterBytesAleatoriosSeguros(tamanho);
 
   for (let i = 0; i < tamanho; i++) {
     const s = segredoBytes[i];

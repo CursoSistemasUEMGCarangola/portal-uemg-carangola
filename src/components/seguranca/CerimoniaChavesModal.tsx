@@ -1,24 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import {
-  CUSTODIANTES_INSTITUCIONAIS,
-  executarCerimoniaParticaoShamir,
-  recomporSegredoDeFragmentos,
-} from '@/lib/crypto/shamir-secret-sharing';
-import {
-  FragmentoChaveShamir,
-  ResultadoCerimoniaParticao,
-  ResultadoRecomposicaoChave,
-  CustodianteInfo,
-} from '@/types/cerimonia';
+import React, { useEffect } from 'react';
+import { CUSTODIANTES_INSTITUCIONAIS } from '@/lib/crypto/shamir-secret-sharing';
+import { useCerimoniaShamir } from '@/hooks/useCerimoniaShamir';
 import {
   Key,
   ShieldCheck,
   Users,
   Copy,
   Check,
-  Download,
   Unlock,
   AlertTriangle,
   X,
@@ -31,22 +21,31 @@ interface CerimoniaChavesModalProps {
 }
 
 export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalProps) {
-  const [abaAtiva, setAbaAtiva] = useState<'particao' | 'recomposicao'>('particao');
+  const {
+    abaAtiva,
+    setAbaAtiva,
+    segredoInput,
+    setSegredoInput,
+    resultadoParticao,
+    copiadoIndice,
+    erroParticao,
+    handleGerarSegredoAleatorio,
+    handleExecutarParticao,
+    handleCopiarFragmento,
+    handleCarregarFragmentosPredefinidosParaTeste,
+    custodianteA,
+    setCustodianteA,
+    shareHexA,
+    setShareHexA,
+    custodianteB,
+    setCustodianteB,
+    shareHexB,
+    setShareHexB,
+    resultadoRecomposicao,
+    handleExecutarRecomposicao,
+  } = useCerimoniaShamir();
 
-  // Estados de Partição
-  const [segredoInput, setSegredoInput] = useState('');
-  const [resultadoParticao, setResultadoParticao] = useState<ResultadoCerimoniaParticao | null>(null);
-  const [copiadoIndice, setCopiadoIndice] = useState<number | null>(null);
-  const [erroParticao, setErroParticao] = useState<string | null>(null);
-
-  // Estados de Recomposição
-  const [custodianteA, setCustodianteA] = useState<number>(1);
-  const [shareHexA, setShareHexA] = useState('');
-  const [custodianteB, setCustodianteB] = useState<number>(2);
-  const [shareHexB, setShareHexB] = useState('');
-  const [resultadoRecomposicao, setResultadoRecomposicao] = useState<ResultadoRecomposicaoChave | null>(null);
-
-  // Fecha no Escape
+  // Acessibilidade: Fecha no Escape
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') aoFechar();
@@ -54,57 +53,6 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [aoFechar]);
-
-  function handleGerarSegredoAleatorio() {
-    const array = new Uint8Array(32);
-    if (typeof window !== 'undefined' && window.crypto) {
-      window.crypto.getRandomValues(array);
-    }
-    const hex = Array.from(array)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-    setSegredoInput(`UEMG-CARANGOLA-MASTER-KEK-2026-${hex.substring(0, 24)}`);
-  }
-
-  async function handleExecutarParticao() {
-    setErroParticao(null);
-    try {
-      if (!segredoInput.trim()) {
-        setErroParticao('Informe a chave mestre ou gere um segredo institucional.');
-        return;
-      }
-      const resultado = await executarCerimoniaParticaoShamir(segredoInput.trim());
-      setResultadoParticao(resultado);
-    } catch (e: any) {
-      setErroParticao(e?.message || 'Erro ao processar cerimônia matemática.');
-    }
-  }
-
-  function handleCopiarFragmento(fragmento: FragmentoChaveShamir) {
-    if (typeof navigator !== 'undefined') {
-      navigator.clipboard.writeText(fragmento.shareHex);
-      setCopiadoIndice(fragmento.indice);
-      setTimeout(() => setCopiadoIndice(null), 3000);
-    }
-  }
-
-  function handleCarregarFragmentosPredefinidosParaTeste(resultado: ResultadoCerimoniaParticao) {
-    // Carrega fragmentos 1 e 3 automaticamente para teste rápido da recomposição
-    setCustodianteA(1);
-    setShareHexA(resultado.fragmentos[0].shareHex);
-    setCustodianteB(3);
-    setShareHexB(resultado.fragmentos[2].shareHex);
-    setAbaAtiva('recomposicao');
-  }
-
-  function handleExecutarRecomposicao() {
-    setResultadoRecomposicao(null);
-    const res = recomporSegredoDeFragmentos([
-      { indice: custodianteA, shareHex: shareHexA },
-      { indice: custodianteB, shareHex: shareHexB },
-    ]);
-    setResultadoRecomposicao(res);
-  }
 
   return (
     <div
