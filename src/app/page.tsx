@@ -132,11 +132,17 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {ultimosArtigos.map((artigo) => (
-            <ArticleCard key={artigo.id} artigo={artigo} />
-          ))}
-        </div>
+        {ultimosArtigos.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {ultimosArtigos.map((artigo) => (
+              <ArticleCard key={artigo.id} artigo={artigo} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 px-4 text-xs text-slate-500 bg-white rounded-xl border border-dashed border-slate-200">
+            Novos artigos submetidos pela comunidade acadêmica serão listados aqui após homologação pelas coordenações.
+          </div>
+        )}
       </section>
 
       {/* Cursos da Unidade */}

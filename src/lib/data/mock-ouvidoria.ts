@@ -18,48 +18,8 @@ import {
 
 const CHAVE_STORAGE_OUVIDORIA = 'portal_uemg_protocolos_ouvidoria_v1';
 
-// Sementes iniciais para teste institucional e consulta imediata
-export const PROTOCOLOS_SEED: ProtocoloInterno[] = [
-  {
-    id: 'proto-seed-1',
-    codigoProtocolo: '#CAR-2026-8942',
-    tokenHash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', // Hash conhecido de teste
-    tipo: 'solicitacao',
-    cursoSigla: 'SIS',
-    isAnonimo: false,
-    envelopeCifrado: {
-      ciphertextBase64: 'U2FsdGVkX1+vupppZksvRf5pq5g5XjO2',
-      ivBase64: 'AQIDBAUGBwgJCgsM',
-      wrappedDekBase64: 'MIIBCgKCAQEAyN6J0V1vL8O0r2d0hZ6+',
-      algoritmoSimetrico: 'AES-GCM-256',
-      algoritmoAssimetrico: 'RSA-OAEP-4096',
-    },
-    status: 'respondido_privado',
-    despachoOficial:
-      'Gabinete da Direção: Informamos que a ampliação do laboratório de informática foi aprovada pela Congregação e está em fase de alocação de bancadas.',
-    numeroPortaria: 'Portaria GD-UEMG-CAR nº 42/2026',
-    criadoEm: '01/10/2026 14:32',
-    atualizadoEm: '04/10/2026 16:45',
-  },
-  {
-    id: 'proto-seed-2',
-    codigoProtocolo: '#CAR-2026-3104',
-    tokenHash: '4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a',
-    tipo: 'sugestao',
-    cursoSigla: 'GERAL',
-    isAnonimo: true,
-    envelopeCifrado: {
-      ciphertextBase64: 'U2FsdGVkX1+vupppZksvRf5pq5g5XjO2',
-      ivBase64: 'AQIDBAUGBwgJCgsM',
-      wrappedDekBase64: 'MIIBCgKCAQEAyN6J0V1vL8O0r2d0hZ6+',
-      algoritmoSimetrico: 'AES-GCM-256',
-      algoritmoAssimetrico: 'RSA-OAEP-4096',
-    },
-    status: 'em_analise_diretoria',
-    criadoEm: '06/10/2026 09:15',
-    atualizadoEm: '07/10/2026 11:20',
-  },
-];
+// Sementes iniciais para teste institucional e consulta imediata (Vazio para testes de usabilidade)
+export const PROTOCOLOS_SEED: ProtocoloInterno[] = [];
 
 export function obterProtocolosArmazenados(): ProtocoloInterno[] {
   if (typeof window === 'undefined') return PROTOCOLOS_SEED;

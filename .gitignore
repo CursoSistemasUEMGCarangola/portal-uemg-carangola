@@ -32,3 +32,9 @@ next-env.d.ts
 .ai/
 .ai-context/
 
+# Scripts locais e seeds confidenciais (Zero-Leak)
+/scripts/
+*.seed.sql
+*.seed.json
+*.local.*
+

@@ -9,53 +9,7 @@ import { ItemMuralPublico, HomologacaoMuralInput } from '@/types/ouvidoria';
 
 const CHAVE_STORAGE_MURAL = 'portal_uemg_mural_publico_v1';
 
-export const MURAL_SEED: ItemMuralPublico[] = [
-  {
-    id: 'mural-seed-1',
-    protocoloReferencia: '#CAR-2026-8942',
-    cursoSigla: 'SIS',
-    tipo: 'solicitacao',
-    manifestacaoResumo:
-      'Demanda da comunidade discente solicitando ampliação das bancadas e modernização dos computadores no Laboratório de Práticas Tecnológicas da unidade.',
-    respostaOficial:
-      'O Gabinete da Direção Geral informa que a demanda foi deliberada favoravelmente pela Congregação da Unidade. Foram adquiridos 20 novos terminais e autorizado remanejamento físico das bancadas.',
-    numeroPortaria: 'Portaria GD-UEMG-CAR nº 42/2026',
-    statusHomologacao: 'Homologado e Respondido',
-    isActive: true,
-    dataManifestacao: '01/10/2026',
-    publicadoEm: '05/10/2026',
-  },
-  {
-    id: 'mural-seed-2',
-    protocoloReferencia: '#CAR-2026-1180',
-    cursoSigla: 'BIO',
-    tipo: 'sugestao',
-    manifestacaoResumo:
-      'Proposta de criação de uma trilha ecológica educativa e herbário comunitário às margens do Rio Carangola em parceria com as escolas da rede municipal.',
-    respostaOficial:
-      'Acolhida com louvor pela Direção Geral e encaminhada para a Pró-Reitoria de Extensão. O projeto foi cadastrado como Programa de Extensão Contínuo com abertura de 2 bolsas discentes.',
-    numeroPortaria: 'Resolução Congregação nº 15/2026',
-    statusHomologacao: 'Homologado e Respondido',
-    isActive: true,
-    dataManifestacao: '25/09/2026',
-    publicadoEm: '30/09/2026',
-  },
-  {
-    id: 'mural-seed-3',
-    protocoloReferencia: '#CAR-2026-4402',
-    cursoSigla: 'PED',
-    tipo: 'elogio',
-    manifestacaoResumo:
-      'Manifestação de reconhecimento pelo acolhimento prestado pelo corpo docente no I Seminário de Práticas Pedagógicas no Campo do Vale do Carangola.',
-    respostaOficial:
-      'O Gabinete agradece e congratula os professores e alunos organizadores pelo impacto sociocultural demonstrado.',
-    numeroPortaria: 'Nota de Elogio GD nº 08/2026',
-    statusHomologacao: 'Homologado e Respondido',
-    isActive: true,
-    dataManifestacao: '18/09/2026',
-    publicadoEm: '22/09/2026',
-  },
-];
+export const MURAL_SEED: ItemMuralPublico[] = [];
 
 export function obterItensMuralPublico(): ItemMuralPublico[] {
   if (typeof window === 'undefined') return MURAL_SEED;
