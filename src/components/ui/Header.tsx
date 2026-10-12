@@ -18,7 +18,12 @@ import {
 import { useAuth } from '@/context/AuthContext';
 
 export const Header: React.FC = () => {
-  const { user, perfil, isLoading, signOut } = useAuth();
+  const { user, perfil, signOut } = useAuth();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getRotuloPapel = () => {
     if (!perfil) return 'Usuário Conectado';
@@ -131,43 +136,42 @@ export const Header: React.FC = () => {
             <span>Acesso Restrito</span>
           </Link>
 
-          {/* Área de Autenticação */}
-          {!isLoading && (
-            <div className="ml-1 sm:ml-2 pl-2 border-l border-slate-200 flex items-center gap-1.5">
-              {user ? (
-                <div className="flex items-center gap-2">
-                  <Link
-                    href="/restrito"
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs font-bold text-[#0B3B60] hover:bg-blue-100 transition-colors"
-                    title={`Conectado como ${user.email}`}
-                  >
-                    <User className="w-3.5 h-3.5 text-[#0056B3]" />
-                    <span className="max-w-[130px] truncate">{getRotuloPapel()}</span>
-                  </Link>
-
-                  <button
-                    type="button"
-                    onClick={() => signOut()}
-                    aria-label="Sair da sessão"
-                    title="Encerrar sessão com segurança"
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
+          {/* Área de Autenticação com Hidratação Estável */}
+          <div className="ml-1 sm:ml-2 pl-2 border-l border-slate-200 flex items-center gap-1.5 min-h-[36px]">
+            {mounted && user ? (
+              <div className="flex items-center gap-2">
                 <Link
-                  href="/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0B3B60] text-white text-xs font-bold hover:bg-[#0056B3] transition-colors shadow-2xs"
+                  href="/restrito"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs font-bold text-[#0B3B60] hover:bg-blue-100 transition-colors"
+                  title={`Conectado como ${user.email}`}
                 >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Entrar</span>
+                  <User className="w-3.5 h-3.5 text-[#0056B3]" />
+                  <span className="max-w-[130px] truncate">{getRotuloPapel()}</span>
                 </Link>
-              )}
-            </div>
-          )}
+
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  aria-label="Sair da sessão"
+                  title="Encerrar sessão com segurança"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0B3B60] text-white text-xs font-bold hover:bg-[#0056B3] transition-colors shadow-2xs"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Entrar</span>
+              </Link>
+            )}
+          </div>
         </nav>
       </div>
     </header>
   );
 };
+

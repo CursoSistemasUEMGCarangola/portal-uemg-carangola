@@ -45,8 +45,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className="h-full">
-      <body className="flex flex-col min-h-full">
+    <html lang="pt-BR" className="h-full" suppressHydrationWarning>
+      <body className="flex flex-col min-h-full" suppressHydrationWarning>
         <AuthProvider>
           {/* Acessibilidade: Atalho de salto para teclado e leitores de tela */}
           <SkipLink />

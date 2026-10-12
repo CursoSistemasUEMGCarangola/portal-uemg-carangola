@@ -91,7 +91,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} Universidade do Estado de Minas Gerais. Todos os direitos reservados.</p>
+          <p suppressHydrationWarning>© {new Date().getFullYear()} Universidade do Estado de Minas Gerais. Todos os direitos reservados.</p>
           <div className="flex items-center space-x-4">
             <Link href="/termos-de-uso" className="hover:text-slate-300 transition-colors underline-offset-2 hover:underline">
               Termos de Uso
