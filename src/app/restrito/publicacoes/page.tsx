@@ -1,106 +1,39 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import {
-  CURSOS_LISTA,
-  obterArtigosConsolidados,
-  aplicarDecisaoEditorial,
-} from '@/lib/data/mock-articles';
-import { Artigo, SiglaCurso } from '@/types/editorial';
-import { StatusBadge } from '@/components/editorial/StatusBadge';
+import React from 'react';
+import { CURSOS_LISTA } from '@/lib/data/mock-articles';
+import { SiglaCurso } from '@/types/editorial';
 import { CourseBadge } from '@/components/editorial/CourseBadge';
 import EditorialDecisionModal from '@/components/editorial/EditorialDecisionModal';
+import { ArtigoCuradoriaCard } from '@/components/editorial/ArtigoCuradoriaCard';
+import { useCuradoriaEditorial } from '@/hooks/useCuradoriaEditorial';
 import {
   ShieldCheck,
   CheckCircle,
   FileCheck,
   Building,
-  User,
-  Calendar,
-  ExternalLink,
   Search,
 } from 'lucide-react';
 import { PushNotificationToggle } from '@/components/seguranca/PushNotificationToggle';
 
 export default function PainelCoordenacaoPage() {
-  const [cursoSelecionado, setCursoSelecionado] = useState<SiglaCurso>('SIS');
-  const [artigos, setArtigos] = useState<Artigo[]>([]);
-  const [filtroAba, setFiltroAba] = useState<'pendentes' | 'todos' | 'publicados'>('pendentes');
-  const [busca, setBusca] = useState('');
-
-  // Estados do Modal de Decisão Editorial
-  const [artigoEmAcao, setArtigoEmAcao] = useState<Artigo | null>(null);
-  const [acaoModal, setAcaoModal] = useState<'solicitar_ajustes' | 'rejeitar' | null>(null);
-  const [mensagemSucesso, setMensagemSucesso] = useState<string | null>(null);
-
-  // Carrega artigos consolidados
-  function recarregarArtigos() {
-    setArtigos(obterArtigosConsolidados());
-  }
-
-  useEffect(() => {
-    recarregarArtigos();
-  }, []);
-
-  // Filtragem monocrática estrita: Coordenador enxerga apenas o seu curso
-  const artigosDoCurso = artigos.filter((a) => a.curso.sigla === cursoSelecionado);
-
-  const artigosFiltrados = artigosDoCurso.filter((a) => {
-    // Filtro por busca de texto
-    const termo = busca.toLowerCase();
-    const bateTexto =
-      !busca ||
-      a.titulo.toLowerCase().includes(termo) ||
-      a.autorNome.toLowerCase().includes(termo) ||
-      (a.autorMatricula && a.autorMatricula.toLowerCase().includes(termo));
-
-    if (!bateTexto) return false;
-
-    // Filtro por aba
-    if (filtroAba === 'pendentes') {
-      return a.status === 'submetido' || a.status === 'em_revisao';
-    }
-    if (filtroAba === 'publicados') {
-      return a.status === 'publicado' || !a.status;
-    }
-    return true; // 'todos'
-  });
-
-  // Ação 1-Clique: Aprovar e Publicar Imediatamente
-  function handleAprovar(artigo: Artigo) {
-    if (confirm(`Confirma a aprovação e publicação imediata do artigo "${artigo.titulo}"?`)) {
-      aplicarDecisaoEditorial({
-        artigoId: artigo.id,
-        acao: 'aprovar',
-      });
-      recarregarArtigos();
-      setMensagemSucesso(`Artigo "${artigo.titulo}" aprovado e publicado com sucesso no Portal!`);
-      setTimeout(() => setMensagemSucesso(null), 5000);
-    }
-  }
-
-  // Ação Modal: Confirmar Correções ou Rejeição
-  function handleConfirmarModal(
-    artigoId: string,
-    acao: 'solicitar_ajustes' | 'rejeitar',
-    notas: string
-  ) {
-    aplicarDecisaoEditorial({
-      artigoId,
-      acao,
-      notas,
-    });
-    setArtigoEmAcao(null);
-    setAcaoModal(null);
-    recarregarArtigos();
-    setMensagemSucesso(
-      acao === 'solicitar_ajustes'
-        ? 'Solicitação de correções enviada ao autor no painel in-app.'
-        : 'Artigo arquivado/rejeitado com a devida justificativa.'
-    );
-    setTimeout(() => setMensagemSucesso(null), 5000);
-  }
+  const {
+    cursoSelecionado,
+    setCursoSelecionado,
+    artigosFiltrados,
+    filtroAba,
+    setFiltroAba,
+    busca,
+    setBusca,
+    artigoEmAcao,
+    setArtigoEmAcao,
+    acaoModal,
+    setAcaoModal,
+    mensagemSucesso,
+    contadores,
+    handleAprovar,
+    handleConfirmarModal,
+  } = useCuradoriaEditorial();
 
   const cursoInfo = CURSOS_LISTA.find((c) => c.sigla === cursoSelecionado);
 
@@ -173,14 +106,14 @@ export default function PainelCoordenacaoPage() {
           <div className="flex items-center gap-6 text-xs text-slate-600 shrink-0">
             <div>
               <span className="block font-bold text-base text-amber-700">
-                {artigosDoCurso.filter((a) => a.status === 'submetido' || a.status === 'em_revisao').length}
+                {contadores.pendentes}
               </span>
               <span>Pendentes</span>
             </div>
             <div className="h-8 w-px bg-slate-200" aria-hidden="true" />
             <div>
               <span className="block font-bold text-base text-emerald-700">
-                {artigosDoCurso.filter((a) => a.status === 'publicado' || !a.status).length}
+                {contadores.publicados}
               </span>
               <span>Publicados</span>
             </div>
@@ -199,7 +132,7 @@ export default function PainelCoordenacaoPage() {
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              Fila de Decisão ({artigosDoCurso.filter((a) => a.status === 'submetido' || a.status === 'em_revisao').length})
+              Fila de Decisão ({contadores.pendentes})
             </button>
             <button
               onClick={() => setFiltroAba('publicados')}
@@ -210,7 +143,7 @@ export default function PainelCoordenacaoPage() {
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              Homologados ({artigosDoCurso.filter((a) => a.status === 'publicado' || !a.status).length})
+              Homologados ({contadores.publicados})
             </button>
             <button
               onClick={() => setFiltroAba('todos')}
@@ -221,7 +154,7 @@ export default function PainelCoordenacaoPage() {
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              Todos ({artigosDoCurso.length})
+              Todos ({contadores.todos})
             </button>
           </nav>
 
@@ -250,113 +183,15 @@ export default function PainelCoordenacaoPage() {
             </div>
           ) : (
             artigosFiltrados.map((artigo) => (
-              <article
+              <ArtigoCuradoriaCard
                 key={artigo.id}
-                className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-slate-300 transition-all space-y-4"
-              >
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                  <div className="space-y-2 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <StatusBadge status={artigo.status} />
-                      <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
-                        {artigo.dataPublicacao}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-bold text-slate-900 leading-snug">
-                      {artigo.titulo}
-                    </h3>
-
-                    <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                      {artigo.resumo}
-                    </p>
-
-                    {/* Conferência visual de discente/docente */}
-                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                      <div>
-                        <span className="text-slate-500 block text-[10px] uppercase font-bold">
-                          Autor Principal
-                        </span>
-                        <strong className="text-slate-800 flex items-center gap-1">
-                          <User className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
-                          {artigo.autorNome}
-                        </strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block text-[10px] uppercase font-bold">
-                          Matrícula / MASP
-                        </span>
-                        <span className="font-mono text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200 inline-block mt-0.5 font-bold">
-                          {artigo.autorMatricula || 'Não informada'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block text-[10px] uppercase font-bold">
-                          Coautoria / Vínculo
-                        </span>
-                        <span className="text-slate-700 truncate block">
-                          {artigo.coautores || 'Autoria individual'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {artigo.notasRevisao && (
-                      <div className="bg-amber-50 border border-amber-300 rounded-lg p-2.5 text-xs text-amber-950">
-                        <span className="font-bold">Último Despacho da Coordenação:</span> {artigo.notasRevisao}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Barra de Ações de 1 Clique */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
-                  <div className="flex items-center gap-2">
-                    {artigo.slug && (
-                      <Link
-                        href={`/artigos/${artigo.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#0056B3] hover:underline"
-                      >
-                        Visualizar Texto Completo
-                        <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                      </Link>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setArtigoEmAcao(artigo);
-                        setAcaoModal('rejeitar');
-                      }}
-                      className="px-3.5 py-2 rounded-lg text-xs font-bold text-red-800 hover:bg-red-50 border border-red-300 transition-colors"
-                    >
-                      Rejeitar
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setArtigoEmAcao(artigo);
-                        setAcaoModal('solicitar_ajustes');
-                      }}
-                      className="px-3.5 py-2 rounded-lg text-xs font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300 transition-colors"
-                    >
-                      Solicitar Ajustes
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleAprovar(artigo)}
-                      className="px-4 py-2 rounded-lg text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 shadow-sm transition-all flex items-center gap-1.5"
-                    >
-                      <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
-                      Aprovar & Publicar (1 Clique)
-                    </button>
-                  </div>
-                </div>
-              </article>
+                artigo={artigo}
+                aoAprovar={handleAprovar}
+                aoAbrirAcaoModal={(art, acao) => {
+                  setArtigoEmAcao(art);
+                  setAcaoModal(acao);
+                }}
+              />
             ))
           )}
         </div>
