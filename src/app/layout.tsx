@@ -3,6 +3,7 @@ import './globals.css';
 import { Header } from '@/components/ui/Header';
 import { Footer } from '@/components/ui/Footer';
 import { SkipLink } from '@/components/ui/SkipLink';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://carangola.uemg.br'),
@@ -46,19 +47,21 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full">
       <body className="flex flex-col min-h-full">
-        {/* Acessibilidade: Atalho de salto para teclado e leitores de tela */}
-        <SkipLink />
+        <AuthProvider>
+          {/* Acessibilidade: Atalho de salto para teclado e leitores de tela */}
+          <SkipLink />
 
-        {/* Cabeçalho Institucional */}
-        <Header />
+          {/* Cabeçalho Institucional */}
+          <Header />
 
-        {/* Conteúdo Principal da Aplicação */}
-        <main id="conteudo-principal" className="flex-1 w-full" tabIndex={-1}>
-          {children}
-        </main>
+          {/* Conteúdo Principal da Aplicação */}
+          <main id="conteudo-principal" className="flex-1 w-full" tabIndex={-1}>
+            {children}
+          </main>
 
-        {/* Rodapé Institucional */}
-        <Footer />
+          {/* Rodapé Institucional */}
+          <Footer />
+        </AuthProvider>
 
         {/* Registro do Service Worker para PWA */}
         <script
