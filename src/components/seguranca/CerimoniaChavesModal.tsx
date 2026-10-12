@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CUSTODIANTES_INSTITUCIONAIS } from '@/lib/crypto/shamir-secret-sharing';
 import { useCerimoniaShamir } from '@/hooks/useCerimoniaShamir';
 import {
@@ -14,6 +14,8 @@ import {
   X,
   FileCheck,
   RefreshCw,
+  Building,
+  FlaskConical,
 } from 'lucide-react';
 
 interface CerimoniaChavesModalProps {
@@ -21,6 +23,8 @@ interface CerimoniaChavesModalProps {
 }
 
 export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalProps) {
+  const [modoCerimonia, setModoCerimonia] = useState<'oficial' | 'simulacao'>('oficial');
+
   const {
     abaAtiva,
     setAbaAtiva,
@@ -118,15 +122,98 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
         <div className="p-6 overflow-y-auto space-y-6 flex-1">
           {abaAtiva === 'particao' ? (
             <div className="space-y-6">
+              {/* Barra de Seleção de Modo (Oficial vs Simulação) */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Regime:</span>
+                  <div className="inline-flex rounded-xl p-1 bg-slate-200/80 border border-slate-300">
+                    <button
+                      type="button"
+                      onClick={() => setModoCerimonia('oficial')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        modoCerimonia === 'oficial'
+                          ? 'bg-[#0B3B60] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Building className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Modo Oficial</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setModoCerimonia('simulacao');
+                        if (!segredoInput) handleGerarSegredoAleatorio();
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        modoCerimonia === 'simulacao'
+                          ? 'bg-amber-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <FlaskConical className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Modo Simulação</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Selo Identificador do Modo */}
+                {modoCerimonia === 'oficial' ? (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60] border border-blue-300 self-start sm:self-auto">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#0056B3]" aria-hidden="true" />
+                    <span>Selo Oficial • Ato Solene Institucional</span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 self-start sm:self-auto">
+                    <FlaskConical className="w-3.5 h-3.5 text-amber-700" aria-hidden="true" />
+                    <span>Selo de Simulação • Testes de Laboratório</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Mensagem Pertinente ao Modo Selecionado */}
+              {modoCerimonia === 'oficial' ? (
+                <div className="bg-blue-50/70 border border-blue-200 text-[#0B3B60] p-4 rounded-xl text-xs space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-sm">
+                    <Building className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
+                    <span>Diretriz do Modo Oficial (Ato de Posse e Gestão):</span>
+                  </div>
+                  <p className="leading-relaxed text-slate-700">
+                    A Cerimônia Oficial de Chaves é realizada <strong>uma única vez por mandato</strong> com a Chave Mestra autêntica do Gabinete e registrada em <strong>Ata de Custódia Compartilhada</strong> assinada pela Direção, Vice-Direção e Secretaria Acadêmica.
+                  </p>
+                  <p className="text-[11px] font-semibold text-amber-900 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                    ⚠️ <strong>Atenção Institucional:</strong> A geração de uma nova partição matemática substitui e invalida permanentemente os fragmentos de sessões anteriores. As cédulas emitidas aqui devem ser lacradas e arquivadas em cofre institucional.
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-amber-50/70 border border-amber-200 text-amber-950 p-4 rounded-xl text-xs space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-sm text-amber-900">
+                    <AlertTriangle className="w-4 h-4 text-amber-700" aria-hidden="true" />
+                    <span>Ambiente de Demonstração e Aprendizado (Sandbox):</span>
+                  </div>
+                  <p className="leading-relaxed text-slate-700">
+                    Este modo gera chaves voláteis aleatórias em memória RAM. Serve exclusivamente para auditar, simular e comprovar o funcionamento matemático do algoritmo de Shamir (k=2, N=3) sem afetar a chave real da instituição.
+                  </p>
+                  <p className="text-[11px] font-semibold text-slate-600 bg-white/80 p-2.5 rounded-lg border border-amber-200">
+                    ℹ️ Os fragmentos gerados neste modo são efêmeros para teste e <strong>não possuem validade legal</strong> perante a Ata de Posse da Unidade.
+                  </p>
+                </div>
+              )}
+
               {/* Formulário de entrada da chave mestra */}
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label htmlFor="segredo-mestre-input" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Chave Mestre Institucional a ser Particionada:
+                    {modoCerimonia === 'oficial'
+                      ? 'Chave Mestra Oficial do Gabinete:'
+                      : 'Chave Efêmera de Simulação (Teste):'}
                   </label>
                   <button
                     type="button"
-                    onClick={handleGerarSegredoAleatorio}
+                    onClick={() => {
+                      setModoCerimonia('simulacao');
+                      handleGerarSegredoAleatorio();
+                    }}
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold text-[#0B3B60] bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors"
                   >
                     <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
@@ -139,7 +226,11 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
                   rows={2}
                   value={segredoInput}
                   onChange={(e) => setSegredoInput(e.target.value)}
-                  placeholder="Insira a chave mestra em texto claro (PEM RSA ou token de alta entropia)..."
+                  placeholder={
+                    modoCerimonia === 'oficial'
+                      ? 'Insira a Chave Mestra Oficial do Gabinete da Direção (PEM RSA ou token de alta entropia)...'
+                      : 'Chave de teste gerada aleatoriamente para homologação técnica...'
+                  }
                   className="w-full bg-white border border-slate-300 rounded-xl p-3 text-xs font-mono text-slate-800 focus:ring-2 focus:ring-[#0B3B60] focus:outline-none"
                 />
 
@@ -152,20 +243,30 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
                 <button
                   type="button"
                   onClick={handleExecutarParticao}
-                  className="w-full py-2.5 bg-[#0B3B60] hover:bg-[#0056B3] text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2"
+                  className={`w-full py-2.5 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 ${
+                    modoCerimonia === 'oficial'
+                      ? 'bg-[#0B3B60] hover:bg-[#0056B3]'
+                      : 'bg-amber-600 hover:bg-amber-700'
+                  }`}
                 >
                   <Key className="w-4 h-4" aria-hidden="true" />
-                  <span>Executar Cerimônia de Partição Matemática em GF(2^8)</span>
+                  <span>
+                    {modoCerimonia === 'oficial'
+                      ? 'Executar Cerimônia de Partição Oficial em GF(256)'
+                      : 'Executar Partição de Simulação em GF(256)'}
+                  </span>
                 </button>
               </div>
 
               {/* Resultado da Partição com os 3 Custodiantes */}
               {resultadoParticao && (
                 <div className="space-y-4 animate-fade-in">
-                  <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-3 rounded-xl text-xs">
+                  <div className="flex items-center justify-between flex-wrap gap-2 bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-3 rounded-xl text-xs">
                     <span className="font-bold flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-                      Cerimônia Concluída com Sucesso! 3 fragmentos matemáticos gerados em memória RAM.
+                      {modoCerimonia === 'oficial'
+                        ? 'Cerimônia Oficial Concluída! 3 Cédulas Institucionais emitidas em memória RAM.'
+                        : 'Simulação Concluída! 3 fragmentos de teste gerados para verificação técnica.'}
                     </span>
                     <button
                       type="button"
@@ -175,6 +276,22 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
                       Testar Recomposição (Quórum 1 + 3) &rarr;
                     </button>
                   </div>
+
+                  {modoCerimonia === 'oficial' ? (
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-[#0B3B60] flex items-center gap-2">
+                      <FileCheck className="w-4 h-4 text-[#0056B3] shrink-0" />
+                      <span>
+                        <strong>Guarda de Ata de Posse:</strong> Cada um dos 3 custodiantes oficiais deve copiar e lacrar individualmente sua cédula exclusiva.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+                      <span>
+                        <strong>Fragmentos Efêmeros de Simulação:</strong> Estes dados servem exclusivamente para demonstração do algoritmo de Shamir. Não arquive em ata solene.
+                      </span>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {resultadoParticao.fragmentos.map((f) => (
