@@ -15,12 +15,32 @@ import {
   Sparkles,
 } from 'lucide-react';
 
+import { redirect } from 'next/navigation';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { HomologacaoCoordenadores } from '@/components/restrito/HomologacaoCoordenadores';
+
 export const metadata = {
   title: 'Painel da Direção | Portal UEMG Carangola',
   description: 'Painel executivo com atribuições objetivas do Gabinete da Direção da UEMG Unidade Carangola.',
 };
 
-export default function AcessoRestritoHubPage() {
+export default async function AcessoRestritoHubPage() {
+  const supabase = createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Redireciona coordenadores e autores para suas respectivas áreas de trabalho
+  if (user) {
+    const role = user.user_metadata?.role;
+    if (role === 'coordenador_curso') {
+      redirect('/restrito/publicacoes');
+    }
+    if (role === 'autor') {
+      redirect('/meus-artigos');
+    }
+  }
+
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
       {/* Cabeçalho Executivo com Identificação Institucional */}
@@ -42,6 +62,9 @@ export default function AcessoRestritoHubPage() {
           </p>
         </div>
       </div>
+
+      {/* Homologação de Coordenações de Curso (Alçada da Direção) */}
+      <HomologacaoCoordenadores />
 
       {/* Seção Principal: Ações Pertinentes à Direção */}
       <section className="space-y-4">

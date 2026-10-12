@@ -136,22 +136,47 @@ export default function CadastroPage() {
         <div className="bg-white py-8 px-6 shadow-sm border border-slate-200 rounded-2xl sm:px-10">
           {sucesso ? (
             <div className="text-center py-8 space-y-4">
-              <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-8 h-8" />
+              <div
+                className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto ${
+                  vinculo === 'coordenador_curso'
+                    ? 'bg-amber-100 text-amber-700'
+                    : 'bg-emerald-100 text-emerald-600'
+                }`}
+              >
+                {vinculo === 'coordenador_curso' ? (
+                  <ShieldAlert className="w-8 h-8" />
+                ) : (
+                  <CheckCircle2 className="w-8 h-8" />
+                )}
               </div>
               <h2 className="text-xl font-bold text-[#0B3B60]">
-                Cadastro Realizado com Sucesso!
+                {vinculo === 'coordenador_curso'
+                  ? 'Solicitação de Coordenação Registrada!'
+                  : 'Cadastro de Autor Concluído com Sucesso!'}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                Seu perfil institucional foi criado e vinculado ao curso selecionado.
-                Você será redirecionado para a tela de login em alguns instantes.
-              </p>
+              <div className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed space-y-2">
+                {vinculo === 'coordenador_curso' ? (
+                  <>
+                    <p>
+                      Seus dados foram gravados com sucesso. Por requisitos de governança e segurança institucional, o perfil de <strong>Coordenador de Curso</strong> depende de <strong>homologação prévia pelo Gabinete da Direção Geral</strong>.
+                    </p>
+                    <p className="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                      Assim que o Gabinete da Direção aprovar sua solicitação, você receberá uma notificação no seu e-mail alternativo e terá acesso liberado ao painel editorial.
+                    </p>
+                  </>
+                ) : (
+                  <p>
+                    Seu perfil institucional foi criado e vinculado ao curso selecionado.
+                    Você já pode acessar o sistema com seu e-mail institucional e senha.
+                  </p>
+                )}
+              </div>
               <div className="pt-4">
                 <Link
                   href="/login"
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0B3B60] hover:bg-[#0056B3] text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
                 >
-                  <span>Acessar Agora com Login e Senha</span>
+                  <span>Ir para Tela de Login</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

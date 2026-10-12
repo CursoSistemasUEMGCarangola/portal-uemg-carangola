@@ -67,8 +67,20 @@ function LoginFormContent() {
         // Silencioso se o cookie do servidor já assumir a sessão
       }
 
-      // 3. Redirecionamento completo do navegador para carregar cookies no middleware e SSR
-      window.location.href = redirectTo;
+      // 3. Redirecionamento baseado no perfil (Role-Based Redirection)
+      const explicitRedirect = searchParams.get('redirectTo');
+      let destino = explicitRedirect;
+      if (!destino || destino === '/restrito') {
+        if (data.role === 'coordenador_curso') {
+          destino = '/restrito/publicacoes';
+        } else if (data.role === 'autor') {
+          destino = '/meus-artigos';
+        } else {
+          destino = '/restrito';
+        }
+      }
+
+      window.location.href = destino;
     } catch (err) {
       console.error('Erro no login:', err);
       setErro('Ocorreu um erro ao conectar com o servidor.');

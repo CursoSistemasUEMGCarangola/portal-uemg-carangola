@@ -270,3 +270,116 @@ export async function enviarEmailRecuperacaoSenha({
     };
   }
 }
+
+export interface EnviarEmailAprovacaoParams {
+  destinatarioEmail: string;
+  destinatarioNome: string;
+  emailInstitucional: string;
+  cursoNome: string;
+}
+
+export async function enviarEmailAprovacaoCoordenador({
+  destinatarioEmail,
+  destinatarioNome,
+  emailInstitucional,
+  cursoNome,
+}: EnviarEmailAprovacaoParams): Promise<{ sucesso: boolean; messageId?: string; erro?: string }> {
+  const apiKey = process.env.BREVO_API_KEY;
+  const remetenteEmail = process.env.BREVO_SENDER_EMAIL || 'cursosiuemgcarangola@gmail.com';
+  const remetenteNome = process.env.BREVO_SENDER_NAME || 'Portal UEMG Carangola';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+  if (!apiKey) {
+    return { sucesso: false, erro: 'Chave Brevo não configurada.' };
+  }
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Homologado — Coordenação UEMG Carangola</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f1f5f9; padding: 36px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 580px; background-color: #ffffff; border-radius: 18px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+          <tr>
+            <td style="background-color: #0B3B60; padding: 28px 32px; text-align: center;">
+              <h1 style="color: #ffffff; font-size: 19px; font-weight: 800; margin: 0;">UNIVERSIDADE DO ESTADO DE MINAS GERAIS</h1>
+              <p style="color: #93c5fd; font-size: 13px; margin: 6px 0 0;">Gabinete da Direção • Unidade Acadêmica de Carangola</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 36px 32px;">
+              <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 24px; text-align: center;">
+                <span style="color: #065f46; font-size: 15px; font-weight: bold;">✓ Cadastro Homologado com Sucesso</span>
+              </div>
+
+              <h2 style="color: #0f172a; font-size: 18px; font-weight: 700; margin: 0 0 14px;">Prezado(a) ${destinatarioNome},</h2>
+              <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
+                Informamos que o seu cadastro como <strong>Coordenador(a) do Curso de ${cursoNome}</strong> foi oficialmente <strong>homologado e aprovado pelo Gabinete da Direção Geral</strong> da UEMG Unidade Carangola.
+              </p>
+
+              <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #334155;">
+                <div><strong>E-mail Institucional:</strong> ${emailInstitucional}</div>
+                <div style="margin-top: 6px;"><strong>Alçada:</strong> Curadoria Editorial e Gestão Monocrática do Colegiado</div>
+              </div>
+
+              <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+                A partir de agora, suas credenciais institucionais estão ativas e você pode acessar o Painel Editorial da Coordenação para gerenciar e homologar publicações discentes e docentes.
+              </p>
+
+              <div style="text-align: center; margin: 28px 0;">
+                <a href="${baseUrl}/login" target="_blank" style="display: inline-block; background-color: #0B3B60; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 2px 4px rgba(11, 59, 96, 0.2);">
+                  Acessar Painel da Coordenação
+                </a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f8fafc; padding: 20px 32px; border-top: 1px solid #e2e8f0; text-align: center;">
+              <p style="color: #64748b; font-size: 11px; margin: 0;">UEMG Unidade Carangola • Praça dos Estudantes, Carangola - MG</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': apiKey,
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        sender: {
+          name: remetenteNome,
+          email: remetenteEmail,
+        },
+        to: [
+          {
+            email: destinatarioEmail,
+            name: destinatarioNome,
+          },
+        ],
+        subject: `Acesso Homologado — Coordenação de ${cursoNome} (UEMG Carangola)`,
+        htmlContent,
+      }),
+    });
+
+    const data = await response.json();
+    return { sucesso: response.ok, messageId: data.messageId, erro: data.message };
+  } catch (err: any) {
+    return { sucesso: false, erro: err?.message };
+  }
+}
+

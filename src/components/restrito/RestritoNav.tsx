@@ -7,11 +7,23 @@ import {
   ExternalLink,
   ShieldCheck,
   LogOut,
+  BookOpen,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export function RestritoNav() {
-  const { signOut } = useAuth();
+  const { signOut, user, perfil } = useAuth();
+
+  const role = perfil?.role || (user?.user_metadata?.role as string) || 'direcao';
+  const isCoordenador = role === 'coordenador_curso';
+  const cursoSigla = user?.user_metadata?.curso_sigla || '';
+
+  const rotuloAmbiente = isCoordenador
+    ? `Ambiente Autenticado • Coordenação de Curso ${cursoSigla ? `(${cursoSigla})` : ''}`
+    : 'Ambiente Autenticado • Gabinete da Direção';
+
+  const linkPainelGeral = isCoordenador ? '/restrito/publicacoes' : '/restrito';
+  const rotuloPainelGeral = isCoordenador ? 'Painel da Coordenação' : 'Painel Geral';
 
   return (
     <div className="bg-white border-b border-slate-200 sticky top-[73px] z-40 shadow-2xs">
@@ -20,12 +32,16 @@ export function RestritoNav() {
           {/* Navegação Principal: Painel Geral e Botão Sair */}
           <div className="flex items-center gap-2">
             <Link
-              href="/restrito"
+              href={linkPainelGeral}
               id="btn-painel-geral"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#0B3B60] hover:bg-[#0056B3] text-white shadow-xs transition-all whitespace-nowrap"
             >
-              <LayoutDashboard className="w-4 h-4 text-blue-200" aria-hidden="true" />
-              <span>Painel Geral</span>
+              {isCoordenador ? (
+                <BookOpen className="w-4 h-4 text-blue-200" aria-hidden="true" />
+              ) : (
+                <LayoutDashboard className="w-4 h-4 text-blue-200" aria-hidden="true" />
+              )}
+              <span>{rotuloPainelGeral}</span>
             </Link>
 
             <button
@@ -45,7 +61,7 @@ export function RestritoNav() {
           <div className="flex items-center gap-4 shrink-0">
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 font-medium">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Ambiente Autenticado • Gabinete da Direção</span>
+              <span>{rotuloAmbiente}</span>
             </div>
 
             <Link

@@ -67,7 +67,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Cria usuário no Supabase Auth com confirmação direta de e-mail e metadados de recuperação
+    const statusInicial = dados.vinculo === 'coordenador_curso' ? 'pendente_aprovacao' : 'ativo';
+
+    // 1. Cria usuário no Supabase Auth com metadados de governança e recuperação
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: dados.email,
       password: dados.senha,
@@ -78,6 +80,8 @@ export async function POST(request: Request) {
         curso_sigla: dados.cursoSigla,
         role: dados.vinculo,
         email_secundario: dados.emailSecundario,
+        status: statusInicial,
+        solicitado_em: new Date().toISOString(),
       },
     });
 
@@ -120,10 +124,17 @@ export async function POST(request: Request) {
       );
     }
 
+    const mensagemSucesso =
+      dados.vinculo === 'coordenador_curso'
+        ? 'Solicitação de cadastro de Coordenador de Curso recebida! Por requisitos de governança institucional, seu acesso está pendente de homologação pelo Gabinete da Direção Geral.'
+        : 'Cadastro de autor realizado com sucesso! Você já pode acessar com seu e-mail e senha.';
+
     return NextResponse.json(
       {
-        message: 'Cadastro realizado com sucesso! Você já pode acessar com seu e-mail e senha.',
+        message: mensagemSucesso,
         userId: authData.user.id,
+        status: statusInicial,
+        vinculo: dados.vinculo,
       },
       { status: 201 }
     );

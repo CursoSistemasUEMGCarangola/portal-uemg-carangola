@@ -1,0 +1,170 @@
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { enviarEmailAprovacaoCoordenador } from '@/lib/email/brevo';
+import { CURSOS_LISTA } from '@/lib/data/mock-articles';
+
+const CURSO_NOME_MAPA: Record<string, string> = {
+  BIO: 'Ciências Biológicas',
+  GEO: 'Geografia',
+  HIS: 'História',
+  LET: 'Letras (Português/Inglês)',
+  MAT: 'Matemática',
+  PED: 'Pedagogia',
+  SSO: 'Serviço Social',
+  SIS: 'Sistemas de Informação',
+};
+
+function getAdminClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error('Configuração do servidor Supabase incompleta.');
+  }
+
+  return createClient(supabaseUrl, serviceRoleKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+// GET: Lista coordenadores e status de homologação (Exclusivo Gabinete da Direção)
+export async function GET() {
+  try {
+    const supabaseUserClient = createServerSupabaseClient();
+    const {
+      data: { user },
+    } = await supabaseUserClient.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 });
+    }
+
+    const role = user.user_metadata?.role;
+    if (role !== 'direcao') {
+      return NextResponse.json(
+        { error: 'Acesso restrito ao Gabinete da Direção Geral.' },
+        { status: 403 }
+      );
+    }
+
+    const supabaseAdmin = getAdminClient();
+    const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+
+    if (listError) {
+      return NextResponse.json({ error: listError.message }, { status: 500 });
+    }
+
+    const coordenadores = (usersData.users || [])
+      .filter((u) => u.user_metadata?.role === 'coordenador_curso')
+      .map((u) => {
+        const meta = u.user_metadata || {};
+        const sigla = (meta.curso_sigla || 'SIS').toUpperCase();
+        return {
+          id: u.id,
+          nomeCompleto: meta.nome_completo || 'Não informado',
+          emailInstitucional: u.email || '',
+          emailSecundario: meta.email_secundario || '',
+          matricula: meta.matricula || '',
+          cursoSigla: sigla,
+          cursoNome: CURSO_NOME_MAPA[sigla] || sigla,
+          status: meta.status || 'ativo',
+          solicitadoEm: meta.solicitado_em || u.created_at,
+          aprovadoEm: meta.aprovado_em || null,
+        };
+      })
+      .sort((a, b) => new Date(b.solicitadoEm).getTime() - new Date(a.solicitadoEm).getTime());
+
+    return NextResponse.json({ coordenadores }, { status: 200 });
+  } catch (error: any) {
+    console.error('Erro ao listar coordenadores:', error);
+    return NextResponse.json(
+      { error: error?.message || 'Erro ao processar solicitação.' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST: Homologar ou Rejeitar acesso de Coordenador de Curso
+export async function POST(request: Request) {
+  try {
+    const supabaseUserClient = createServerSupabaseClient();
+    const {
+      data: { user: callerUser },
+    } = await supabaseUserClient.auth.getUser();
+
+    if (!callerUser) {
+      return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 });
+    }
+
+    if (callerUser.user_metadata?.role !== 'direcao') {
+      return NextResponse.json(
+        { error: 'Apenas a Direção Geral pode homologar acessos.' },
+        { status: 403 }
+      );
+    }
+
+    const { userId, acao } = await request.json();
+
+    if (!userId || !['aprovar', 'rejeitar'].includes(acao)) {
+      return NextResponse.json(
+        { error: 'Parâmetros inválidos (userId e acao obrigatórios).' },
+        { status: 400 }
+      );
+    }
+
+    const supabaseAdmin = getAdminClient();
+    const { data: targetData, error: getUserError } = await supabaseAdmin.auth.admin.getUserById(userId);
+
+    if (getUserError || !targetData.user) {
+      return NextResponse.json({ error: 'Usuário não localizado.' }, { status: 404 });
+    }
+
+    const targetUser = targetData.user;
+    const currentMeta = targetUser.user_metadata || {};
+    const novoStatus = acao === 'aprovar' ? 'ativo' : 'rejeitado';
+
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+      user_metadata: {
+        ...currentMeta,
+        status: novoStatus,
+        homologado_em: new Date().toISOString(),
+        homologado_por: callerUser.email,
+      },
+    });
+
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+
+    // Se aprovado, dispara e-mail de notificação de homologação via Brevo
+    if (acao === 'aprovar' && currentMeta.email_secundario) {
+      const sigla = (currentMeta.curso_sigla || 'SIS').toUpperCase();
+      const cursoNome = CURSO_NOME_MAPA[sigla] || sigla;
+
+      await enviarEmailAprovacaoCoordenador({
+        destinatarioEmail: currentMeta.email_secundario,
+        destinatarioNome: currentMeta.nome_completo || 'Coordenador',
+        emailInstitucional: targetUser.email || '',
+        cursoNome,
+      });
+    }
+
+    return NextResponse.json(
+      {
+        message:
+          acao === 'aprovar'
+            ? 'Acesso de Coordenador homologado com sucesso! E-mail de confirmação despachado.'
+            : 'Solicitação de acesso indeferida pela Direção Geral.',
+        status: novoStatus,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error('Erro ao homologar coordenador:', error);
+    return NextResponse.json(
+      { error: error?.message || 'Erro ao homologar cadastro.' },
+      { status: 500 }
+    );
+  }
+}
