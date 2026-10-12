@@ -103,6 +103,7 @@ export const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({ artigo }) 
             .content {
               font-size: 13px;
               text-align: justify;
+              line-height: 1.6;
             }
             .content h2 {
               font-size: 15px;
@@ -110,6 +111,14 @@ export const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({ artigo }) 
               border-bottom: 1px solid #e2e8f0;
               padding-bottom: 4px;
               margin-top: 20px;
+              margin-bottom: 8px;
+            }
+            .content ul {
+              margin: 8px 0;
+              padding-left: 20px;
+            }
+            .content li {
+              margin-bottom: 4px;
             }
             .footer {
               margin-top: 30px;
@@ -146,9 +155,13 @@ export const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({ artigo }) 
 
           <div class="content">
             ${artigo.corpoMarkdown
-              .replace(/## (.*?)\n/g, '<h2>$1</h2>')
+              .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+              .replace(/^### (.*$)/gim, '<h3>$1</h3>')
               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\n\n/g, '<p>')
+              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+              .replace(/^\* (.*$)/gim, '<li>$1</li>')
+              .replace(/(<li>[\s\S]*?<\/li>)/gi, '<ul>$1</ul>')
+              .replace(/\n\n/g, '<p></p>')
               .replace(/\n/g, '<br>')}
           </div>
 

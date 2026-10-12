@@ -15,6 +15,7 @@ import {
 } from '@/lib/storage/draft-storage';
 import { esquemasSubmissaoArtigo } from '@/lib/utils/validations';
 import { SiglaCurso } from '@/types/editorial';
+import { MarkdownRenderer } from '@/components/editorial/MarkdownRenderer';
 import {
   UploadCloud,
   CheckCircle,
@@ -416,12 +417,10 @@ export default function SubmissionForm() {
             )}
           </div>
         ) : (
-          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50 min-h-[250px] prose prose-sm max-w-none">
+          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50 min-h-[250px]">
             <h3 className="text-base font-bold text-slate-800 border-b pb-2 mb-3">Prévia do Artigo</h3>
             {corpoMarkdown ? (
-              <div className="whitespace-pre-wrap text-xs text-slate-700 font-sans leading-relaxed">
-                {corpoMarkdown}
-              </div>
+              <MarkdownRenderer content={corpoMarkdown} />
             ) : (
               <p className="text-xs text-slate-400 italic">Nenhum conteúdo inserido ainda.</p>
             )}

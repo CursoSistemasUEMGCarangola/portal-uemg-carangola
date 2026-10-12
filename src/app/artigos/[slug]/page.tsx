@@ -6,6 +6,7 @@ import { ARTIGOS_MOCK } from '@/lib/data/mock-articles';
 import { PdfDownloadButton } from '@/components/editorial/PdfDownloadButton';
 import { CopyCitationButton } from '@/components/editorial/CopyCitationButton';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
+import { MarkdownRenderer } from '@/components/editorial/MarkdownRenderer';
 import { Calendar, Clock, User, ExternalLink, ArrowLeft, Bookmark } from 'lucide-react';
 
 interface ArticlePageProps {
@@ -135,31 +136,8 @@ export default function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           {/* Corpo do Artigo Renderizado */}
-          <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-sm sm:text-base space-y-6">
-            {artigo.corpoMarkdown.split('\n\n').map((paragrafo, index) => {
-              if (paragrafo.startsWith('## ')) {
-                return (
-                  <h2
-                    key={index}
-                    className="text-lg sm:text-xl font-bold text-[#0B3B60] border-b border-slate-200 pb-2 mt-8 pt-4"
-                  >
-                    {paragrafo.replace('## ', '')}
-                  </h2>
-                );
-              }
-              if (paragrafo.startsWith('1. ') || paragrafo.startsWith('- ')) {
-                return (
-                  <div key={index} className="pl-4 border-l-2 border-slate-200 text-slate-700 text-sm py-1">
-                    {paragrafo}
-                  </div>
-                );
-              }
-              return (
-                <p key={index} className="text-justify leading-relaxed">
-                  {paragrafo}
-                </p>
-              );
-            })}
+          <div className="text-slate-800 leading-relaxed text-sm sm:text-base">
+            <MarkdownRenderer content={artigo.corpoMarkdown} />
           </div>
 
           {/* Ficha Técnica & Citação ABNT */}
