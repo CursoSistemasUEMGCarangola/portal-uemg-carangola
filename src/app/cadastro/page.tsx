@@ -17,6 +17,8 @@ import {
   CheckCircle2,
   ArrowLeft,
   BookOpen,
+  MailCheck,
+  ShieldAlert,
 } from 'lucide-react';
 
 export default function CadastroPage() {
@@ -24,6 +26,7 @@ export default function CadastroPage() {
 
   const [nomeCompleto, setNomeCompleto] = useState('');
   const [email, setEmail] = useState('');
+  const [emailSecundario, setEmailSecundario] = useState('');
   const [matricula, setMatricula] = useState('');
   const [vinculo, setVinculo] = useState<'autor' | 'coordenador_curso'>('autor');
   const [cursoSigla, setCursoSigla] = useState('SIS');
@@ -37,6 +40,16 @@ export default function CadastroPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro(null);
+
+    if (!emailSecundario || !emailSecundario.includes('@')) {
+      setErro('O e-mail secundário (pessoal) é obrigatório para recuperação de acesso.');
+      return;
+    }
+
+    if (emailSecundario.toLowerCase().endsWith('@uemg.br')) {
+      setErro('O e-mail secundário deve ser de um provedor externo (ex: Gmail, Outlook, Yahoo) e não pode ser @uemg.br.');
+      return;
+    }
 
     if (senha.length < 6) {
       setErro('A senha deve conter no mínimo 6 caracteres.');
@@ -57,6 +70,7 @@ export default function CadastroPage() {
         body: JSON.stringify({
           nomeCompleto: nomeCompleto.trim(),
           email: email.trim().toLowerCase(),
+          emailSecundario: emailSecundario.trim().toLowerCase(),
           matricula: matricula.trim(),
           vinculo,
           cursoSigla,
@@ -175,6 +189,21 @@ export default function CadastroPage() {
                   </div>
                 </div>
 
+                {/* Alerta Informativo Obrigatório: E-mail Secundário */}
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
+                  <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-bold text-amber-900">
+                      Obrigatoriedade de E-mail Secundário para Recuperação de Senha
+                    </p>
+                    <p className="text-amber-800 leading-relaxed text-[11px]">
+                      Os servidores institucionais da UEMG bloqueiam o recebimento de mensagens automáticas de scripts externos. 
+                      Portanto, é <strong>obrigatório</strong> informar um e-mail alternativo pessoal (ex: <em>Gmail, Outlook, Hotmail</em>). 
+                      O link de recuperação de acesso será enviado <strong>exclusivamente</strong> para este endereço secundário.
+                    </p>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* E-mail Institucional */}
                   <div>
@@ -189,31 +218,60 @@ export default function CadastroPage() {
                         id="cad-email"
                         type="email"
                         required
+                        placeholder="nome.sobrenome@uemg.br"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#0056B3] outline-none"
                       />
                     </div>
+                    <span className="text-[10px] text-slate-500 mt-1 block">
+                      Usado para login no sistema (@uemg.br)
+                    </span>
                   </div>
 
-                  {/* Matrícula ou MASP */}
+                  {/* E-mail Secundário (Recuperação de Acesso) */}
                   <div>
-                    <label htmlFor="cad-matricula" className="block text-xs font-bold text-slate-700 mb-1">
-                      Matrícula / MASP *
+                    <label htmlFor="cad-email-secundario" className="block text-xs font-bold text-slate-700 mb-1">
+                      E-mail Alternativo / Pessoal *
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                        <BadgeAlert className="w-4 h-4" />
+                        <MailCheck className="w-4 h-4 text-emerald-600" />
                       </div>
                       <input
-                        id="cad-matricula"
-                        type="text"
+                        id="cad-email-secundario"
+                        type="email"
                         required
-                        value={matricula}
-                        onChange={(e) => setMatricula(e.target.value)}
-                        className="w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#0056B3] outline-none"
+                        placeholder="ex: seu.email@gmail.com"
+                        value={emailSecundario}
+                        onChange={(e) => setEmailSecundario(e.target.value)}
+                        className="w-full pl-10 pr-3 py-2 text-sm border border-amber-300 bg-amber-50/20 rounded-xl focus:ring-2 focus:ring-[#0056B3] outline-none"
                       />
                     </div>
+                    <span className="text-[10px] text-amber-700 font-medium mt-1 block">
+                      Obrigatório: Gmail, Outlook ou outro não-UEMG
+                    </span>
+                  </div>
+                </div>
+
+                {/* Matrícula ou MASP */}
+                <div>
+                  <label htmlFor="cad-matricula" className="block text-xs font-bold text-slate-700 mb-1">
+                    Matrícula / MASP *
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <BadgeAlert className="w-4 h-4" />
+                    </div>
+                    <input
+                      id="cad-matricula"
+                      type="text"
+                      required
+                      placeholder="Ex: 1234567"
+                      value={matricula}
+                      onChange={(e) => setMatricula(e.target.value)}
+                      className="w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#0056B3] outline-none"
+                    />
                   </div>
                 </div>
 

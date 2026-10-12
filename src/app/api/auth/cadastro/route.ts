@@ -13,14 +13,29 @@ const CURSOS_MAPA: Record<string, string> = {
   SIS: '3aac4a44-09e3-4520-95f8-0444b5566e35',
 };
 
-const CadastroSchema = z.object({
-  nomeCompleto: z.string().min(3, 'Nome completo deve ter pelo menos 3 caracteres'),
-  email: z.string().email('E-mail institucional inválido'),
-  senha: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
-  matricula: z.string().min(2, 'Matrícula ou MASP obrigatório'),
-  vinculo: z.enum(['autor', 'coordenador_curso']),
-  cursoSigla: z.string().min(2, 'Selecione um curso válido'),
-});
+const CadastroSchema = z
+  .object({
+    nomeCompleto: z.string().min(3, 'Nome completo deve ter pelo menos 3 caracteres'),
+    email: z.string().email('E-mail institucional inválido'),
+    emailSecundario: z
+      .string()
+      .email('E-mail alternativo/pessoal inválido')
+      .refine(
+        (val) => !val.toLowerCase().endsWith('@uemg.br'),
+        'O e-mail alternativo deve ser pessoal/externo (ex: Gmail, Outlook). Contas @uemg.br rejeitam scripts automáticos.'
+      ),
+    senha: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+    matricula: z.string().min(2, 'Matrícula ou MASP obrigatório'),
+    vinculo: z.enum(['autor', 'coordenador_curso']),
+    cursoSigla: z.string().min(2, 'Selecione um curso válido'),
+  })
+  .refine(
+    (data) => data.email.toLowerCase() !== data.emailSecundario.toLowerCase(),
+    {
+      message: 'O e-mail alternativo deve ser diferente do e-mail institucional.',
+      path: ['emailSecundario'],
+    }
+  );
 
 export async function POST(request: Request) {
   try {
@@ -52,7 +67,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Cria usuário no Supabase Auth com confirmação direta de e-mail
+    // 1. Cria usuário no Supabase Auth com confirmação direta de e-mail e metadados de recuperação
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: dados.email,
       password: dados.senha,
@@ -62,6 +77,7 @@ export async function POST(request: Request) {
         matricula: dados.matricula,
         curso_sigla: dados.cursoSigla,
         role: dados.vinculo,
+        email_secundario: dados.emailSecundario,
       },
     });
 

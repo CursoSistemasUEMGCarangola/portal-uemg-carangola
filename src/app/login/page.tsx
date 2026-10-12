@@ -145,9 +145,17 @@ function LoginFormContent() {
             </div>
 
             <div>
-              <label htmlFor="login-password" className="block text-xs font-bold text-slate-700 mb-1">
-                Senha de Acesso *
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="login-password" className="block text-xs font-bold text-slate-700">
+                  Senha de Acesso *
+                </label>
+                <Link
+                  href="/recuperar-senha"
+                  className="text-xs text-[#0056B3] hover:text-[#0B3B60] hover:underline font-semibold"
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Lock className="w-4 h-4" />
