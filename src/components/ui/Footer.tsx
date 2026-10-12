@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  Portal Central UEMG (Reitoria) ↗
+                  Site Oficial da UEMG ↗
                 </a>
               </li>
               <li>
