@@ -1,19 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { ItemMuralPublico, TipoManifestacao } from '@/types/ouvidoria';
+import { ItemMuralPublico } from '@/types/ouvidoria';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
-import { obterItensMuralPublico } from '@/lib/data/mock-mural';
 import { MuralCard } from '@/components/ouvidoria/MuralCard';
+import { useMuralTransparencia } from '@/hooks/useMuralTransparencia';
 import {
   Search,
-  Filter,
-  Scale,
-  Building,
-  CheckCircle2,
   MessageSquare,
-  ShieldAlert,
   ArrowRight,
   Inbox,
 } from 'lucide-react';
@@ -22,44 +17,28 @@ interface MuralCatalogProps {
   itensIniciais: ItemMuralPublico[];
 }
 
+const TIPOS_FILTRO = [
+  { id: 'TODOS', rotulo: 'Todos' },
+  { id: 'solicitacao', rotulo: 'Solicitações' },
+  { id: 'sugestao', rotulo: 'Sugestões' },
+  { id: 'elogio', rotulo: 'Elogios' },
+  { id: 'denuncia', rotulo: 'Denúncias' },
+];
+
 export function MuralCatalog({ itensIniciais }: MuralCatalogProps) {
-  const [itens, setItens] = useState<ItemMuralPublico[]>(itensIniciais);
-  const [busca, setBusca] = useState('');
-  const [cursoSelecionado, setCursoSelecionado] = useState<string>('TODOS');
-  const [tipoSelecionado, setTipoSelecionado] = useState<string>('TODOS');
+  const {
+    itens,
+    itensFiltrados,
+    busca,
+    setBusca,
+    cursoSelecionado,
+    setCursoSelecionado,
+    tipoSelecionado,
+    setTipoSelecionado,
+    limparFiltros,
+  } = useMuralTransparencia(itensIniciais);
 
-  // Atualiza com dados persistidos no cliente (localStorage)
-  useEffect(() => {
-    setItens(obterItensMuralPublico());
-  }, []);
-
-  const itensFiltrados = itens.filter((item) => {
-    // Apenas ativos
-    if (!item.isActive) return false;
-
-    // Filtro de busca textual
-    const termo = busca.toLowerCase();
-    const bateTexto =
-      !busca ||
-      item.protocoloReferencia.toLowerCase().includes(termo) ||
-      item.manifestacaoResumo.toLowerCase().includes(termo) ||
-      item.respostaOficial.toLowerCase().includes(termo) ||
-      (item.numeroPortaria && item.numeroPortaria.toLowerCase().includes(termo));
-
-    if (!bateTexto) return false;
-
-    // Filtro por curso
-    if (cursoSelecionado !== 'TODOS') {
-      if (item.cursoSigla !== cursoSelecionado) return false;
-    }
-
-    // Filtro por tipo
-    if (tipoSelecionado !== 'TODOS') {
-      if (item.tipo !== tipoSelecionado) return false;
-    }
-
-    return true;
-  });
+  const temFiltroAtivo = busca !== '' || cursoSelecionado !== 'TODOS' || tipoSelecionado !== 'TODOS';
 
   return (
     <div className="space-y-8">
@@ -88,13 +67,7 @@ export function MuralCatalog({ itensIniciais }: MuralCatalogProps) {
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">
               Tipo:
             </span>
-            {[
-              { id: 'TODOS', rotulo: 'Todos' },
-              { id: 'solicitacao', rotulo: 'Solicitações' },
-              { id: 'sugestao', rotulo: 'Sugestões' },
-              { id: 'elogio', rotulo: 'Elogios' },
-              { id: 'denuncia', rotulo: 'Denúncias' },
-            ].map((t) => (
+            {TIPOS_FILTRO.map((t) => (
               <button
                 key={t.id}
                 type="button"
@@ -156,14 +129,10 @@ export function MuralCatalog({ itensIniciais }: MuralCatalogProps) {
               Não encontramos deliberações com os critérios ou termos pesquisados no momento.
             </p>
           </div>
-          {(busca || cursoSelecionado !== 'TODOS' || tipoSelecionado !== 'TODOS') && (
+          {temFiltroAtivo && (
             <button
               type="button"
-              onClick={() => {
-                setBusca('');
-                setCursoSelecionado('TODOS');
-                setTipoSelecionado('TODOS');
-              }}
+              onClick={limparFiltros}
               className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors"
             >
               Limpar todos os filtros
