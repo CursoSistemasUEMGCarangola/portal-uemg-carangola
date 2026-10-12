@@ -288,7 +288,10 @@ export async function enviarEmailAprovacaoCoordenador({
   const apiKey = process.env.BREVO_API_KEY;
   const remetenteEmail = process.env.BREVO_SENDER_EMAIL || 'cursosiuemgcarangola@gmail.com';
   const remetenteNome = process.env.BREVO_SENDER_NAME || 'Portal UEMG Carangola';
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
+      ? process.env.NEXT_PUBLIC_SITE_URL
+      : 'https://carangola.uemg.br';
 
   if (!apiKey) {
     return { sucesso: false, erro: 'Chave Brevo não configurada.' };
@@ -300,7 +303,7 @@ export async function enviarEmailAprovacaoCoordenador({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acesso Homologado — Coordenação UEMG Carangola</title>
+  <title>Acesso Homologado - Coordenacao UEMG Carangola</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f1f5f9; padding: 36px 16px;">
@@ -334,7 +337,7 @@ export async function enviarEmailAprovacaoCoordenador({
               </p>
 
               <div style="text-align: center; margin: 28px 0;">
-                <a href="${baseUrl}/login" target="_blank" style="display: inline-block; background-color: #0B3B60; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 2px 4px rgba(11, 59, 96, 0.2);">
+                <a href="${siteUrl}/login" target="_blank" style="display: inline-block; background-color: #0B3B60; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 2px 4px rgba(11, 59, 96, 0.2);">
                   Acessar Painel da Coordenação
                 </a>
               </div>
@@ -372,9 +375,9 @@ export async function enviarEmailAprovacaoCoordenador({
             name: destinatarioNome,
           },
         ],
-        subject: `Acesso Homologado — Coordenação de ${cursoNome} (UEMG Carangola)`,
+        subject: `Acesso Homologado: Coordenacao de ${cursoNome} - UEMG Carangola`,
         htmlContent,
-        textContent: `Prezado(a) ${destinatarioNome},\n\nInformamos que o seu cadastro como Coordenador(a) do Curso de ${cursoNome} foi oficialmente homologado e aprovado pelo Gabinete da Direção Geral da UEMG Unidade Carangola.\n\nE-mail Institucional: ${emailInstitucional}\nAlçada: Curadoria Editorial e Gestão Monocrática do Colegiado\n\nSuas credenciais institucionais estão ativas. Acesse o painel pelo link:\n${baseUrl}/login\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
+        textContent: `Prezado(a) ${destinatarioNome},\n\nInformamos que o seu cadastro como Coordenador(a) do Curso de ${cursoNome} foi oficialmente homologado e aprovado pelo Gabinete da Direção Geral da UEMG Unidade Carangola.\n\nE-mail Institucional: ${emailInstitucional}\nAlçada: Curadoria Editorial e Gestão Monocrática do Colegiado\n\nSuas credenciais institucionais estão ativas. Acesse o painel pelo link:\n${siteUrl}/login\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
       }),
     });
 
