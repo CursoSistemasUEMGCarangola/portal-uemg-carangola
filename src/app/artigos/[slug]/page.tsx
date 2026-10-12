@@ -7,6 +7,7 @@ import { PdfDownloadButton } from '@/components/editorial/PdfDownloadButton';
 import { CopyCitationButton } from '@/components/editorial/CopyCitationButton';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
 import { MarkdownRenderer } from '@/components/editorial/MarkdownRenderer';
+import { AudioReader } from '@/components/editorial/AudioReader';
 import { Calendar, Clock, User, ExternalLink, ArrowLeft, Bookmark } from 'lucide-react';
 
 interface ArticlePageProps {
@@ -106,9 +107,16 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               </div>
             </div>
 
-            {/* Barra de Ações: Download PDF + Link Externo */}
+            {/* Barra de Ações: Acessibilidade (Áudio) + Download PDF + Link Externo */}
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-              <PdfDownloadButton artigo={artigo} />
+              <div className="flex flex-wrap items-center gap-2.5">
+                <AudioReader
+                  titulo={artigo.titulo}
+                  resumo={artigo.resumo}
+                  conteudoMarkdown={artigo.corpoMarkdown}
+                />
+                <PdfDownloadButton artigo={artigo} />
+              </div>
 
               {artigo.linkExternoMidia && (
                 <a
