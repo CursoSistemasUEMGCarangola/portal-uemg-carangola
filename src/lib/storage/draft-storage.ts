@@ -12,7 +12,6 @@ export interface RascunhoArtigo {
   autorNome: string;
   autorMatricula: string;
   coautores?: string;
-  doi?: string;
   linkExternoMidia?: string;
   ultimaAtualizacao: number;
 }
@@ -30,7 +29,6 @@ export function salvarRascunho(dados: Partial<RascunhoArtigo>): void {
       autorNome: dados.autorNome || '',
       autorMatricula: dados.autorMatricula || '',
       coautores: dados.coautores || '',
-      doi: dados.doi || '',
       linkExternoMidia: dados.linkExternoMidia || '',
       ultimaAtualizacao: Date.now(),
     };

@@ -24,13 +24,6 @@ export const esquemasSubmissaoArtigo = z.object({
     .min(4, 'A matrícula institucional deve conter pelo menos 4 caracteres.')
     .max(30, 'Matrícula inválida.'),
   coautores: z.string().max(500, 'Lista de coautores muito longa.').optional(),
-  doi: z
-    .string()
-    .max(100, 'DOI inválido.')
-    .optional()
-    .refine((val) => !val || /^10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+$/.test(val), {
-      message: 'Formato de DOI inválido (ex: 10.1000/182).',
-    }),
   linkExternoMidia: z
     .string()
     .url('Informe uma URL válida (ex: https://...)')

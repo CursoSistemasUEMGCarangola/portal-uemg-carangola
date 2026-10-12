@@ -24,7 +24,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
       {/* Campo de Busca Textual */}
       <div className="relative">
         <label htmlFor="busca-artigos" className="sr-only">
-          Buscar artigos por título, autor, resumo ou DOI
+          Buscar artigos por título, autor ou resumo
         </label>
         <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
           <Search className="w-4 h-4" aria-hidden="true" />
@@ -34,7 +34,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
           type="text"
           value={busca}
           onChange={(e) => onBuscaChange(e.target.value)}
-          placeholder="Buscar artigos por título, autor, palavras-chave ou DOI..."
+          placeholder="Buscar artigos por título, autor ou palavras-chave..."
           className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0056B3] focus:ring-2 focus:ring-[#0056B3]/20 transition-all shadow-sm"
         />
         {busca && (

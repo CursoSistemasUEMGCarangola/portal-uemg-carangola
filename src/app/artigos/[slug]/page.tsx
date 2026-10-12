@@ -73,11 +73,6 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               <span className={`inline-block px-3 py-1 rounded-md text-xs font-bold border ${artigo.curso.corBadge}`}>
                 {artigo.curso.nome} ({artigo.curso.sigla})
               </span>
-              {artigo.doi && (
-                <span className="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-600 text-xs font-mono">
-                  DOI: {artigo.doi}
-                </span>
-              )}
             </div>
 
             <h1 className="text-2xl sm:text-3.5xl font-extrabold text-[#0B3B60] leading-tight mb-6">

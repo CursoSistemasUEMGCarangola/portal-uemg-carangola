@@ -30,7 +30,7 @@ O discente da UEMG Carangola é o protagonista do portal. Aqui você pode pesqui
 
 ## 2. Como Pesquisar Artigos no Catálogo Geral (`/artigos`)
 1. No menu superior, clique em **Artigos**.
-2. Digite termos de busca no campo superior (título, nome do professor/colega, assunto ou identificador DOI).
+2. Digite termos de busca no campo superior (título, nome do professor/colega ou assunto).
 3. Utilize as pílulas de atalho dos cursos (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIN*) para filtrar produções da sua área.
 
 ## 3. Carga Inicial de Produção Acadêmica dos 8 Cursos

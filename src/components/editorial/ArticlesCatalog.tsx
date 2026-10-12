@@ -33,10 +33,9 @@ export const ArticlesCatalog: React.FC<ArticlesCatalogProps> = ({
         const noTitulo = art.titulo.toLowerCase().includes(termo);
         const noResumo = art.resumo.toLowerCase().includes(termo);
         const noAutor = art.autorNome.toLowerCase().includes(termo);
-        const noDoi = art.doi ? art.doi.toLowerCase().includes(termo) : false;
         const nasTags = art.tags ? art.tags.some((t) => t.toLowerCase().includes(termo)) : false;
 
-        return noTitulo || noResumo || noAutor || noDoi || nasTags;
+        return noTitulo || noResumo || noAutor || nasTags;
       }
 
       return true;

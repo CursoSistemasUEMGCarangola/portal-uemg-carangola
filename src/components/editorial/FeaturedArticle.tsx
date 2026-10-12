@@ -57,12 +57,6 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({ artigo }) => {
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
               {artigo.resumo}
             </p>
-
-            {artigo.doi && (
-              <div className="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-600 text-xs font-mono mb-6">
-                DOI: {artigo.doi}
-              </div>
-            )}
           </div>
 
           <div className="pt-6 border-t border-slate-100 flex items-center justify-between">

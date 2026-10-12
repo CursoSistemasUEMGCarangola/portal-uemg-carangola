@@ -40,7 +40,6 @@ export default function SubmissionForm() {
   const [autorNome, setAutorNome] = useState('');
   const [autorMatricula, setAutorMatricula] = useState('');
   const [coautores, setCoautores] = useState('');
-  const [doi, setDoi] = useState('');
   const [linkExternoMidia, setLinkExternoMidia] = useState('');
 
   // Estados de imagem e compressão
@@ -65,7 +64,6 @@ export default function SubmissionForm() {
       if (rascunho.autorNome) setAutorNome(rascunho.autorNome);
       if (rascunho.autorMatricula) setAutorMatricula(rascunho.autorMatricula);
       if (rascunho.coautores) setCoautores(rascunho.coautores);
-      if (rascunho.doi) setDoi(rascunho.doi);
       if (rascunho.linkExternoMidia) setLinkExternoMidia(rascunho.linkExternoMidia);
       setRascunhoCarregado(true);
     }
@@ -81,10 +79,9 @@ export default function SubmissionForm() {
       autorNome,
       autorMatricula,
       coautores,
-      doi,
       linkExternoMidia,
     });
-  }, [titulo, resumo, corpoMarkdown, cursoSigla, autorNome, autorMatricula, coautores, doi, linkExternoMidia]);
+  }, [titulo, resumo, corpoMarkdown, cursoSigla, autorNome, autorMatricula, coautores, linkExternoMidia]);
 
   // Handler de seleção de imagem com pipeline de compressão no navegador
   async function handleSelecionarArquivo(e: React.ChangeEvent<HTMLInputElement>) {
@@ -121,7 +118,6 @@ export default function SubmissionForm() {
       setAutorNome('');
       setAutorMatricula('');
       setCoautores('');
-      setDoi('');
       setLinkExternoMidia('');
       setResultadoCompressao(null);
       setRascunhoCarregado(false);
@@ -142,7 +138,6 @@ export default function SubmissionForm() {
       autorNome,
       autorMatricula,
       coautores: coautores || undefined,
-      doi: doi || undefined,
       linkExternoMidia: linkExternoMidia || undefined,
       capaBase64Webp: resultadoCompressao?.dataUrlWebp || '',
     };
@@ -172,7 +167,6 @@ export default function SubmissionForm() {
         autorNome,
         autorMatricula,
         coautores: coautores || undefined,
-        doi: doi || undefined,
         linkExternoMidia: linkExternoMidia || undefined,
         capaBase64Webp: resultadoCompressao!.dataUrlWebp,
         capaTamanhoBytes: resultadoCompressao!.tamanhoComprimidoBytes,
@@ -434,21 +428,7 @@ export default function SubmissionForm() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div>
-            <label htmlFor="doi" className="block text-xs font-semibold text-slate-700 mb-1">
-              Identificador Digital DOI (Opcional)
-            </label>
-            <input
-              id="doi"
-              type="text"
-              value={doi}
-              onChange={(e) => setDoi(e.target.value)}
-              placeholder="10.5281/zenodo.123456"
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
-            />
-          </div>
-
+        <div className="pt-2">
           <div>
             <label htmlFor="linkExternoMidia" className="block text-xs font-semibold text-slate-700 mb-1">
               Link Externo Complementar / Repositório (Opcional)

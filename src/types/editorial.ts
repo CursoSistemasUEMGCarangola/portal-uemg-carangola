@@ -22,7 +22,6 @@ export interface Artigo {
   autorMatricula?: string;
   autorRole?: string;
   coautores?: string;
-  doi?: string;
   linkExternoMidia?: string;
   tempoLeituraMinutos: number;
   dataPublicacao: string;
@@ -40,7 +39,6 @@ export interface SubmissaoArtigoInput {
   autorNome: string;
   autorMatricula: string;
   coautores?: string;
-  doi?: string;
   linkExternoMidia?: string;
   capaBase64Webp: string;
   capaTamanhoBytes: number;

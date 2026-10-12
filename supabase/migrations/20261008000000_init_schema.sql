@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS public.artigos (
     curso_id UUID NOT NULL REFERENCES public.cursos(id) ON DELETE RESTRICT,
     autor_id UUID NOT NULL REFERENCES public.perfis_usuarios(id) ON DELETE CASCADE,
     coautores TEXT,
-    doi VARCHAR(100),
     link_externo_midia VARCHAR(500),
     tempo_leitura_minutos INT DEFAULT 5 NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'rascunho' CHECK (status IN ('rascunho', 'submetido', 'em_revisao', 'publicado', 'rejeitado')),

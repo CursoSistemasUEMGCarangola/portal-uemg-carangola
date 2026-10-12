@@ -127,8 +127,7 @@ export const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({ artigo }) 
               <div class="header-sub">Unidade Acadêmica de Carangola — Portal de Publicações</div>
             </div>
             <div style="text-align: right; font-size: 10px; color: #718096;">
-              Publicado em: ${artigo.dataPublicacao}<br>
-              ${artigo.doi ? `DOI: ${artigo.doi}` : ''}
+              Publicado em: ${artigo.dataPublicacao}
             </div>
           </div>
 
