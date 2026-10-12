@@ -199,7 +199,6 @@ export default function OuvidoriaForm() {
                 required={!isAnonimo}
                 value={autorNome}
                 onChange={(e) => setAutorNome(e.target.value)}
-                placeholder="Ex: Ana Clara Souza"
                 className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
               />
               {erros.autorNome && <span className="text-xs text-red-600">{erros.autorNome}</span>}
@@ -214,7 +213,6 @@ export default function OuvidoriaForm() {
                 type="text"
                 value={autorMatricula}
                 onChange={(e) => setAutorMatricula(e.target.value)}
-                placeholder="Ex: 2024-PED-0412"
                 className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
               />
             </div>
@@ -228,7 +226,6 @@ export default function OuvidoriaForm() {
                 type="email"
                 value={autorEmail}
                 onChange={(e) => setAutorEmail(e.target.value)}
-                placeholder="seu.email@uemg.br"
                 className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
               />
             </div>
@@ -260,7 +257,6 @@ export default function OuvidoriaForm() {
             required
             value={assunto}
             onChange={(e) => setAssunto(e.target.value)}
-            placeholder="Ex: Solicitação de manutenção nos computadores do Laboratório 2"
             className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
           />
           {erros.assunto && <span className="text-xs text-red-600">{erros.assunto}</span>}
@@ -276,7 +272,6 @@ export default function OuvidoriaForm() {
             required
             value={mensagem}
             onChange={(e) => setMensagem(e.target.value)}
-            placeholder="Descreva aqui os fatos, argumentos, datas e detalhes relevantes..."
             className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none leading-relaxed"
           />
           <div className="flex justify-between text-[11px] text-slate-400 mt-1">
