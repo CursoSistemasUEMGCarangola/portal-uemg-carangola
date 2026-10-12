@@ -3,8 +3,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BookOpen, MessageSquare, Shield, CheckCircle2, ArrowRight, Building2 } from 'lucide-react';
 import { ARTIGOS_MOCK, CURSOS_LISTA } from '@/lib/data/mock-articles';
+import { SiglaCurso } from '@/types/editorial';
 import { FeaturedArticle } from '@/components/editorial/FeaturedArticle';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
+
+const FAIXA_CORES: Record<SiglaCurso, { dot: string; borderTop: string }> = {
+  BIO: { dot: 'bg-emerald-600', borderTop: 'border-t-emerald-600' },
+  GEO: { dot: 'bg-amber-600', borderTop: 'border-t-amber-600' },
+  HIS: { dot: 'bg-purple-600', borderTop: 'border-t-purple-600' },
+  LET: { dot: 'bg-violet-600', borderTop: 'border-t-violet-600' },
+  MAT: { dot: 'bg-cyan-600', borderTop: 'border-t-cyan-600' },
+  PED: { dot: 'bg-sky-500', borderTop: 'border-t-sky-500' },
+  SSO: { dot: 'bg-teal-700', borderTop: 'border-t-teal-700' },
+  SIS: { dot: 'bg-[#0B3B60]', borderTop: 'border-t-[#0056B3]' },
+};
 
 export default function HomePage() {
   const artigoEmDestaque = ARTIGOS_MOCK[0];
@@ -165,21 +177,41 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {CURSOS_LISTA.map((curso) => (
-            <Link
-              key={curso.sigla}
-              href={`/cursos/${curso.sigla.toLowerCase()}`}
-              className={`p-4 rounded-xl border ${curso.corBadge} transition-all hover:-translate-y-1 hover:shadow-sm block text-decoration-none`}
-            >
-              <span className="text-xs font-black tracking-wider block opacity-75">
-                {curso.sigla}
-              </span>
-              <span className="text-sm font-bold block mt-1 leading-snug">
-                {curso.nome}
-              </span>
-            </Link>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {CURSOS_LISTA.map((curso) => {
+            const estiloFaixa = FAIXA_CORES[curso.sigla];
+
+            return (
+              <Link
+                key={curso.sigla}
+                href={`/cursos/${curso.sigla.toLowerCase()}`}
+                className={`group relative p-5 rounded-2xl border ${curso.corBadge} ${estiloFaixa.borderTop} border-t-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md block text-decoration-none`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <span className="text-xs font-black tracking-wider uppercase font-mono px-2 py-0.5 rounded-md bg-white/90 border border-current shadow-2xs">
+                    {curso.sigla}
+                  </span>
+                  {curso.grau && (
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-75">
+                      {curso.grau}
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="text-sm sm:text-base font-extrabold leading-snug tracking-tight">
+                  {curso.nome}
+                </h3>
+
+                <div className="flex items-center gap-1.5 mt-3 pt-2.5 border-t border-current/15 text-[11px] font-semibold opacity-90">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${estiloFaixa.dot} shadow-xs ring-1 ring-white shrink-0`}
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">Faixa: {curso.corFaixa}</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

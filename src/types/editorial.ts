@@ -6,6 +6,8 @@ export interface Curso {
   sigla: SiglaCurso;
   descricao: string;
   corBadge: string;
+  corFaixa?: string;
+  grau?: 'Licenciatura' | 'Bacharelado';
 }
 
 export type StatusArtigo = 'rascunho' | 'submetido' | 'em_revisao' | 'publicado' | 'rejeitado';
