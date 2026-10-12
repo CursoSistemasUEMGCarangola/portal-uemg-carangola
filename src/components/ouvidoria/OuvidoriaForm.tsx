@@ -1,11 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
-import { registrarManifestacaoOuvidoria } from '@/lib/data/mock-ouvidoria';
-import { TipoManifestacao } from '@/types/ouvidoria';
-import { SiglaCurso } from '@/types/editorial';
+import { useOuvidoriaForm } from '@/hooks/useOuvidoriaForm';
 import {
   ShieldCheck,
   Lock,
@@ -19,101 +16,28 @@ import {
 } from 'lucide-react';
 
 export default function OuvidoriaForm() {
-  const router = useRouter();
-
-  // Estados do formulário
-  const [tipo, setTipo] = useState<TipoManifestacao>('solicitacao');
-  const [cursoSigla, setCursoSigla] = useState<SiglaCurso | 'GERAL'>('GERAL');
-  const [assunto, setAssunto] = useState('');
-  const [mensagem, setMensagem] = useState('');
-  const [isAnonimo, setIsAnonimo] = useState(false);
-  const [autorNome, setAutorNome] = useState('');
-  const [autorMatricula, setAutorMatricula] = useState('');
-  const [autorEmail, setAutorEmail] = useState('');
-
-  // Estados de processo e validação
-  const [enviando, setEnviando] = useState(false);
-  const [erros, setErros] = useState<Record<string, string>>({});
-
-  const tiposDisponiveis: { id: TipoManifestacao; rotulo: string; desc: string }[] = [
-    {
-      id: 'solicitacao',
-      rotulo: 'Solicitação',
-      desc: 'Requerimentos acadêmicos, melhorias estruturais e pedidos institucionais',
-    },
-    {
-      id: 'sugestao',
-      rotulo: 'Sugestão',
-      desc: 'Propostas de novas iniciativas, eventos ou métodos pedagógicos',
-    },
-    {
-      id: 'elogio',
-      rotulo: 'Elogio',
-      desc: 'Reconhecimento a professores, setores, projetos ou servidores',
-    },
-    {
-      id: 'denuncia',
-      rotulo: 'Denúncia',
-      desc: 'Irregularidades, assédio ou descumprimento de normas (sigilo absoluto garantido)',
-    },
-  ];
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const novosErros: Record<string, string> = {};
-
-    if (!assunto.trim() || assunto.trim().length < 5) {
-      novosErros.assunto = 'O assunto deve conter ao menos 5 caracteres.';
-    }
-
-    if (!mensagem.trim() || mensagem.trim().length < 20) {
-      novosErros.mensagem = 'A mensagem deve conter ao menos 20 caracteres detalhados.';
-    }
-
-    if (!isAnonimo) {
-      if (!autorNome.trim() || autorNome.trim().length < 3) {
-        novosErros.autorNome = 'Informe seu nome completo ou selecione o Modo Anônimo.';
-      }
-    }
-
-    if (Object.keys(novosErros).length > 0) {
-      setErros(novosErros);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-
-    setEnviando(true);
-
-    try {
-      // Executa o pipeline de cifragem de envelope e registro
-      const resultado = await registrarManifestacaoOuvidoria({
-        tipo,
-        cursoSigla,
-        assunto,
-        mensagem,
-        isAnonimo,
-        autorNome: isAnonimo ? undefined : autorNome,
-        autorMatricula: isAnonimo ? undefined : autorMatricula,
-        autorEmail: isAnonimo ? undefined : autorEmail,
-      });
-
-      // Persiste o comprovante efêmero para visualização na tela de sucesso
-      sessionStorage.setItem(
-        'portal_uemg_comprovante_recente',
-        JSON.stringify(resultado.comprovante)
-      );
-
-      // Redireciona com os parâmetros de consulta
-      router.push(
-        `/fale-com-a-direcao/sucesso?protocolo=${encodeURIComponent(
-          resultado.protocolo.codigoProtocolo
-        )}&token=${encodeURIComponent(resultado.tokenSecreto)}`
-      );
-    } catch (err: any) {
-      alert('Falha ao processar criptografia de envelope. Tente novamente.');
-      setEnviando(false);
-    }
-  }
+  const {
+    tipo,
+    setTipo,
+    cursoSigla,
+    setCursoSigla,
+    assunto,
+    setAssunto,
+    mensagem,
+    setMensagem,
+    isAnonimo,
+    setIsAnonimo,
+    autorNome,
+    setAutorNome,
+    autorMatricula,
+    setAutorMatricula,
+    autorEmail,
+    setAutorEmail,
+    enviando,
+    erros,
+    handleSubmit,
+    tiposDisponiveis,
+  } = useOuvidoriaForm();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
