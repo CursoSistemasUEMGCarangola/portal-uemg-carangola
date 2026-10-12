@@ -245,6 +245,7 @@ export async function enviarEmailRecuperacaoSenha({
         ],
         subject: 'Recuperação de Acesso — Portal UEMG Carangola',
         htmlContent,
+        textContent: `Olá, ${destinatarioNome}!\n\nRecebemos uma solicitação de recuperação de acesso para sua conta institucional (${emailInstitucional}) no Portal UEMG Carangola.\n\nPara redefinir sua senha, acesse o link seguro abaixo (válido por 2 horas):\n${linkRecuperacao}\n\nNota: Devido às diretrizes de segurança da UEMG, este link foi enviado exclusivamente para o seu e-mail alternativo cadastrado.\n\nSe você não solicitou esta recuperação, ignore esta mensagem com segurança.\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
       }),
     });
 
@@ -373,6 +374,7 @@ export async function enviarEmailAprovacaoCoordenador({
         ],
         subject: `Acesso Homologado — Coordenação de ${cursoNome} (UEMG Carangola)`,
         htmlContent,
+        textContent: `Prezado(a) ${destinatarioNome},\n\nInformamos que o seu cadastro como Coordenador(a) do Curso de ${cursoNome} foi oficialmente homologado e aprovado pelo Gabinete da Direção Geral da UEMG Unidade Carangola.\n\nE-mail Institucional: ${emailInstitucional}\nAlçada: Curadoria Editorial e Gestão Monocrática do Colegiado\n\nSuas credenciais institucionais estão ativas. Acesse o painel pelo link:\n${baseUrl}/login\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
       }),
     });
 

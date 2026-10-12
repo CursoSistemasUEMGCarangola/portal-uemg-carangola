@@ -106,9 +106,9 @@ export async function POST(request: Request) {
 
     const { userId, acao } = await request.json();
 
-    if (!userId || !['aprovar', 'rejeitar'].includes(acao)) {
+    if (!userId || !['aprovar', 'rejeitar', 'reenviar_email'].includes(acao)) {
       return NextResponse.json(
-        { error: 'Parâmetros inválidos (userId e acao obrigatórios).' },
+        { error: 'Parâmetros inválidos (userId e acao: aprovar | rejeitar | reenviar_email obrigatórios).' },
         { status: 400 }
       );
     }
@@ -122,6 +122,45 @@ export async function POST(request: Request) {
 
     const targetUser = targetData.user;
     const currentMeta = targetUser.user_metadata || {};
+    const emailSecundario = currentMeta.email_secundario;
+
+    if (!emailSecundario) {
+      return NextResponse.json(
+        { error: 'O coordenador selecionado não possui um e-mail alternativo/pessoal registrado.' },
+        { status: 400 }
+      );
+    }
+
+    // Ação: Reenviar Notificação por e-mail
+    if (acao === 'reenviar_email') {
+      const sigla = (currentMeta.curso_sigla || 'SIS').toUpperCase();
+      const cursoNome = CURSO_NOME_MAPA[sigla] || sigla;
+
+      const envioRes = await enviarEmailAprovacaoCoordenador({
+        destinatarioEmail: emailSecundario,
+        destinatarioNome: currentMeta.nome_completo || 'Coordenador',
+        emailInstitucional: targetUser.email || '',
+        cursoNome,
+      });
+
+      if (!envioRes.sucesso) {
+        return NextResponse.json(
+          { error: `Falha ao reenviar e-mail via Brevo: ${envioRes.erro}` },
+          { status: 502 }
+        );
+      }
+
+      return NextResponse.json(
+        {
+          message: `Notificação reenviada com sucesso para o e-mail alternativo: ${emailSecundario}.`,
+          emailDestino: emailSecundario,
+          messageId: envioRes.messageId,
+        },
+        { status: 200 }
+      );
+    }
+
+    // Ação: Aprovar ou Rejeitar
     const novoStatus = acao === 'aprovar' ? 'ativo' : 'rejeitado';
 
     const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
@@ -137,26 +176,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: updateError.message }, { status: 500 });
     }
 
-    // Se aprovado, dispara e-mail de notificação de homologação via Brevo
-    if (acao === 'aprovar' && currentMeta.email_secundario) {
+    // Se aprovado, dispara e-mail de notificação de homologação via Brevo exclusivamente para o e-mail secundário
+    let emailStatus = '';
+    if (acao === 'aprovar') {
       const sigla = (currentMeta.curso_sigla || 'SIS').toUpperCase();
       const cursoNome = CURSO_NOME_MAPA[sigla] || sigla;
 
-      await enviarEmailAprovacaoCoordenador({
-        destinatarioEmail: currentMeta.email_secundario,
+      const envioRes = await enviarEmailAprovacaoCoordenador({
+        destinatarioEmail: emailSecundario,
         destinatarioNome: currentMeta.nome_completo || 'Coordenador',
         emailInstitucional: targetUser.email || '',
         cursoNome,
       });
+
+      if (envioRes.sucesso) {
+        emailStatus = ` E-mail de confirmação enviado com sucesso para o e-mail alternativo: ${emailSecundario}.`;
+      } else {
+        emailStatus = ` (Atenção: Acesso ativado, porém houve falha de envio no Brevo: ${envioRes.erro})`;
+      }
     }
 
     return NextResponse.json(
       {
         message:
           acao === 'aprovar'
-            ? 'Acesso de Coordenador homologado com sucesso! E-mail de confirmação despachado.'
+            ? `Acesso de Coordenador homologado com sucesso!${emailStatus}`
             : 'Solicitação de acesso indeferida pela Direção Geral.',
         status: novoStatus,
+        emailDestino: emailSecundario,
       },
       { status: 200 }
     );

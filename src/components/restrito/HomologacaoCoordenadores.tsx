@@ -52,7 +52,7 @@ export function HomologacaoCoordenadores() {
     carregarCoordenadores();
   }, [carregarCoordenadores]);
 
-  const handleDecisao = async (userId: string, acao: 'aprovar' | 'rejeitar') => {
+  const handleDecisao = async (userId: string, acao: 'aprovar' | 'rejeitar' | 'reenviar_email') => {
     setProcessandoId(userId);
     setMensagemAviso(null);
 
@@ -241,34 +241,65 @@ export function HomologacaoCoordenadores() {
         </div>
       )}
 
+      {/* Diretriz Institucional de Entrega de E-mails */}
+      <div className="p-3.5 rounded-xl bg-blue-50/80 border border-blue-200 text-slate-700 text-xs flex items-start gap-2.5">
+        <Mail className="w-4 h-4 text-[#0056B3] shrink-0 mt-0.5" />
+        <div className="leading-relaxed">
+          <strong>Diretriz Institucional UEMG:</strong> Todas as mensagens automáticas do sistema são disparadas <strong>exclusivamente para o e-mail alternativo/pessoal cadastrado</strong> (Gmail, Outlook, etc.), contornando bloqueios de scripts do domínio institucional. Devido aos filtros dos provedores externos, o usuário deve sempre conferir a caixa de entrada, a aba <em>Promoções</em> e a pasta de <em>Spam / Lixo Eletrônico</em>.
+        </div>
+      </div>
+
       {/* Histórico Recente de Coordenações Homologadas */}
       {historico.length > 0 && (
         <div className="pt-4 border-t border-slate-100">
-          <details className="text-xs group">
+          <details className="text-xs group" open>
             <summary className="font-bold text-slate-500 hover:text-[#0B3B60] cursor-pointer flex items-center gap-1.5 select-none py-1">
-              <span>Ver histórico de coordenações ativas e cadastradas ({historico.length})</span>
+              <span>Coordenações homologadas / cadastradas ({historico.length})</span>
             </summary>
             <div className="mt-3 space-y-2 pt-2">
               {historico.map((coord) => (
                 <div
                   key={coord.id}
-                  className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
+                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-[#0B3B60]">{coord.nomeCompleto}</span>
-                    <span className="text-[11px] text-slate-500">({coord.cursoSigla})</span>
-                    <span className="text-slate-400">•</span>
-                    <span className="text-slate-500">{coord.emailInstitucional}</span>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-[#0B3B60]">{coord.nomeCompleto}</span>
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-100 text-[#0056B3]">
+                        {coord.cursoSigla} — {coord.cursoNome}
+                      </span>
+                      <span
+                        className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
+                          coord.status === 'ativo'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {coord.status === 'ativo' ? 'Homologado / Ativo' : 'Indeferido'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-slate-500 text-[11px] flex-wrap">
+                      <span>Institucional: {coord.emailInstitucional}</span>
+                      <span>•</span>
+                      <span className="text-amber-900 font-medium">
+                        E-mail de Envio: <strong>{coord.emailSecundario}</strong>
+                      </span>
+                    </div>
                   </div>
-                  <span
-                    className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
-                      coord.status === 'ativo'
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {coord.status === 'ativo' ? 'Homologado / Ativo' : 'Indeferido'}
-                  </span>
+
+                  {coord.status === 'ativo' && (
+                    <button
+                      type="button"
+                      disabled={processandoId === coord.id}
+                      onClick={() => handleDecisao(coord.id, 'reenviar_email')}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-[11px] font-bold text-[#0B3B60] transition-colors cursor-pointer shrink-0"
+                      title={`Reenviar mensagem oficial para ${coord.emailSecundario}`}
+                    >
+                      <Send className="w-3 h-3 text-[#0056B3]" />
+                      <span>{processandoId === coord.id ? 'Reenviando...' : 'Reenviar Notificação'}</span>
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
