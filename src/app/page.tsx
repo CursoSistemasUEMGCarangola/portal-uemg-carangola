@@ -1,11 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookOpen, MessageSquare, Shield, CheckCircle2, ArrowRight, Building2 } from 'lucide-react';
+import {
+  BookOpen,
+  MessageSquare,
+  Shield,
+  CheckCircle2,
+  ArrowRight,
+  Building2,
+  Send,
+  Search,
+  FileText,
+  ShieldCheck,
+  Lock,
+} from 'lucide-react';
 import { ARTIGOS_MOCK, CURSOS_LISTA } from '@/lib/data/mock-articles';
 import { SiglaCurso } from '@/types/editorial';
 import { FeaturedArticle } from '@/components/editorial/FeaturedArticle';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
+import { InstallPwaButton } from '@/components/pwa/InstallPwaButton';
 
 const FAIXA_CORES: Record<SiglaCurso, { borderTop: string }> = {
   BIO: { borderTop: 'border-t-emerald-600' },
@@ -50,14 +63,7 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-            <Link
-              href="/artigos"
-              className="inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-lg bg-white text-[#0B3B60] font-bold text-sm shadow-md hover:bg-slate-100 transition-colors"
-            >
-              <BookOpen className="w-4 h-4 text-[#0B3B60]" aria-hidden="true" />
-              <span>Explorar Publicações</span>
-              <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
-            </Link>
+            <InstallPwaButton />
 
             <Link
               href="/fale-com-a-direcao"
@@ -204,6 +210,126 @@ export default function HomePage() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      {/* Novo Quadro Dedicado: Fale com a Direção */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 mb-16">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B3B60] via-[#082d4a] to-[#041a2e] text-white shadow-xl border border-blue-900/40 p-6 sm:p-10">
+          {/* Elementos visuais de iluminação em degradê */}
+          <div className="absolute top-0 right-0 -mt-12 -mr-12 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 -mb-12 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Cabeçalho do Quadro */}
+          <div className="relative z-10 max-w-3xl mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/20 text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">
+              <MessageSquare className="w-3.5 h-3.5 text-blue-300" aria-hidden="true" />
+              <span>Canal de Governança Participativa</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
+              Fale com a Direção
+            </h2>
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
+              Canal institucional seguro e direto com o Gabinete da Direção da Unidade Carangola.
+              Envie suas manifestações com total garantia de sigilo, anonimato constitucional e acompanhamento transparente.
+            </p>
+          </div>
+
+          {/* Cards de Ação Rápida dentro do Quadro */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            {/* Ação 1: Nova Manifestação */}
+            <div className="bg-white/10 hover:bg-white/15 backdrop-blur-md rounded-2xl p-6 border border-white/15 flex flex-col justify-between transition-all duration-200 shadow-sm">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/25 text-white flex items-center justify-center">
+                    <Send className="w-5 h-5 text-blue-300" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-orange-500/30 text-orange-200 border border-orange-400/50">
+                    Opção de Sigilo Total
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Nova Manifestação
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-6">
+                  Registre elogios, sugestões, solicitações administrativas ou denúncias para avaliação prioritária do Gabinete.
+                </p>
+              </div>
+              <Link
+                href="/fale-com-a-direcao"
+                className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white text-[#0B3B60] font-bold text-xs hover:bg-slate-100 transition-colors shadow-sm"
+              >
+                <span>Acessar Formulário</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+
+            {/* Ação 2: Consultar Protocolo */}
+            <div className="bg-white/10 hover:bg-white/15 backdrop-blur-md rounded-2xl p-6 border border-white/15 flex flex-col justify-between transition-all duration-200 shadow-sm">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/25 text-white flex items-center justify-center">
+                    <Search className="w-5 h-5 text-emerald-300" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/40">
+                    Acompanhamento
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Consultar Protocolo
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-6">
+                  Acompanhe respostas e andamentos de manifestações utilizando seu Protocolo e Chave Secreta emitida no envio.
+                </p>
+              </div>
+              <Link
+                href="/fale-com-a-direcao/consulta"
+                className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs transition-colors border border-white/20"
+              >
+                <span>Consultar Resposta</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+
+            {/* Ação 3: Mural de Transparência */}
+            <div className="bg-white/10 hover:bg-white/15 backdrop-blur-md rounded-2xl p-6 border border-white/15 flex flex-col justify-between transition-all duration-200 shadow-sm">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/25 text-white flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-purple-300" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-purple-500/25 text-purple-200 border border-purple-400/40">
+                    Público
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Mural de Transparência
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-6">
+                  Consulte resoluções, despachos e decisões homologadas pela Direção para ciência de toda a comunidade acadêmica.
+                </p>
+              </div>
+              <Link
+                href="/mural-de-transparencia"
+                className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs transition-colors border border-white/20"
+              >
+                <span>Ver Mural Público</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Rodapé Informativo do Quadro */}
+          <div className="relative z-10 pt-6 border-t border-white/15 flex flex-wrap items-center justify-between gap-4 text-xs text-blue-200">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>Criptografia no cliente (Zero-Trust) • Conformidade com LAI (12.527/11) e LGPD (13.709/18)</span>
+            </div>
+            <div className="flex items-center gap-2 text-slate-300">
+              <Lock className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" />
+              <span>Garantia de sigilo e não rastreabilidade para manifestantes anônimos</span>
+            </div>
+          </div>
         </div>
       </section>
 
