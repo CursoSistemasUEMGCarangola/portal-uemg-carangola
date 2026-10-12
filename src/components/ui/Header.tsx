@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookOpen, MessageSquare, ShieldCheck, Home, GraduationCap, FileText, CheckSquare, Scale } from 'lucide-react';
+import { BookOpen, MessageSquare, ShieldCheck, GraduationCap, FileText, CheckSquare, Scale } from 'lucide-react';
 
 export const Header: React.FC = () => {
   return (
@@ -20,16 +20,16 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Navegação Principal */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         {/* Identidade Institucional */}
-        <Link href="/" className="flex items-center space-x-3 group text-decoration-none">
-          <div className="w-10 h-10 relative flex-shrink-0 flex items-center justify-center">
+        <Link href="/" className="flex items-center space-x-3.5 group text-decoration-none">
+          <div className="w-14 h-14 relative flex-shrink-0 flex items-center justify-center">
             <Image
               src="/images/logo_uemg.png"
               alt="Logo UEMG"
-              width={40}
-              height={40}
-              className="w-10 h-10 object-contain transition-transform group-hover:scale-105"
+              width={56}
+              height={56}
+              className="w-14 h-14 object-contain transition-transform group-hover:scale-105 drop-shadow-sm"
               priority
             />
           </div>
@@ -45,14 +45,6 @@ export const Header: React.FC = () => {
 
         {/* Links de Acesso Rápido */}
         <nav aria-label="Navegação Principal" className="flex items-center flex-wrap gap-1 sm:gap-2">
-          <Link
-            href="/"
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-md text-sm font-semibold text-slate-700 hover:text-[#0B3B60] hover:bg-slate-100 transition-colors"
-          >
-            <Home className="w-4 h-4 text-slate-500" aria-hidden="true" />
-            <span>Início</span>
-          </Link>
-
           <Link
             href="/artigos"
             className="flex items-center space-x-1.5 px-3 py-2 rounded-md text-sm font-semibold text-slate-700 hover:text-[#0B3B60] hover:bg-slate-100 transition-colors"
