@@ -14,13 +14,13 @@ export default function HomePage() {
     <div className="w-full">
       {/* Hero Institucional com Fachada da Unidade como Fundo */}
       <section className="relative overflow-hidden bg-[#002244] text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-blue-900">
-        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade em 70% */}
+        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade em 90% */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/UEMG-fachada-2.jpg"
             alt="Fachada UEMG Carangola"
             fill
-            className="object-cover object-center opacity-70"
+            className="object-cover object-center opacity-90"
             priority
           />
           {/* Overlay azul com mais transparência para favorecer a visibilidade da fachada */}
