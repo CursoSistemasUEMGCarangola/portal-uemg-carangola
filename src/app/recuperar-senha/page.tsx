@@ -107,9 +107,21 @@ export default function RecuperarSenhaPage() {
                 </div>
               )}
 
-              <p className="text-[11px] text-slate-500 max-w-xs mx-auto">
-                Por motivos de segurança institucional, o envio é direcionado ao seu provedor externo (Gmail, Outlook, etc.). Verifique também a sua caixa de spam ou lixo eletrônico. O link é válido por 2 horas.
-              </p>
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left text-[11px] text-amber-900 space-y-1.5">
+                <p className="font-bold flex items-center gap-1.5 text-amber-950">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>Atenção: Verifique a pasta de Spam / Lixo Eletrônico</span>
+                </p>
+                <p className="text-amber-800 leading-relaxed">
+                  Como o envio é realizado por sistema automatizado, provedores como o <strong>Gmail</strong> podem direcionar esta primeira mensagem para a pasta de <strong>Spam</strong> ou aba <strong>Promoções</strong>.
+                </p>
+                <p className="text-amber-900 font-semibold bg-amber-100/60 p-1.5 rounded-lg border border-amber-200/60">
+                  💡 Dica: Ao localizar a mensagem no Spam, clique em <strong>&quot;Não é spam&quot;</strong> para que os próximos e-mails cheguem diretamente à sua Caixa de Entrada.
+                </p>
+                <p className="text-slate-500 text-[10px] pt-1">
+                  ⏱ O link de redefinição é válido por <strong>2 horas</strong>.
+                </p>
+              </div>
 
               <div className="pt-4 flex flex-col gap-2">
                 <Link

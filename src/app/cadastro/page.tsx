@@ -160,9 +160,15 @@ export default function CadastroPage() {
                     <p>
                       Seus dados foram gravados com sucesso. Por requisitos de governança e segurança institucional, o perfil de <strong>Coordenador de Curso</strong> depende de <strong>homologação prévia pelo Gabinete da Direção Geral</strong>.
                     </p>
-                    <p className="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
-                      Assim que o Gabinete da Direção aprovar sua solicitação, você receberá uma notificação no seu e-mail alternativo e terá acesso liberado ao painel editorial.
-                    </p>
+                    <div className="text-[11px] text-amber-900 bg-amber-50 p-3 rounded-xl border border-amber-200 text-left space-y-1">
+                      <p className="font-bold flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                        <span>Aviso sobre a Notificação por E-mail</span>
+                      </p>
+                      <p className="text-amber-800 leading-relaxed">
+                        A notificação de homologação será enviada para o seu e-mail alternativo. Como se trata de disparo via sistema externo, <strong>verifique a pasta de Spam / Lixo Eletrônico</strong> e clique em <strong>&quot;Não é spam&quot;</strong> para habilitar as comunicações na sua Caixa de Entrada.
+                      </p>
+                    </div>
                   </>
                 ) : (
                   <p>
