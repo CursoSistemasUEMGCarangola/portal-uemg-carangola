@@ -14,8 +14,12 @@ export const metadata: Metadata = {
     'Portal oficial de divulgação científica, cultural e canal de governança participativa da Universidade do Estado de Minas Gerais — Unidade Carangola.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/icons/icon-192.png',
-    apple: '/icons/icon-192.png',
+    icon: [
+      { url: '/images/logo_uemg_2.jpg' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/images/logo_uemg_2.jpg',
+    apple: '/images/logo_uemg_2.jpg',
   },
   openGraph: {
     title: 'Portal UEMG Carangola',

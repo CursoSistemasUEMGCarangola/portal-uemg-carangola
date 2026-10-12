@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BookOpen, MessageSquare, ShieldCheck, Home, GraduationCap, FileText, CheckSquare, Scale } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -22,8 +23,15 @@ export const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         {/* Identidade Institucional */}
         <Link href="/" className="flex items-center space-x-3 group text-decoration-none">
-          <div className="w-10 h-10 rounded-lg bg-[#0B3B60] flex items-center justify-center text-white font-bold text-xl shadow-sm group-hover:bg-[#0056B3] transition-colors">
-            U
+          <div className="w-10 h-10 relative flex-shrink-0 flex items-center justify-center">
+            <Image
+              src="/images/logo_uemg.png"
+              alt="Logo UEMG"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain transition-transform group-hover:scale-105"
+              priority
+            />
           </div>
           <div>
             <span className="block text-lg font-bold text-[#0B3B60] leading-tight">

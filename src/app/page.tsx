@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BookOpen, MessageSquare, Shield, CheckCircle2, ArrowRight, Sparkles, Building2 } from 'lucide-react';
 import { ARTIGOS_MOCK, CURSOS_LISTA } from '@/lib/data/mock-articles';
 import { FeaturedArticle } from '@/components/editorial/FeaturedArticle';
@@ -11,19 +12,33 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-      {/* Hero Institucional */}
-      <section className="bg-gradient-to-b from-[#002244] to-[#0B3B60] text-white py-16 sm:py-20 px-4 sm:px-8 border-b border-blue-900">
-        <div className="max-w-7xl mx-auto">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold mb-6 border border-blue-400/30">
+      {/* Hero Institucional com Fachada da Unidade como Fundo */}
+      <section className="relative overflow-hidden bg-[#002244] text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-blue-900">
+        {/* Imagem de Fundo (Fachada UEMG Carangola) com Opacidade Suave e Mistura Harmônica */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/UEMG-fachada-2.jpg"
+            alt="Fachada UEMG Carangola"
+            fill
+            className="object-cover object-center opacity-20 mix-blend-luminosity scale-105"
+            priority
+          />
+          {/* Overlay com gradiente institucional profundo para legibilidade impecável dos textos */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#002244]/95 via-[#002244]/85 to-[#0B3B60]/90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#002244] via-transparent to-transparent opacity-80" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold mb-6 border border-blue-400/30 backdrop-blur-sm">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
             <span>Unidade Acadêmica de Carangola — Zona da Mata Mineira</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-4xl leading-tight mb-6 drop-shadow-sm">
             Divulgação Científica e Governança Participativa em um Ponto Único
           </h1>
 
-          <p className="text-base sm:text-xl text-slate-200 max-w-3xl leading-relaxed mb-10">
+          <p className="text-base sm:text-xl text-slate-200 max-w-3xl leading-relaxed mb-10 drop-shadow-sm">
             Conectamos a produção acadêmica dos nossos 8 cursos de graduação ao canal direto
             de diálogo com a Direção Geral, assegurando transparência ativa e engajamento comunitário.
           </p>
