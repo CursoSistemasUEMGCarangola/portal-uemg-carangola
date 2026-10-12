@@ -38,6 +38,16 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/termos-de-uso" className="hover:text-white transition-colors">
+                  Termos de Uso do Portal
+                </Link>
+              </li>
+              <li>
+                <Link href="/acessibilidade-e-privacidade" className="hover:text-white transition-colors">
+                  Acessibilidade &amp; Privacidade (LGPD)
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://www.uemg.br"
                   target="_blank"
@@ -69,15 +79,28 @@ export const Footer: React.FC = () => {
               Projeto mantido pelo Curso de <strong>Sistemas de Informação</strong> da
               UEMG Carangola sob arquitetura soberana de custo zero.
             </p>
-            <div className="inline-block px-3 py-1.5 rounded bg-[#0B3B60] text-xs text-slate-200 border border-slate-700">
-              Padrão eMAG & WCAG 2.1 AA | LGPD Compliant
-            </div>
+            <Link
+              href="/acessibilidade-e-privacidade"
+              className="group inline-flex items-center space-x-1.5 px-3 py-1.5 rounded bg-[#0B3B60] hover:bg-[#003366] text-xs font-semibold text-slate-200 hover:text-white border border-slate-700 hover:border-slate-500 transition-all shadow-sm focus-visible:outline-2 focus-visible:outline-[#0056B3]"
+              title="Acessar documentação detalhada sobre Acessibilidade eMAG / WCAG 2.1 AA e Política de Privacidade LGPD"
+            >
+              <span>Padrão eMAG &amp; WCAG 2.1 AA | LGPD Compliant</span>
+              <span className="text-amber-300 group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} Universidade do Estado de Minas Gerais. Todos os direitos reservados.</p>
-          <p>Desenvolvido com foco em Privacidade, Acessibilidade e Transparência Pública.</p>
+          <div className="flex items-center space-x-4">
+            <Link href="/termos-de-uso" className="hover:text-slate-300 transition-colors underline-offset-2 hover:underline">
+              Termos de Uso
+            </Link>
+            <span aria-hidden="true">•</span>
+            <Link href="/acessibilidade-e-privacidade" className="hover:text-slate-300 transition-colors underline-offset-2 hover:underline">
+              Acessibilidade &amp; Privacidade
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -44,6 +44,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 0.6,
     },
+    {
+      url: `${BASE_URL}/acessibilidade-e-privacidade`,
+      lastModified: agora,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/termos-de-uso`,
+      lastModified: agora,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ];
 
   // Páginas Dedicadas aos 8 Cursos de Graduação
