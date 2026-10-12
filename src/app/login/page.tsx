@@ -36,31 +36,42 @@ function LoginFormContent() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
+      // 1. Autentica via endpoint de servidor para gravar os cookies HTTP oficiais
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error?.includes('Invalid login credentials')) {
           setErro('E-mail institucional ou senha incorretos.');
-        } else if (error.message.includes('Email not confirmed')) {
-          setErro('E-mail ainda não confirmado.');
+        } else if (data.error?.includes('Email not confirmed')) {
+          setErro('E-mail institucional ainda não confirmado.');
         } else {
-          setErro(`Falha na autenticação: ${error.message}`);
+          setErro(data.error || 'Falha na autenticação.');
         }
         setLoading(false);
         return;
       }
 
-      if (data.user) {
-        // Redireciona para o destino pretendido
-        router.push(redirectTo);
-        router.refresh();
+      // 2. Sincroniza sessão no cliente para contexto instantâneo
+      try {
+        await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+      } catch {
+        // Silencioso se o cookie do servidor já assumir a sessão
       }
+
+      // 3. Redirecionamento completo do navegador para carregar cookies no middleware e SSR
+      window.location.href = redirectTo;
     } catch (err) {
       console.error('Erro no login:', err);
-      setErro('Ocorreu um erro inesperado ao conectar com o servidor.');
+      setErro('Ocorreu um erro ao conectar com o servidor.');
       setLoading(false);
     }
   };
