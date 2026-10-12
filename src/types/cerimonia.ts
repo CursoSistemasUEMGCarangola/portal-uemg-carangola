@@ -5,9 +5,9 @@
  */
 
 export type CustodiantePapel =
-  | 'diretor_geral'
-  | 'secretaria_geral'
-  | 'presidencia_congregacao';
+  | 'direcao'
+  | 'vice_direcao'
+  | 'secretaria_academica';
 
 export interface CustodianteInfo {
   papel: CustodiantePapel;

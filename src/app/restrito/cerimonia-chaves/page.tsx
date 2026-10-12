@@ -68,7 +68,7 @@ export default function CerimoniaChavesPage() {
                 3 Custodiantes Formais
               </span>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Fragmentação matemática entre a Direção Geral, a Secretaria Geral e a Presidência da Congregação da Unidade.
+                Fragmentação matemática entre a Direção, a Vice-Direção e a Secretaria Acadêmica da Unidade.
               </p>
             </div>
 

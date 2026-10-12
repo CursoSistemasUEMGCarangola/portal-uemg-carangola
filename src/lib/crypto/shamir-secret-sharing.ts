@@ -17,25 +17,25 @@ import {
 
 export const CUSTODIANTES_INSTITUCIONAIS: CustodianteInfo[] = [
   {
-    papel: 'diretor_geral',
-    tituloInstitucional: 'Diretor Geral da Unidade Acadêmica',
-    titularAtual: 'Prof. Dr. Diretor Geral (Gestão Vigente)',
+    papel: 'direcao',
+    tituloInstitucional: 'Direção',
+    titularAtual: 'Direção Geral da Unidade',
     indiceX: 1,
     descricao: 'Custodiante da gestão executiva e representação institucional máxima.',
   },
   {
-    papel: 'secretaria_geral',
-    tituloInstitucional: 'Secretaria Geral / Vice-Direção',
-    titularAtual: 'Secretário(a) Geral e Registros Acadêmicos',
+    papel: 'vice_direcao',
+    tituloInstitucional: 'Vice-Direção',
+    titularAtual: 'Vice-Direção da Unidade',
     indiceX: 2,
-    descricao: 'Custodiante da guarda perene de atos administrativos e continuidade de mandato.',
+    descricao: 'Custodiante da cogestão executiva e continuidade administrativa imediata.',
   },
   {
-    papel: 'presidencia_congregacao',
-    tituloInstitucional: 'Presidência da Congregação da Unidade',
-    titularAtual: 'Representante Eleito da Congregação',
+    papel: 'secretaria_academica',
+    tituloInstitucional: 'Secretaria Acadêmica',
+    titularAtual: 'Secretaria Acadêmica e Registros Oficiais',
     indiceX: 3,
-    descricao: 'Custodiante colegiado deliberativo superior da UEMG Carangola.',
+    descricao: 'Custodiante da guarda perene de atos, registros acadêmicos e conformidade documental.',
   },
 ];
 
@@ -157,7 +157,7 @@ export async function executarCerimoniaParticaoShamir(
   const fragmentos: FragmentoChaveShamir[] = [
     {
       indice: 1,
-      papel: 'diretor_geral',
+      papel: 'direcao',
       tituloInstitucional: CUSTODIANTES_INSTITUCIONAIS[0].tituloInstitucional,
       shareHex: bytesParaHex(share1Bytes),
       comprovanteHash: await calcularSha256Hex(share1Bytes),
@@ -165,7 +165,7 @@ export async function executarCerimoniaParticaoShamir(
     },
     {
       indice: 2,
-      papel: 'secretaria_geral',
+      papel: 'vice_direcao',
       tituloInstitucional: CUSTODIANTES_INSTITUCIONAIS[1].tituloInstitucional,
       shareHex: bytesParaHex(share2Bytes),
       comprovanteHash: await calcularSha256Hex(share2Bytes),
@@ -173,7 +173,7 @@ export async function executarCerimoniaParticaoShamir(
     },
     {
       indice: 3,
-      papel: 'presidencia_congregacao',
+      papel: 'secretaria_academica',
       tituloInstitucional: CUSTODIANTES_INSTITUCIONAIS[2].tituloInstitucional,
       shareHex: bytesParaHex(share3Bytes),
       comprovanteHash: await calcularSha256Hex(share3Bytes),
@@ -266,9 +266,9 @@ export function recomporSegredoDeFragmentos(
     const textoReconstruido = decoder.decode(segredoReconstruidoBytes);
 
     const papeisMap: Record<number, CustodiantePapel> = {
-      1: 'diretor_geral',
-      2: 'secretaria_geral',
-      3: 'presidencia_congregacao',
+      1: 'direcao',
+      2: 'vice_direcao',
+      3: 'secretaria_academica',
     };
 
     return {

@@ -178,7 +178,7 @@ export default function AcessoRestritoHubPage() {
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Dividir segredos via Shamir (2 de 3: Direção, Secretaria e Congregação).</span>
+                    <span>Dividir segredos via Shamir (2 de 3: Direção, Vice-Direção e Secretaria Acadêmica).</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />

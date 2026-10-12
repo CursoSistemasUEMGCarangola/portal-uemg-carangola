@@ -73,7 +73,7 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
               Cerimônia de Custódia Compartilhada & Continuidade Administrativa
             </h2>
             <p className="text-xs text-slate-500">
-              Divisão matemática incondicional da chave mestra do Gabinete entre Direção, Secretaria e Congregação.
+              Divisão matemática incondicional da chave mestra do Gabinete entre Direção, Vice-Direção e Secretaria Acadêmica.
             </p>
           </div>
           <button
@@ -318,7 +318,17 @@ export default function CerimoniaChavesModal({ aoFechar }: CerimoniaChavesModalP
                         <span>Chave Reconstruída com Sucesso pelo Quórum Qualificado!</span>
                       </div>
                       <p className="text-xs text-emerald-800">
-                        Custodiantes que assinaram a restauração: {resultadoRecomposicao.custodiantesPresentes.join(', ')}.
+                        Custodiantes que assinaram a restauração:{' '}
+                        {resultadoRecomposicao.custodiantesPresentes
+                          .map((p) =>
+                            p === 'direcao'
+                              ? 'Direção'
+                              : p === 'vice_direcao'
+                              ? 'Vice-Direção'
+                              : 'Secretaria Acadêmica'
+                          )
+                          .join(', ')}
+                        .
                       </p>
                       <div className="bg-white p-3.5 rounded-xl border border-emerald-200 mt-2">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">

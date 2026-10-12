@@ -44,7 +44,7 @@ O Monitor de TI é um estudante do curso de **Sistemas de Informação da UEMG C
 * **Teoria Matemática:**
   - Opera sobre o corpo finito de Galois $GF(2^8)$ com o polinômio irredutível $0x11D$ ($x^8+x^4+x^3+x+1$), com tabelas exponenciais e logarítmicas pré-computadas.
   - Polinômio aleatório de grau $k-1 = 1$ ($f(x) = S \oplus a_1 \cdot x$).
-  - 3 custodiantes oficiais: Diretor Geral ($x=1$), Secretaria Geral ($x=2$) e Presidência da Congregação ($x=3$).
+  - 3 custodiantes oficiais: Direção ($x=1$), Vice-Direção ($x=2$) e Secretaria Acadêmica ($x=3$).
   - **Reconstituição:** Interpolação de Lagrange em $x=0$ requer estritamente 2 fragmentos quaisquer:
     $$L_1(0) = \frac{x_2}{x_1 \oplus x_2}, \quad L_2(0) = \frac{x_1}{x_1 \oplus x_2}$$
   - **Segurança da Teoria da Informação:** 1 fragmento isolado não diminui a entropia da chave em 1 único bit.
