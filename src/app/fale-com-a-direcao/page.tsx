@@ -14,7 +14,7 @@ import {
 export const metadata = {
   title: 'Fale com a Direção | Portal UEMG Carangola',
   description:
-    'Canal soberano e seguro de ouvidoria com o Gabinete da Direção Geral da UEMG Carangola. Criptografia de ponta a ponta e sigilo garantido.',
+    'Canal autônomo e seguro de ouvidoria com o Gabinete da Direção Geral da UEMG Carangola. Criptografia de ponta a ponta e sigilo garantido.',
 };
 
 export default function FaleComADirecaoPage() {
@@ -26,7 +26,7 @@ export default function FaleComADirecaoPage() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0B3B60] text-white mb-2">
               <Building className="w-3.5 h-3.5 text-cyan-300" aria-hidden="true" />
-              Gabinete da Direção Geral • Ouvidoria Soberana
+              Gabinete da Direção Geral • Ouvidoria Cidadã e Segura
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
               Fale com a Direção

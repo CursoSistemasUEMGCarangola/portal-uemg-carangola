@@ -1,7 +1,7 @@
 -- ==============================================================================
 -- MIGRAÇÃO INICIAL: Schema Relacional e Políticas de RLS
 -- Projeto: Portal UEMG Carangola (Publicações Acadêmicas & Fale com a Direção)
--- Princípio Soberano: Client-Side Zero-Trust & Governança por Papéis (RBAC)
+-- Princípio Arquitetural: Client-Side Zero-Trust & Governança por Papéis (RBAC)
 -- ==============================================================================
 
 -- 1. EXTENSÕES OBRIGATÓRIAS

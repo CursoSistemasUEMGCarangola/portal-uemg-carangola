@@ -434,7 +434,7 @@ export default function HomePage() {
             <div>
               <h3 className="text-sm font-bold text-slate-900">Custo Zero e Sustentável</h3>
               <p className="text-xs text-slate-500 mt-1">
-                Arquitetura soberana gratuita ancorada como projeto de extensão do curso de Sistemas de Informação.
+                Arquitetura autônoma gratuita ancorada como projeto de extensão do curso de Sistemas de Informação.
               </p>
             </div>
           </div>

@@ -53,7 +53,7 @@ export default function TermosDeUsoPage() {
               O Portal UEMG Carangola tem por finalidade constituir um repositório institucional e veículo unificado de
               divulgação científica, cultural e de extensão para os 8 cursos de graduação da Unidade (Ciências Biológicas,
               Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação), bem como prover um
-              canal soberano e seguro para a governança participativa e ouvidoria junto ao Gabinete da Direção Geral.
+              canal autônomo e seguro para a governança participativa e ouvidoria junto ao Gabinete da Direção Geral.
             </p>
           </section>
 
@@ -146,7 +146,7 @@ export default function TermosDeUsoPage() {
             </h2>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
               O Portal é desenvolvido e mantido pelo Colegiado de Sistemas de Informação da UEMG Carangola sob a filosofia de
-              Arquitetura Soberana de Custo Zero. A Universidade reserva-se o direito de atualizar funcionalidades, aplicar
+              Arquitetura Autônoma de Custo Zero. A Universidade reserva-se o direito de atualizar funcionalidades, aplicar
               melhorias de segurança e revisar estes termos periodicamente para manter a conformidade com a legislação pública
               vigente.
             </p>

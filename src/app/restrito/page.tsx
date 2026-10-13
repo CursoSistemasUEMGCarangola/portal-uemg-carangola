@@ -52,7 +52,7 @@ export default async function AcessoRestritoHubPage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/20 text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-              <span>Gabinete da Direção Geral • Gestão Soberana</span>
+              <span>Gabinete da Direção Geral • Gestão Autônoma e Participativa</span>
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
@@ -207,7 +207,7 @@ export default async function AcessoRestritoHubPage() {
                   <Key className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                  Soberania
+                  Autonomia
                 </span>
               </div>
 
@@ -229,7 +229,7 @@ export default async function AcessoRestritoHubPage() {
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Garantir sucessão administrativa e soberania tecnológica sem custo.</span>
+                    <span>Garantir sucessão administrativa e autonomia tecnológica sem custo.</span>
                   </div>
                 </div>
               </div>

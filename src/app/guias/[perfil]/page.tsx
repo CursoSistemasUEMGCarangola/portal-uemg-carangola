@@ -129,7 +129,7 @@ export default function GuiaDeUsoPage({ params }: GuiaPageProps) {
               Universidade do Estado de Minas Gerais — Unidade Carangola
             </p>
             <p>
-              Documentação Institucional Soberana • Conformidade com LAI (Lei 12.527/11) e LGPD (Lei 13.709/18)
+              Documentação Institucional Oficial • Conformidade com LAI (Lei 12.527/11) e LGPD (Lei 13.709/18)
             </p>
           </div>
         </div>

@@ -20,7 +20,7 @@ Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) 
    * **Defesa Anti-Enumeração:** Acompanhamento condicionado à posse estrita da tupla *Protocolo Institucional + Token Secreto (NanoID de 24 caracteres)* com retardo artificial de 400ms contra timing attacks.
    * **Desacoplamento Físico:** Mensagens privadas residem em `protocolos_internos`; deliberações homologadas em texto claro residem isoladamente no `mural_publico`.
 
-3. **Continuidade Institucional & Soberania Digital:**
+3. **Continuidade Institucional & Autonomia Digital:**
    * **Partição Criptográfica de Shamir (2-de-3):** A chave mestre do acervo é fragmentada matematicamente entre Diretor Geral, Secretaria Geral/Vice-Direção e Congregação da Unidade com CSPRNG estrito (`crypto.getRandomValues`), prevenindo orfandade técnica nas trocas de gestão.
    * **Operação em Custo Zero Absoluto:** Infraestrutura sustentável no Supabase Free Tier e Vercel, ancorada institucionalmente como Projeto de Extensão Contínuo do curso de **Sistemas de Informação (SIS)**.
    * **Prevenção de Pausa por Inatividade:** Tabela transacional `keepalive` atualizada periodicamente via GitHub Actions, garantindo que o banco de dados nunca entre em dormência no plano gratuito.

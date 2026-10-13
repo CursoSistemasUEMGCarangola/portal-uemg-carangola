@@ -54,7 +54,7 @@ export default function AcessibilidadeEPrivacidadePage() {
           </h1>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             O Portal da <strong>Universidade do Estado de Minas Gerais — Unidade Acadêmica de Carangola</strong> foi
-            concebido como uma infraestrutura pública soberana, garantindo acesso universal, inclusivo e transparente a
+            concebido como uma infraestrutura pública autônoma, garantindo acesso universal, inclusivo e transparente a
             toda a comunidade acadêmica e à sociedade civil, com proteção rigorosa da privacidade e dos dados dos cidadãos.
           </p>
         </header>

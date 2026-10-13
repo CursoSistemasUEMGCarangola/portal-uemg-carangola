@@ -1,5 +1,5 @@
 /**
- * Cliente Soberano de Notificações Web Push (VAPID)
+ * Cliente Autônomo de Notificações Web Push (VAPID)
  * Em conformidade com o Hard Box DNA #6 (Zero-Email) e #7 (Modo Computador Hostil/Compartilhado).
  */
 

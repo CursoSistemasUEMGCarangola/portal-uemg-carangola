@@ -1,5 +1,5 @@
 # GUIA DE USO: GABINETE DA DIREÇÃO GERAL
-## Portal UEMG Carangola — Governança Institucional, Ouvidoria Soberana e Transparência
+## Portal UEMG Carangola — Governança Institucional, Ouvidoria Cidadã e Transparência
 
 > **Versão:** 3.1.0 | **Perfil:** Diretor Geral / Vice-Direção / Assessoria do Gabinete  
 > **Papel no Sistema:** `direcao` | **Alçada:** Decisão Máxima de Governança, Ouvidoria e Custódia Institucional  
@@ -21,7 +21,7 @@
 ---
 
 ## 1. Visão Geral do Perfil e Atribuições
-O Diretor Geral da UEMG Unidade Carangola exerce a autoridade máxima de governança participativa, ouvidoria e homologação institucional. O portal foi concebido para conferir ao Gabinete um canal soberano, direto e desburocratizado de diálogo com a comunidade acadêmica e a sociedade civil, superando a invisibilidade da gestão e protegendo integralmente o sigilo constitucional de manifestantes.
+O Diretor Geral da UEMG Unidade Carangola exerce a autoridade máxima de governança participativa, ouvidoria e homologação institucional. O portal foi concebido para conferir ao Gabinete um canal autônomo, direto e desburocratizado de diálogo com a comunidade acadêmica e a sociedade civil, superando a invisibilidade da gestão e protegendo integralmente o sigilo constitucional de manifestantes.
 
 ## 2. O Painel do Gabinete da Direção (`/restrito/ouvidoria`)
 Acessível a partir de `/restrito` pelo perfil `direcao`:

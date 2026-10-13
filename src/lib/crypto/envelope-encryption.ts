@@ -15,7 +15,7 @@ import {
   obterChavePublicaGabinete,
 } from './keys';
 
-// Cache efêmero de DEKs locais na memória RAM da sessão para demonstração soberana do Gabinete
+// Cache efêmero de DEKs locais na memória RAM da sessão para demonstração segura do Gabinete
 const mapaDeksEfêmeras = new Map<string, CryptoKey>();
 
 /**

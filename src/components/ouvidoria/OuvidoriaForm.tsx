@@ -63,7 +63,7 @@ export default function OuvidoriaForm() {
           </p>
           <div className="pt-2">
             <Link
-              href="/guias/estudante#9-canal-fale-com-a-direcao-ouvidoria-soberana-zero-trust"
+              href="/guias/estudante#9-canal-fale-com-a-direcao-ouvidoria-cidada-zero-trust"
               target="_blank"
               className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0056B3] hover:text-[#0B3B60] hover:underline"
             >

@@ -217,7 +217,7 @@ export async function enviarEmailRecuperacaoSenha({
         <p>
           <strong>Universidade do Estado de Minas Gerais — Unidade Carangola</strong><br>
           Praça dos Estudantes, 23 — Centro | Carangola - MG, CEP: 36800-000<br>
-          Arquitetura Soberana de Governança Institucional &middot; Custo Zero
+          Arquitetura Autônoma de Governança Institucional &middot; Custo Zero
         </p>
       </div>
     </div>
@@ -504,7 +504,7 @@ export async function enviarEmailAprovacaoCoordenador({
         <p style="margin: 0;">
           <strong style="color: #334155;">Universidade do Estado de Minas Gerais — Unidade Carangola</strong><br>
           Praça dos Estudantes, 23 — Centro | Carangola - MG, CEP: 36800-000<br>
-          Arquitetura Soberana de Governança Institucional &middot; Custo Zero
+          Arquitetura Autônoma de Governança Institucional &middot; Custo Zero
         </p>
       </div>
     </div>

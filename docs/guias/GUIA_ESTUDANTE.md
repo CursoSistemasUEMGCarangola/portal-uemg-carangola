@@ -16,7 +16,7 @@
 * [6. Como Submeter seu Trabalho Acadêmico (`/meus-artigos/novo`)](#6-como-submeter-seu-trabalho-acadêmico-meus-artigosnovo)
 * [7. Compressão Automática de Imagens em WebP](#7-compressão-automática-de-imagens-em-webp)
 * [8. Acompanhamento dos Seus Artigos (`/meus-artigos`)](#8-acompanhamento-dos-seus-artigos-meus-artigos)
-* [9. Canal Fale com a Direção (Ouvidoria Soberana Zero-Trust)](#9-canal-fale-com-a-direção-ouvidoria-soberana-zero-trust)
+* [9. Canal Fale com a Direção (Ouvidoria Cidadã Zero-Trust)](#9-canal-fale-com-a-direção-ouvidoria-cidadã-zero-trust)
 * [10. A Dupla Chave e o Comprovante Portátil em PDF](#10-a-dupla-chave-e-o-comprovante-portátil-em-pdf)
 * [11. Como Consultar o Despacho da Direção (`/fale-com-a-direcao/consulta`)](#11-como-consultar-o-despacho-da-direção-fale-com-a-direcaoconsulta)
 * [12. Mural de Transparência Pública (`/mural-de-transparencia`)](#12-mural-de-transparência-pública-mural-de-transparencia)
@@ -63,7 +63,7 @@ No lançamento oficial, o portal conta com acervo pré-carregado representativo 
 ## 8. Acompanhamento dos Seus Artigos (`/meus-artigos`)
 * Acesse a tela **Meus Artigos** para acompanhar o andamento da sua publicação por meio de selos visuais em tempo real (*Aguardando Avaliação*, *Com Ajustes*, *Publicados*, *Rejeitados*).
 
-## 9. Canal Fale com a Direção (Ouvidoria Soberana Zero-Trust)
+## 9. Canal Fale com a Direção (Ouvidoria Cidadã Zero-Trust)
 1. No menu superior, clique em **Fale com a Direção** (`/fale-com-a-direcao`).
 2. Selecione a categoria: *Solicitação, Sugestão, Elogio ou Denúncia*.
 3. **Modo Anônimo:** Se preferir sigilo absoluto, ative o botão **Manifestação Anônima**. Nenhum dado pessoal será gravado.

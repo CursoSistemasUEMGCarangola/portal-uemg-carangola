@@ -77,7 +77,7 @@ export const Footer: React.FC = () => {
             </h2>
             <p className="text-xs text-slate-400 leading-relaxed mb-3">
               Projeto mantido pelo Curso de <strong>Sistemas de Informação</strong> da
-              UEMG Carangola sob arquitetura soberana de custo zero.
+              UEMG Carangola sob arquitetura autônoma de custo zero.
             </p>
             <Link
               href="/acessibilidade-e-privacidade"

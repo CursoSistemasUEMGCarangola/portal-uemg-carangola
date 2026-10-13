@@ -78,12 +78,12 @@ export const CURSOS_LISTA: Curso[] = [
 export const ARTIGOS_MOCK: Artigo[] = [
   {
     id: 'art-1',
-    slug: 'arquitetura-soberana-custo-zero-governanca-publica',
-    titulo: 'Arquitetura de Software Soberana e Custo Zero: Descentralização Tecnológica na UEMG Carangola',
+    slug: 'arquitetura-autonoma-custo-zero-governanca-publica',
+    titulo: 'Arquitetura de Software Autônoma e Custo Zero: Descentralização Tecnológica na UEMG Carangola',
     resumo: 'Relato técnico e metodológico sobre a concepção e implementação do Portal UEMG Carangola. Descreve a engenharia de uma plataforma pública sustentável que unifica a divulgação científica dos 8 cursos e a ouvidoria institucional com Custo Zero, Criptografia de Envelope Client-Side, partição de chaves Shamir (2-de-3) e operação perpétua no Free Tier do Supabase.',
     corpoMarkdown: `## Resumo Técnico
 
-Este artigo documenta a concepção, os fundamentos arquiteturais e as decisões de engenharia de software empregadas na construção do **Portal UEMG Carangola**, plataforma pública unificada concebida para atender à Universidade do Estado de Minas Gerais (UEMG) em sua Unidade Acadêmica de Carangola, localizada na Zona da Mata Mineira. O projeto responde a um duplo desafio comum às autarquias estaduais descentralizadas: a fragmentação da produção intelectual multicampi e a ausência de canais institucionais seguros e acessíveis para o diálogo entre a comunidade acadêmica e o Gabinete da Direção Geral. Em um cenário de fortes restrições orçamentárias públicas, onde a contratação de infraestrutura em nuvem de grande porte é inviabilizada por entraves licitatórios, foi formulada e executada uma **Arquitetura Soberana em Custo Zero Absoluto**. 
+Este artigo documenta a concepção, os fundamentos arquiteturais e as decisões de engenharia de software empregadas na construção do **Portal UEMG Carangola**, plataforma pública unificada concebida para atender à Universidade do Estado de Minas Gerais (UEMG) em sua Unidade Acadêmica de Carangola, localizada na Zona da Mata Mineira. O projeto responde a um duplo desafio comum às autarquias estaduais descentralizadas: a fragmentação da produção intelectual multicampi e a ausência de canais institucionais seguros e acessíveis para o diálogo entre a comunidade acadêmica e o Gabinete da Direção Geral. Em um cenário de fortes restrições orçamentárias públicas, onde a contratação de infraestrutura em nuvem de grande porte é inviabilizada por entraves licitatórios, foi formulada e executada uma **Arquitetura Autônoma em Custo Zero Absoluto**. 
 
 O sistema integra em uma única base de código a divulgação científica de oito cursos de graduação e um canal de ouvidoria blindado por Criptografia de Envelope no cliente (*Client-Side Zero-Trust*), distribuição de segredos mestres via algoritmo de Shamir (*2-de-3 Secret Sharing*), políticas estritas de segurança em nível de linha (*Row Level Security — RLS*) no PostgreSQL e mitigação ativa contra pausas de inatividade no plano gratuito do Supabase.
 
@@ -93,7 +93,7 @@ O sistema integra em uma única base de código a divulgação científica de oi
 
 A interiorização do ensino superior público em Minas Gerais, consolidada pela expansão da UEMG, transformou a dinâmica socioeconômica de microrregiões históricas como a bacia do Rio Carangola. Contudo, a descentralização física frequentemente enfrenta a chamada *assimetria da visibilidade digital*: enquanto os campi sediados na capital concentram recursos tecnológicos e canais corporativos unificados, as unidades do interior tendem a conviver com repositórios isolados, publicações dispersas em redes sociais não oficiais e canais de governança dependentes de caixas de e-mail genéricas ou formulários desprovidos de garantias criptográficas.
 
-Em Carangola, oito cursos de graduação — Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação — geram continuadamente artigos de extensão, ensaios teóricos, monografias e relatórios de campo. Paralelamente, o Gabinete da Direção Geral necessitava de um mecanismo soberano para o programa "Fale com a Direção", assegurando que denúncias, críticas, sugestões e elogios pudessem tramitar com garantia de sigilo ou anonimato inviolável, conforme preconizado pela Lei de Acesso à Informação (LAI — Lei 12.527/2011) e pela Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).
+Em Carangola, oito cursos de graduação — Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação — geram continuadamente artigos de extensão, ensaios teóricos, monografias e relatórios de campo. Paralelamente, o Gabinete da Direção Geral necessitava de um mecanismo autônomo para o programa "Fale com a Direção", assegurando que denúncias, críticas, sugestões e elogios pudessem tramitar com garantia de sigilo ou anonimato inviolável, conforme preconizado pela Lei de Acesso à Informação (LAI — Lei 12.527/2011) e pela Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).
 
 O desafio central imposto à equipe de desenvolvimento do curso de Sistemas de Informação consistiu em: **como construir uma infraestrutura perene, de alta fidelidade visual e rigor criptográfico, sem dispor de orçamento financeiro para servidores dedicados, bancos de dados pagos ou serviços corporativos de e-mail?**
 
@@ -101,13 +101,13 @@ O desafio central imposto à equipe de desenvolvimento do curso de Sistemas de I
 
 ## 2. A Filosofia do Custo Zero e o Offloading Computacional no Cliente
 
-A resposta a essa restrição orçamentária foi materializada através da filosofia de **Custo Zero Soberano (Zero-Budget Sovereign Architecture)**. Em vez de depender de instâncias virtuais ativas 24 horas por dia consumindo cotas financeiras, a arquitetura do Portal UEMG Carangola transfere a intensidade do processamento computacional para a CPU e memória RAM do navegador do usuário (*Client-Side Offloading*).
+A resposta a essa restrição orçamentária foi materializada através da filosofia de **Custo Zero e Autonomia Tecnológica (Zero-Budget Autonomous Architecture)**. Em vez de depender de instâncias virtuais ativas 24 horas por dia consumindo cotas financeiras, a arquitetura do Portal UEMG Carangola transfere a intensidade do processamento computacional para a CPU e memória RAM do navegador do usuário (*Client-Side Offloading*).
 
 Essa decisão manifesta-se em três soluções de engenharia primordiais:
 
 1. **Pipeline de Compressão Gráfica WebP Client-Side:** O upload direto de fotografias em alta resolução esgotaria o limite de 1 GB de armazenamento de arquivos oferecido pelo plano gratuito do Supabase Storage. Para contornar esse teto, implementou-se um pipeline no navegador baseado em \`OffscreenCanvas\` que redimensiona imagens para uma largura máxima de 1200 pixels e as converte em WebP com taxa de compressão de 80%. O resultado reduz arquivos de 8 MB para uma faixa entre 80 KB e 110 KB antes de qualquer tráfego de rede, viabilizando o suporte a milhares de artigos sem custos de storage.
 2. **A Regra Inviolável de Zero-Storage para Arquivos PDF:** No modelo editorial tradicional, cada artigo publicado gera um arquivo PDF binário armazenado permanentemente no servidor. No Portal UEMG Carangola, vigora a regra estrita de **Zero-Storage de PDFs**: nenhum arquivo binário \`.pdf\` é gravado no banco de dados. Os documentos oficiais são compilados sob demanda no navegador do leitor a partir do texto estruturado em Markdown e metadados institucionais, utilizando estilos CSS tipográficos de alta precisão calibrados para impressão A4 na memória volátil.
-3. **Comunicação Soberana In-App (Zero-Email Architecture):** Servidores de correio eletrônico (SMTP) corporativos apresentam custos recorrentes e suscetibilidade a bloqueios de reputação e spam. Toda a comunicação do portal foi desenhada para operar de forma 100% autônoma dentro da aplicação (*In-App*), empregando comprovantes portáteis e notificações Web Push nativas via protocolo VAPID, sem qualquer dependência de fornecedores de e-mail externos.
+3. **Comunicação Autônoma In-App (Zero-Email Architecture):** Servidores de correio eletrônico (SMTP) corporativos apresentam custos recorrentes e suscetibilidade a bloqueios de reputação e spam. Toda a comunicação do portal foi desenhada para operar de forma 100% autônoma dentro da aplicação (*In-App*), empregando comprovantes portáteis e notificações Web Push nativas via protocolo VAPID, sem qualquer dependência de fornecedores de e-mail externos.
 
 ---
 
@@ -174,7 +174,7 @@ A concepção e o lançamento do **Portal UEMG Carangola** demonstram que a desc
 
 Ao ancorar o ciclo de vida do software no Projeto de Extensão Contínuo do curso de **Sistemas de Informação**, o portal combate de raiz o clássico problema da orfandade de sistemas no setor público. Cada turma semestral de estagiários e monitores herda uma base de código tipada estritamente em TypeScript, documentada em profundidade, auditada por padrões governamentais (WCAG 2.1 AA e eMAG) e protegida por salvaguardas criptográficas que impedem o vazamento de dados de ouvidoria.
 
-Mais do que um portal web, a plataforma consolida-se como um laboratório vivo de soberania digital, onde a teoria de algoritmos, a segurança da informação e a ética pública convergem para fortalecer a cidadania universitária e a memória acadêmica da UEMG na Zona da Mata Mineira.
+Mais do que um portal web, a plataforma consolida-se como um laboratório vivo de autonomia digital e tecnologia pública, onde a teoria de algoritmos, a segurança da informação e a ética pública convergem para fortalecer a cidadania universitária e a memória acadêmica da UEMG na Zona da Mata Mineira.
 `,
     capaUrl: '/icons/icon-512.png',
     curso: CURSOS_LISTA[7], // SIS
@@ -185,8 +185,8 @@ Mais do que um portal web, a plataforma consolida-se como um laboratório vivo d
     linkExternoMidia: 'https://github.com/niltonfjunior2/portal-uemg-carangola',
     tempoLeituraMinutos: 9,
     dataPublicacao: '12/10/2026',
-    citacaoAbnt: 'FREITAS JUNIOR, N. Arquitetura de Software Soberana e Custo Zero: Descentralização Tecnológica na UEMG Carangola. Portal Acadêmico UEMG Carangola, out. 2026.',
-    tags: ['Engenharia de Software', 'Zero-Trust', 'PWA', 'Governança Pública', 'Soberania Digital'],
+    citacaoAbnt: 'FREITAS JUNIOR, N. Arquitetura de Software Autônoma e Custo Zero: Descentralização Tecnológica na UEMG Carangola. Portal Acadêmico UEMG Carangola, out. 2026.',
+    tags: ['Engenharia de Software', 'Zero-Trust', 'PWA', 'Governança Pública', 'Autonomia Digital'],
     status: 'publicado',
   },
 ];
