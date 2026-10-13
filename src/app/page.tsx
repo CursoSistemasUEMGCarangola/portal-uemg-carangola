@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  BookOpen,
   MessageSquare,
   Shield,
   CheckCircle2,
@@ -83,52 +82,6 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Dois Pilares Institucionais */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Pilar 1 */}
-          <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-lg bg-blue-50 text-[#0056B3] flex items-center justify-center mb-5">
-              <BookOpen className="w-6 h-6" aria-hidden="true" />
-            </div>
-            <h2 className="text-xl font-bold text-[#0B3B60] mb-3">
-              1. Disseminação do Conhecimento
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              Artigos, ensaios técnicos, crônicas e projetos de extensão categorizados por curso,
-              com destaques automatizados e geração on-the-fly de cópias oficiais em PDF.
-            </p>
-            <Link
-              href="/artigos"
-              className="text-sm font-bold text-[#0056B3] hover:text-[#0B3B60] inline-flex items-center space-x-1"
-            >
-              <span>Ver acervo de publicações</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-          </div>
-
-          {/* Pilar 2 */}
-          <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-lg bg-blue-50 text-[#0056B3] flex items-center justify-center mb-5">
-              <MessageSquare className="w-6 h-6" aria-hidden="true" />
-            </div>
-            <h2 className="text-xl font-bold text-[#0B3B60] mb-3">
-              2. Governança & Fale com a Direção
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              Envio anônimo ou identificado com chave criptográfica exclusiva (Zero-Trust),
-              acompanhamento por protocolo institucional e mural público de resoluções homologadas.
-            </p>
-            <Link
-              href="/fale-com-a-direcao"
-              className="text-sm font-bold text-[#0056B3] hover:text-[#0B3B60] inline-flex items-center space-x-1"
-            >
-              <span>Enviar demanda ou consultar mural</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Recentes do Campus */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 mb-16">
