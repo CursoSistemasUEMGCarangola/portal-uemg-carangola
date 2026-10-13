@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -12,33 +12,105 @@ interface MarkdownRendererProps {
   className?: string;
 }
 
+/**
+ * Extrai recursivamente o texto plano de um nó ou árvore React.
+ */
+function extrairTextoDoReactNode(node: React.ReactNode): string {
+  if (node === null || node === undefined || typeof node === 'boolean') {
+    return '';
+  }
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(extrairTextoDoReactNode).join('');
+  }
+  if (React.isValidElement(node) && (node.props as { children?: React.ReactNode })?.children) {
+    return extrairTextoDoReactNode((node.props as { children?: React.ReactNode }).children);
+  }
+  return '';
+}
+
+/**
+ * Converte o texto de um cabeçalho em um identificador slug GFM compatível com âncoras.
+ */
+function gerarSlugId(children: React.ReactNode): string {
+  const text = extrairTextoDoReactNode(children);
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s\u00C0-\u017F-]/g, '')
+    .replace(/\s+/g, '-');
+}
+
 export function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
+  // Suporte a carregamento direto com âncora (#) na barra de endereços
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const rawHash = window.location.hash.slice(1);
+      const decoded = decodeURIComponent(rawHash).toLowerCase().trim();
+      const timer = setTimeout(() => {
+        const el =
+          document.getElementById(rawHash) ||
+          document.getElementById(decoded) ||
+          document.getElementById(decoded.replace(/-+/g, '-'));
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [content]);
+
   return (
     <div className={`markdown-content ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          h1: ({ children }) => (
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight mt-10 mb-4 pb-2 border-b border-slate-200">
-              {children}
-            </h1>
-          ),
-          h2: ({ children }) => (
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0B3B60] tracking-tight mt-8 mb-4 pb-2 border-b border-slate-200">
-              {children}
-            </h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className="text-lg sm:text-xl font-bold text-slate-800 mt-6 mb-3">
-              {children}
-            </h3>
-          ),
-          h4: ({ children }) => (
-            <h4 className="text-base sm:text-lg font-semibold text-slate-800 mt-4 mb-2">
-              {children}
-            </h4>
-          ),
+          h1: ({ children }) => {
+            const id = gerarSlugId(children);
+            return (
+              <h1
+                id={id}
+                className="scroll-mt-28 text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight mt-10 mb-4 pb-2 border-b border-slate-200"
+              >
+                {children}
+              </h1>
+            );
+          },
+          h2: ({ children }) => {
+            const id = gerarSlugId(children);
+            return (
+              <h2
+                id={id}
+                className="scroll-mt-28 text-xl sm:text-2xl font-bold text-[#0B3B60] tracking-tight mt-8 mb-4 pb-2 border-b border-slate-200"
+              >
+                {children}
+              </h2>
+            );
+          },
+          h3: ({ children }) => {
+            const id = gerarSlugId(children);
+            return (
+              <h3
+                id={id}
+                className="scroll-mt-28 text-lg sm:text-xl font-bold text-slate-800 mt-6 mb-3"
+              >
+                {children}
+              </h3>
+            );
+          },
+          h4: ({ children }) => {
+            const id = gerarSlugId(children);
+            return (
+              <h4
+                id={id}
+                className="scroll-mt-28 text-base sm:text-lg font-semibold text-slate-800 mt-4 mb-2"
+              >
+                {children}
+              </h4>
+            );
+          },
           p: ({ children }) => (
             <p className="text-slate-800 text-base leading-relaxed mb-4 text-justify sm:text-left">
               {children}
@@ -97,16 +169,62 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
           hr: () => (
             <hr className="my-8 border-t border-slate-200" />
           ),
-          a: ({ href, children }) => (
-            <a
-              href={href}
-              target={href?.startsWith('http') ? '_blank' : undefined}
-              rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="text-[#0056B3] hover:text-[#0B3B60] underline underline-offset-2 font-medium transition-colors"
-            >
-              {children}
-            </a>
-          ),
+          a: ({ href, children }) => {
+            const isHash = href?.startsWith('#');
+            if (isHash) {
+              return (
+                <a
+                  href={href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const linkHref = href || '';
+                    const rawHash = linkHref.slice(1);
+                    const decoded = decodeURIComponent(rawHash).toLowerCase().trim();
+
+                    // 1. Tenta correspondência exata
+                    let el = document.getElementById(rawHash) || document.getElementById(decoded);
+
+                    // 2. Tenta normalizar hifens múltiplos (-- para -)
+                    if (!el) {
+                      const singleHyphen = decoded.replace(/-+/g, '-');
+                      el = document.getElementById(singleHyphen);
+                    }
+
+                    // 3. Fallback: busca por cabeçalho pelo texto
+                    if (!el) {
+                      const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+                      const cleanTarget = decoded.replace(/[^a-z0-9]/gi, '');
+                      el = (headings.find((h) => {
+                        const cleanH = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]/gi, '');
+                        return cleanH.includes(cleanTarget) || cleanTarget.includes(cleanH);
+                      }) as HTMLElement) || null;
+                    }
+
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      if (typeof window !== 'undefined' && linkHref) {
+                        window.history.pushState(null, '', linkHref);
+                      }
+                    }
+                  }}
+                  className="text-[#0056B3] hover:text-[#0B3B60] underline underline-offset-2 font-medium transition-colors cursor-pointer"
+                >
+                  {children}
+                </a>
+              );
+            }
+
+            return (
+              <a
+                href={href}
+                target={href?.startsWith('http') ? '_blank' : undefined}
+                rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="text-[#0056B3] hover:text-[#0B3B60] underline underline-offset-2 font-medium transition-colors"
+              >
+                {children}
+              </a>
+            );
+          },
           table: ({ children }) => (
             <div className="overflow-x-auto my-6 border border-slate-200 rounded-lg">
               <table className="w-full border-collapse text-sm">

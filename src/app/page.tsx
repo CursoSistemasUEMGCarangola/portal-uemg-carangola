@@ -12,6 +12,9 @@ import {
   FileText,
   ShieldCheck,
   Lock,
+  BookOpen,
+  GraduationCap,
+  UserCheck,
 } from 'lucide-react';
 import { ARTIGOS_MOCK, CURSOS_LISTA } from '@/lib/data/mock-articles';
 import { SiglaCurso } from '@/types/editorial';
@@ -282,6 +285,143 @@ export default function HomePage() {
               <Lock className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" />
               <span>Garantia de sigilo e não rastreabilidade para manifestantes anônimos</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Dedicada: Guias de Uso do Sistema */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 mb-16">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60] mb-3">
+                <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Documentação e Procedimentos Operacionais</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight mb-2">
+                Guias de Uso do Sistema
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Consulte orientações passo a passo, normas de submissão acadêmica, procedimentos de curadoria e fluxos da ouvidoria institucional específicos para cada perfil da comunidade universitária.
+              </p>
+            </div>
+            <Link
+              href="/guias"
+              className="text-sm font-bold text-[#0056B3] hover:text-[#0B3B60] hover:underline inline-flex items-center space-x-1 shrink-0"
+            >
+              <span>Acessar Central de Guias</span>
+              <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* 1. Guia do Estudante */}
+            <Link
+              href="/guias/estudante"
+              className="group bg-[#F7F9FC] hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-sky-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-sky-50 text-sky-800 border border-sky-200">
+                    Estudante
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#0B3B60] transition-colors mb-1.5">
+                  Guia do Estudante
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Pesquisa e leitura de artigos, download de PDFs oficiais, submissão de trabalhos e ouvidoria cidadã.
+                </p>
+              </div>
+              <div className="flex items-center text-xs font-bold text-sky-700 group-hover:text-[#0B3B60] transition-colors pt-2 border-t border-slate-200/60">
+                <span>Acessar Guia</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+
+            {/* 2. Guia do Docente */}
+            <Link
+              href="/guias/docente"
+              className="group bg-[#F7F9FC] hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <FileText className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200">
+                    Docente
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#0B3B60] transition-colors mb-1.5">
+                  Guia do Docente
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Submissão de artigos científicos e relatos de extensão, pipeline WebP, citações ABNT e acompanhamento in-app.
+                </p>
+              </div>
+              <div className="flex items-center text-xs font-bold text-indigo-700 group-hover:text-[#0B3B60] transition-colors pt-2 border-t border-slate-200/60">
+                <span>Acessar Guia</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+
+            {/* 3. Guia da Coordenação */}
+            <Link
+              href="/guias/coordenador"
+              className="group bg-[#F7F9FC] hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-emerald-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                    <UserCheck className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Coordenação
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#0B3B60] transition-colors mb-1.5">
+                  Guia da Coordenação
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Curadoria editorial departamental em 1 clique, modais de ajustes e gestão de publicações do colegiado.
+                </p>
+              </div>
+              <div className="flex items-center text-xs font-bold text-emerald-700 group-hover:text-[#0B3B60] transition-colors pt-2 border-t border-slate-200/60">
+                <span>Acessar Guia</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+
+            {/* 4. Guia da Direção */}
+            <Link
+              href="/guias/direcao"
+              className="group bg-[#F7F9FC] hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#0B3B60] flex items-center justify-center">
+                    <Building2 className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-blue-50 text-[#0B3B60] border border-blue-200">
+                    Direção Geral
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#0B3B60] transition-colors mb-1.5">
+                  Guia da Direção
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Governança, análise e despacho em ouvidoria com decodificação em RAM, homologação e custódia Shamir.
+                </p>
+              </div>
+              <div className="flex items-center text-xs font-bold text-[#0B3B60] group-hover:text-[#0056B3] transition-colors pt-2 border-t border-slate-200/60">
+                <span>Acessar Guia</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
           </div>
         </div>
       </section>
