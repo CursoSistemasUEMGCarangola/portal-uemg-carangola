@@ -143,12 +143,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Determina a URL base da aplicação
-    const origin =
-      request.headers.get('origin') ||
-      process.env.NEXT_PUBLIC_APP_URL ||
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      'http://localhost:3000';
+    // 5. Determina a URL base da aplicação de forma dinâmica e segura
+    const originHeader = request.headers.get('origin');
+    const hostHeader = request.headers.get('x-forwarded-host') || request.headers.get('host');
+    const protoHeader = request.headers.get('x-forwarded-proto') || (hostHeader?.includes('localhost') ? 'http' : 'https');
+
+    let origin = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://carangola.uemg.br';
+
+    // Se a requisição partiu de um ambiente local (desenvolvimento), preserva localhost para testes locais
+    if (originHeader?.includes('localhost') || hostHeader?.includes('localhost')) {
+      origin = originHeader || (hostHeader ? `${protoHeader}://${hostHeader}` : 'http://localhost:3000');
+    }
+
     const linkRecuperacao = `${origin}/redefinir-senha?token=${token}`;
 
     const nomeDestinatario =
