@@ -7,12 +7,14 @@ import { CourseBadge } from '@/components/editorial/CourseBadge';
 import EditorialDecisionModal from '@/components/editorial/EditorialDecisionModal';
 import { ArtigoCuradoriaCard } from '@/components/editorial/ArtigoCuradoriaCard';
 import { useCuradoriaEditorial } from '@/hooks/useCuradoriaEditorial';
+import Link from 'next/link';
 import {
   ShieldCheck,
   CheckCircle,
   FileCheck,
   Building,
   Search,
+  BookOpen,
 } from 'lucide-react';
 
 export default function PainelCoordenacaoPage() {
@@ -58,7 +60,7 @@ export default function PainelCoordenacaoPage() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0B3B60] text-white mb-2">
               <ShieldCheck className="w-3.5 h-3.5 text-cyan-300" aria-hidden="true" />
-              Painel Monocrático da Coordenação • Rota Restrita
+              Painel Departamental da Coordenação • Rota Restrita
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
               Curadoria Editorial de Artigos
@@ -68,8 +70,19 @@ export default function PainelCoordenacaoPage() {
             </p>
           </div>
 
-          {/* Seletor Departamental de Simulação/Auditoria de RBAC */}
-          <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm shrink-0">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
+            <Link
+              href="/guias/coordenador"
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-3.5 py-3 rounded-xl bg-white border border-slate-300 hover:border-[#0056B3] text-[#0B3B60] font-bold text-xs shadow-2xs transition-all whitespace-nowrap"
+              title="Consultar Guia de Uso da Coordenação"
+            >
+              <BookOpen className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
+              <span>Guia da Coordenação</span>
+            </Link>
+
+            {/* Seletor Departamental de Simulação/Auditoria de RBAC */}
+            <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm shrink-0">
             <label
               htmlFor="seletor-departamento"
               className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"
@@ -89,6 +102,7 @@ export default function PainelCoordenacaoPage() {
                 </option>
               ))}
             </select>
+            </div>
           </div>
         </div>
 

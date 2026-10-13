@@ -37,7 +37,7 @@ export interface UseCuradoriaEditorialReturn {
 }
 
 /**
- * Hook orquestrador do Painel Monocrático de Coordenação (Curadoria Editorial).
+ * Hook orquestrador do Painel Departamental de Coordenação (Curadoria Editorial).
  * Isola gestão de estado, filtragem por departamento (RLS simulado) e decisões editoriais.
  */
 export function useCuradoriaEditorial(): UseCuradoriaEditorialReturn {
@@ -58,7 +58,7 @@ export function useCuradoriaEditorial(): UseCuradoriaEditorialReturn {
     recarregarArtigos();
   }, [recarregarArtigos]);
 
-  // Filtragem monocrática: Coordenador enxerga apenas o seu departamento
+  // Filtragem departamental: Coordenador enxerga apenas o seu departamento
   const artigosDoCurso = useMemo(() => {
     return artigos.filter((a) => a.curso.sigla === cursoSelecionado);
   }, [artigos, cursoSelecionado]);

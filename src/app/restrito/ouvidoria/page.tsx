@@ -6,11 +6,13 @@ import GabineteDespachoModal from '@/components/ouvidoria/GabineteDespachoModal'
 import { OuvidoriaMetricasCards } from '@/components/ouvidoria/OuvidoriaMetricasCards';
 import { ProtocoloCardItem } from '@/components/ouvidoria/ProtocoloCardItem';
 import { useGabineteOuvidoria, FiltroStatusGabinete } from '@/hooks/useGabineteOuvidoria';
+import Link from 'next/link';
 import {
   ShieldCheck,
   Search,
   CheckCircle,
   Clock,
+  BookOpen,
 } from 'lucide-react';
 
 export default function GabineteOuvidoriaPage() {
@@ -42,18 +44,30 @@ export default function GabineteOuvidoriaPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Cabeçalho da Página */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60]">
-              <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Gabinete da Direção Geral • Ouvidoria Segura</span>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60]">
+                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Gabinete da Direção Geral • Ouvidoria Segura</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
+                Painel do Gabinete da Direção
+              </h1>
+              <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
+                Gestão com criptografia assimétrica de envelope, despacho oficial e homologação
+                desacoplada para o Mural de Transparência da UEMG Carangola.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
-              Painel do Gabinete da Direção
-            </h1>
-            <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-              Gestão com criptografia assimétrica de envelope, despacho oficial e homologação
-              desacoplada para o Mural de Transparência da UEMG Carangola.
-            </p>
+
+            <Link
+              href="/guias/direcao"
+              target="_blank"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#0B3B60] border border-slate-300 font-bold text-xs shadow-2xs transition-all shrink-0 whitespace-nowrap"
+              title="Consultar Guia de Uso da Direção"
+            >
+              <BookOpen className="w-4 h-4 text-[#0056B3]" />
+              <span>Guia da Direção</span>
+            </Link>
           </div>
 
           {/* Cards de Métricas */}

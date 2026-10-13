@@ -46,7 +46,7 @@ export default function CerimoniaChavesPage() {
               </h1>
               <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
                 Aplicação do algoritmo <strong>Shamir&apos;s Secret Sharing</strong> sobre o corpo finito de Galois GF(256) / GF(2⁸)
-                para mitigar o risco de perda ou retenção monocrática das chaves criptográficas do Gabinete da Direção.
+                para mitigar o risco de perda ou retenção isolada das chaves criptográficas do Gabinete da Direção.
               </p>
             </div>
 

@@ -64,14 +64,24 @@ export default async function AcessoRestritoHubPage() {
             </p>
           </div>
 
-          <div className="shrink-0">
+          <div className="shrink-0 flex items-center gap-2.5 flex-wrap">
             <Link
               href="/restrito/perfil"
               id="btn-meus-dados-direcao"
               className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold shadow-xs transition-all backdrop-blur-xs whitespace-nowrap"
             >
               <UserCog className="w-4 h-4 text-cyan-300" />
-              <span>Meus Dados Cadastrais</span>
+              <span>Meus Dados</span>
+            </Link>
+
+            <Link
+              href="/guias/direcao"
+              id="btn-guia-direcao"
+              target="_blank"
+              className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold shadow-xs transition-all backdrop-blur-xs whitespace-nowrap"
+            >
+              <BookOpen className="w-4 h-4 text-cyan-300" />
+              <span>Guia da Direção</span>
             </Link>
           </div>
         </div>
@@ -168,7 +178,7 @@ export default async function AcessoRestritoHubPage() {
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Realizar curadoria e homologação editorial monocrática por departamento.</span>
+                    <span>Realizar curadoria e homologação editorial direta por departamento.</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />

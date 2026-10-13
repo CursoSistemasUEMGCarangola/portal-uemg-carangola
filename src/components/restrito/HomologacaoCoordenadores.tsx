@@ -104,7 +104,7 @@ export function HomologacaoCoordenadores() {
             Homologação de Coordenações de Curso
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            Controle de governança para liberação monocrática de acesso a coordenadores de colegiado.
+            Controle de governança para liberação direta de acesso a coordenadores de colegiado.
           </p>
         </div>
 
@@ -213,7 +213,7 @@ export function HomologacaoCoordenadores() {
                   </div>
                 </div>
 
-                {/* Botões de Ação Monocrática da Direção */}
+                {/* Botões de Ação Direta da Direção */}
                 <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-amber-200">
                   <button
                     type="button"

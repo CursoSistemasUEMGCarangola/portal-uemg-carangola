@@ -31,7 +31,7 @@ Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) 
 5. **Identidade Institucional, Recuperação de Acesso & Homologação:**
    * **Superação de Bloqueios de Rede:** Como os domínios corporativos `@uemg.br` rejeitam mensagens automáticas externas, o sistema adota e-mail alternativo pessoal obrigatório para notificações seguras.
    * **Mensageria Transacional via Brevo API:** Disparo de links temporários de recuperação de senha (validade de 2 horas) e comunicados de homologação com design system oficial UEMG.
-   * **Homologação Monocrática de Coordenadores:** Gabinete da Direção Geral aprova ou indefere novos coordenadores antes da liberação do painel editorial.
+   * **Homologação Direta de Coordenadores:** Gabinete da Direção Geral aprova ou indefere novos coordenadores antes da liberação do painel editorial.
    * **Autoatendimento Protegido:** Módulo `/restrito/perfil` para edição de dados pessoais e alteração de senha sem risco de escalonamento indevido de privilégios (`role` e `curso_id` imutáveis pelo usuário).
 
 ---
@@ -86,11 +86,11 @@ O portal abriga e categoriza a produção científica dos 8 cursos de graduaçã
 ```text
 portal-uemg-carangola/
 ├── docs/
-│   └── manuais/                # Manuais de Operação e Governança por perfil
-│       ├── MANUAL_ESTUDANTE.md    # Manual do aluno (busca, leitura, emissão de PDF e ouvidoria)
-│       ├── MANUAL_DOCENTE.md      # Manual do professor (submissão, compressão WebP, citação ABNT)
-│       ├── MANUAL_COORDENADOR.md  # Manual do coordenador (esteira monocrática do curso)
-│       └── MANUAL_MONITOR.md      # Manual do monitor de SIS (DevOps, RLS, Zero-Trust e cerimônia KEK)
+│   └── guias/                  # Guias de Uso e Governança por perfil institucional
+│       ├── GUIA_ESTUDANTE.md      # Guia do aluno (busca, leitura, emissão de PDF e ouvidoria)
+│       ├── GUIA_DOCENTE.md        # Guia do professor (submissão, compressão WebP, citação ABNT)
+│       ├── GUIA_COORDENADOR.md    # Guia do coordenador (curadoria departamental em 1 clique)
+│       └── GUIA_DIRECAO.md        # Guia da Direção Geral (governança, ouvidoria, despacho e Shamir)
 ├── public/
 │   ├── favicon.ico             # Favicon legado de alta resolução
 │   ├── manifest.json           # Manifesto PWA com badges institucionais
@@ -128,7 +128,7 @@ portal-uemg-carangola/
 │   │   ├── useArtigoSubmission.ts   # Orquestração da submissão autoral e rascunhos
 │   │   ├── useCerimoniaShamir.ts    # Orquestração matemática da Cerimônia de Chaves
 │   │   ├── useConsultaProtocolo.ts  # Busca cega e sincronia de parâmetros de URL
-│   │   ├── useCuradoriaEditorial.ts # Painel monocrático e RLS simulado do colegiado
+│   │   ├── useCuradoriaEditorial.ts # Painel departamental e RLS simulado do colegiado
 │   │   ├── useGabineteOuvidoria.ts  # Despachos e métricas do Gabinete da Direção
 │   │   ├── useMuralTransparencia.ts # Filtragem reativa do catálogo público
 │   │   └── useOuvidoriaForm.ts      # Validação e cifragem client-side da manifestação

@@ -3,6 +3,7 @@
 import React from 'react';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
 import { useOuvidoriaForm } from '@/hooks/useOuvidoriaForm';
+import Link from 'next/link';
 import {
   ShieldCheck,
   Lock,
@@ -13,6 +14,7 @@ import {
   Info,
   CheckCircle,
   HelpCircle,
+  BookOpen,
 } from 'lucide-react';
 
 export default function OuvidoriaForm() {
@@ -59,6 +61,16 @@ export default function OuvidoriaForm() {
             Sua mensagem é cifrada no seu próprio navegador antes de ser enviada ao servidor.
             Mesmo estudantes monitores que administram o banco de dados visualizam apenas dados ilegíveis. Apenas a chave privada do Gabinete da Direção pode descriptografar sua manifestação.
           </p>
+          <div className="pt-2">
+            <Link
+              href="/guias/estudante#9-canal-fale-com-a-direcao-ouvidoria-soberana-zero-trust"
+              target="_blank"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0056B3] hover:text-[#0B3B60] hover:underline"
+            >
+              <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Consultar Guia de Uso da Ouvidoria</span>
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -28,12 +28,14 @@ export function RestritoNav() {
 
   const linkPainelGeral = isCoordenador ? '/restrito/publicacoes' : isAutor ? '/meus-artigos' : '/restrito';
   const rotuloPainelGeral = isCoordenador ? 'Painel da Coordenação' : isAutor ? 'Meus Artigos' : 'Painel Geral';
+  const linkGuia = isCoordenador ? '/guias/coordenador' : isAutor ? '/guias/docente' : '/guias/direcao';
+  const rotuloGuia = isCoordenador ? 'Guia da Coordenação' : isAutor ? 'Guia do Docente' : 'Guia da Direção';
 
   return (
     <div className="bg-white border-b border-slate-200 sticky top-[73px] z-40 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-2.5 gap-3">
-          {/* Navegação Principal: Painel Geral, Meus Dados e Botão Sair */}
+          {/* Navegação Principal: Painel Geral, Meus Dados, Guia de Uso e Botão Sair */}
           <div className="flex items-center gap-2">
             <Link
               href={linkPainelGeral}
@@ -56,6 +58,18 @@ export function RestritoNav() {
             >
               <UserCog className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
               <span>Meus Dados</span>
+            </Link>
+
+            <Link
+              href={linkGuia}
+              id="btn-guia-nav"
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 hover:bg-slate-200 text-[#0B3B60] border border-slate-300/80 shadow-2xs transition-all whitespace-nowrap"
+              title="Consultar Guia de Uso Oficial"
+            >
+              <BookOpen className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
+              <span className="hidden md:inline">{rotuloGuia}</span>
+              <span className="md:hidden">Guia</span>
             </Link>
 
             <button

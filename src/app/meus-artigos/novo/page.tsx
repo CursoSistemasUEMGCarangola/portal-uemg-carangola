@@ -26,7 +26,7 @@ export default function NovaSubmissaoPage() {
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#0B3B60] mb-2">
                 <BookOpen className="w-3.5 h-3.5" />
-                Esteira Editorial Monocrática — Épico 3
+                Esteira Editorial Departamental — Épico 3
               </span>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B3B60] tracking-tight">
                 Nova Submissão Acadêmica

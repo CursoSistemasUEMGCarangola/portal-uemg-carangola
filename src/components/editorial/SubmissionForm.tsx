@@ -103,7 +103,7 @@ export default function SubmissionForm() {
             Autoria & Vínculo Departamental
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Dados utilizados pelo Coordenador para validação monocrática de matrícula e mérito.
+            Dados utilizados pelo Coordenador para validação direta de matrícula e mérito.
           </p>
         </div>
 

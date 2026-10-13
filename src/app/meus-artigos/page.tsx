@@ -93,7 +93,7 @@ function MeusArtigosConteudo() {
             <div>
               <p className="font-bold text-sm">Artigo submetido com sucesso!</p>
               <p className="text-xs text-emerald-700">
-                Sua publicação entrou na fila monocrática da Coordenação de Curso. O status é atualizado aqui em tempo real.
+                Sua publicação entrou na fila de avaliação da Coordenação de Curso. O status é atualizado aqui em tempo real.
               </p>
             </div>
           </div>
@@ -124,6 +124,17 @@ function MeusArtigosConteudo() {
           >
             <UserCog className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
             <span>Meus Dados</span>
+          </Link>
+
+          <Link
+            href="/guias/docente"
+            id="btn-guia-docente"
+            target="_blank"
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#0B3B60] border border-slate-300/80 font-bold text-sm shadow-2xs transition-all whitespace-nowrap"
+            title="Consultar o Guia de Uso do Docente"
+          >
+            <BookOpen className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
+            <span>Guia de Uso</span>
           </Link>
 
           <button

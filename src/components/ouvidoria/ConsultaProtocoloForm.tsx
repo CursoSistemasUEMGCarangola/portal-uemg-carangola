@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {
   Search,
   Lock,
@@ -10,6 +11,7 @@ import {
   Building,
   Calendar,
   ShieldCheck,
+  BookOpen,
 } from 'lucide-react';
 import { OuvidoriaTipoBadge } from '@/components/ouvidoria/OuvidoriaBadge';
 import { ProtocoloTimeline } from '@/components/ouvidoria/ProtocoloTimeline';
@@ -30,14 +32,26 @@ export default function ConsultaProtocoloForm() {
     <div className="space-y-8">
       {/* Formulário de Busca por Dupla Chave */}
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-        <div className="border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-bold text-[#0B3B60] flex items-center gap-2">
-            <Search className="w-5 h-5 text-[#0056B3]" aria-hidden="true" />
-            Consulta por Dupla Chave Institucional
-          </h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Informe o número de protocolo e o token secreto emitidos no momento da sua manifestação.
-          </p>
+        <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-bold text-[#0B3B60] flex items-center gap-2">
+              <Search className="w-5 h-5 text-[#0056B3]" aria-hidden="true" />
+              Consulta por Dupla Chave Institucional
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Informe o número de protocolo e o token secreto emitidos no momento da sua manifestação.
+            </p>
+          </div>
+
+          <Link
+            href="/guias/estudante#11-como-consultar-o-despacho-da-direcao-fale-com-a-direcaoconsulta"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#0B3B60] text-xs font-bold transition-colors shrink-0 border border-slate-200"
+            title="Consultar instruções de como resgatar e consultar seu protocolo"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-[#0056B3]" aria-hidden="true" />
+            <span>Guia de Consulta</span>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

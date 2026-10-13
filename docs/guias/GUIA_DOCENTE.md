@@ -1,12 +1,12 @@
-# MANUAL DO USUÁRIO: PROFESSOR / DOCENTE
+# GUIA DE USO: PROFESSOR / DOCENTE
 ## Portal UEMG Carangola — Divulgação Científica, Extensão e Transparência
 
-> **Versão:** 3.0.0 (Go-Live Oficial & Operação Soberana) | **Perfil:** Professor / Docente / Pesquisador  
+> **Versão:** 3.1.0 | **Perfil:** Professor / Docente / Pesquisador  
 > **Papel no Sistema:** `autor` / Orientador  
 
 ---
 
-## 📑 MENU DINÂMICO DE NAVEGAÇÃO
+## 📑 SUMÁRIO DO GUIA
 
 * [1. Visão Geral do Perfil](#1-visão-geral-do-perfil)
 * [2. Visibilidade da Produção nas Páginas de Cursos (`/cursos/:sigla`)](#2-visibilidade-da-produção-nas-páginas-de-cursos-cursossigla)
@@ -31,27 +31,27 @@ O Docente da UEMG Carangola utiliza a plataforma para dar visibilidade científi
 * Todos os textos publicados pelo seu colegiado são listados cronologicamente, com contagem dinâmica de artigos e acesso direto à leitura integral.
 
 ## 3. Submissão de Artigos e Relatos de Extensão (`/meus-artigos/novo`)
-* No menu superior, clique em **Meus Artigos** e depois no botão **Nova Submissão**.
-* Preencha identificação, coautores e texto em Markdown.
+* No menu superior, acesse **Meus Artigos** com seu login institucional e clique em **Nova Submissão**.
+* Preencha identificação, coautores e texto em formato estruturado Markdown.
 
 ## 4. Pipeline Automático de Compressão WebP Client-Side
-* O navegador realiza o redimensionamento proporcional (máx. 1200px) e conversão para **WebP com 80% de qualidade** instantaneamente (~80 a 110 KB), poupando espaço de storage.
+* O navegador realiza o redimensionamento proporcional (máx. 1200px) e conversão para **WebP com 80% de qualidade** instantaneamente (~80 a 110 KB), poupando espaço de storage sem perda visual.
 
 ## 5. Resiliência de Escrita e Proteção Contra Perda de Dados
-* Rascunhos são salvos automaticamente na sessão do navegador contra perdas acidentais de conexão.
+* Rascunhos são salvos automaticamente na sessão do navegador contra perdas acidentais de conexão ou recarregamentos de página.
 
 ## 6. Acompanhamento In-App e Alertas no Navegador
-* Acompanhe o status do artigo em tempo real via badges com alto contraste auditados pela WCAG 2.1 AA (`Aguardando Coordenação`, `Ajustes Solicitados`, `Publicado no Portal`, `Rejeitado`).
-* Ative notificações Web Push em dispositivos pessoais para receber alertas no momento da deliberação.
+* Acompanhe o status do artigo em tempo real via badges com alto contraste auditados pela WCAG 2.1 AA (*Aguardando Avaliação*, *Com Ajustes*, *Publicados*, *Rejeitados*).
+* Ative notificações Web Push em dispositivos pessoais para receber alertas no momento da deliberação da coordenação.
 
 ## 7. Ficha Técnica e Citação ABNT Automatizada
-* Geração instantânea de ficha catalográfica e caixa de citação ABNT com cópia em 1 clique.
+* Geração instantânea de ficha catalográfica e caixa de citação ABNT com cópia em 1 clique na página pública do trabalho.
 
 ## 8. Emissão Oficial de Separatas em PDF (Zero-Storage)
-* Compilação instantânea na memória RAM do navegador com o cabeçalho oficial de Minas Gerais e selo da UEMG.
+* Compilação instantânea na memória RAM do navegador com o cabeçalho oficial de Minas Gerais e selo da UEMG, sem requisições pesadas ao servidor.
 
 ## 9. Ouvidoria com o Gabinete da Direção (`/fale-com-a-direcao`)
-* Canal seguro com Criptografia de Envelope (AES-GCM-256 + RSA-OAEP-4096) para envio de demandas de infraestrutura, sugestões e elogios ao Diretor Geral.
+* Canal seguro com Criptografia de Envelope (AES-GCM-256 + RSA-OAEP-4096) para envio de demandas de infraestrutura, sugestões e elogios ao Gabinete da Direção.
 
 ## 10. Consulta por Dupla Chave e Despacho da Direção
 * Acompanhe a tramitação do protocolo de ouvidoria em `/fale-com-a-direcao/consulta` com o código e a chave secreta de 24 caracteres sob tempo de resposta normalizado anti-timing.
@@ -60,4 +60,4 @@ O Docente da UEMG Carangola utiliza a plataforma para dar visibilidade científi
 * Consulte despachos e portarias públicas previamente sanitizadas pelo Gabinete, garantindo a proteção da intimidade discente e docente (LAI e LGPD).
 
 ## 12. Indexação em Mecanismos de Busca Acadêmicos (Sitemap & SEO)
-* No Go-Live oficial, todos os artigos publicados são mapeados dinamicamente no `sitemap.xml` com metadados OpenGraph padronizados (`metadataBase: https://carangola.uemg.br`), garantindo indexação automática no Google Acadêmico e redes de pesquisa.
+* Metadados acadêmicos canônicos e sitemap dinâmico garantem que seus artigos publicados sejam catalogados em indexadores públicos e motores de busca.

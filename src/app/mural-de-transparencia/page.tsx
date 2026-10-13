@@ -40,7 +40,7 @@ export default function MuralTransparenciaPage() {
           <p>
             Em estrita observância à Lei de Acesso à Informação (LAI) e à Lei Geral de Proteção de
             Dados (LGPD), todas as manifestações exibidas neste mural público passam por rigoroso
-            processo prévio de sanitização monocrática pelo Gabinete da Direção no navegador,
+            processo prévio de sanitização institucional pelo Gabinete da Direção no navegador,
             garantindo a supressão de dados pessoais identificáveis (PII) antes da publicação.
           </p>
         </div>

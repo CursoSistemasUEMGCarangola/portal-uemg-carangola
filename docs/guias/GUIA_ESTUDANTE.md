@@ -1,12 +1,12 @@
-# MANUAL DO USUÁRIO: ESTUDANTE / DISCENTE
+# GUIA DE USO: ESTUDANTE / DISCENTE
 ## Portal UEMG Carangola — Produção Acadêmica, Cidadania e Transparência
 
-> **Versão:** 3.0.0 (Go-Live Oficial & Implantação Institucional) | **Perfil:** Aluno de Graduação / Pesquisador  
+> **Versão:** 3.1.0 | **Perfil:** Aluno de Graduação / Pesquisador  
 > **Papel no Sistema:** `autor` / Solicitante Cidadão  
 
 ---
 
-## 📑 MENU DINÂMICO DE NAVEGAÇÃO
+## 📑 SUMÁRIO DO GUIA
 
 * [1. Visão Geral do Perfil](#1-visão-geral-do-perfil)
 * [2. Como Pesquisar Artigos no Catálogo Geral (`/artigos`)](#2-como-pesquisar-artigos-no-catálogo-geral-artigos)
@@ -34,7 +34,7 @@ O discente da UEMG Carangola é o protagonista do portal. Aqui você pode pesqui
 3. Utilize as pílulas de atalho dos cursos (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIN*) para filtrar produções da sua área.
 
 ## 3. Carga Inicial de Produção Acadêmica dos 8 Cursos
-No lançamento oficial (Go-Live v3.0.0), o portal já conta com acervo pré-carregado representativo de todos os 8 cursos de graduação da UEMG Carangola:
+No lançamento oficial, o portal conta com acervo pré-carregado representativo de todos os 8 cursos de graduação da UEMG Carangola:
 * **Ciências Biológicas (BIO):** Levantamento de epífitas e biodiversidade na Mata Atlântica regional.
 * **Geografia (GEO):** Vulnerabilidade socioambiental e dinâmica de encostas na Bacia do Rio Carangola.
 * **História (HIS):** Memória oral e patrimônio ferroviário na Zona da Mata mineira.
@@ -53,15 +53,15 @@ No lançamento oficial (Go-Live v3.0.0), o portal já conta com acervo pré-carr
 * O documento com o cabeçalho e selo oficial da UEMG é gerado **diretamente no seu navegador**, sem baixar arquivos pesados da internet e sem gastar seus dados móveis.
 
 ## 6. Como Submeter seu Trabalho Acadêmico (`/meus-artigos/novo`)
-1. No menu superior, clique em **Meus Artigos** e depois no botão **Nova Submissão**.
+1. No menu superior, clique em **Meus Artigos** (requer login institucional) e depois no botão **Nova Submissão**.
 2. Preencha seus dados de autor, curso, resumo e o texto do artigo em formato Markdown.
-3. Clique em **Submeter Artigo para Avaliação**. Seu coordenador receberá o texto na esteira monocrática de 1 clique.
+3. Clique em **Submeter Artigo para Avaliação**. Seu coordenador receberá o texto na esteira departamental de 1 clique.
 
 ## 7. Compressão Automática de Imagens em WebP
 * O formulário converte automaticamente sua imagem de capa para o formato moderno **WebP 80%** (máx. 1200px, ~100KB), garantindo redução de peso superior a 90% sem que você precise instalar nenhum editor.
 
 ## 8. Acompanhamento dos Seus Artigos (`/meus-artigos`)
-* Acesse a tela **Meus Artigos** para acompanhar o andamento da sua publicação por meio de selos visuais em tempo real (*Aguardando Coordenação*, *Ajustes Solicitados*, *Publicado no Portal*, *Rejeitado*).
+* Acesse a tela **Meus Artigos** para acompanhar o andamento da sua publicação por meio de selos visuais em tempo real (*Aguardando Avaliação*, *Com Ajustes*, *Publicados*, *Rejeitados*).
 
 ## 9. Canal Fale com a Direção (Ouvidoria Soberana Zero-Trust)
 1. No menu superior, clique em **Fale com a Direção** (`/fale-com-a-direcao`).

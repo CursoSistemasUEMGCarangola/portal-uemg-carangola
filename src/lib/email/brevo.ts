@@ -475,7 +475,7 @@ export async function enviarEmailAprovacaoCoordenador({
           <strong>Conta Institucional:</strong> ${emailInstitucional}<br>
           <strong>Destino deste Alerta:</strong> ${destinatarioEmail} <em>(E-mail Alternativo Cadastrado)</em><br>
           <strong>Colegiado Moderado:</strong> ${cursoNome}<br>
-          <strong>Alçada:</strong> Curadoria Editorial e Gestão Monocrática do Colegiado
+          <strong>Alçada:</strong> Curadoria Editorial e Gestão Departamental do Colegiado
         </div>
 
         <p class="text" style="font-size: 14px; color: #475569; margin-bottom: 18px;">
@@ -534,7 +534,7 @@ export async function enviarEmailAprovacaoCoordenador({
         ],
         subject: `Acesso Homologado: Coordenacao de ${cursoNome} - UEMG Carangola`,
         htmlContent,
-        textContent: `Prezado(a) ${destinatarioNome},\n\nInformamos que o seu cadastro como Coordenador(a) do Curso de ${cursoNome} foi oficialmente homologado e aprovado pelo Gabinete da Direção Geral da UEMG Unidade Carangola.\n\nE-mail Institucional: ${emailInstitucional}\nAlçada: Curadoria Editorial e Gestão Monocrática do Colegiado\n\nSuas credenciais institucionais estão ativas. Acesse o painel pelo link:\n${siteUrl}/login\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
+        textContent: `Prezado(a) ${destinatarioNome},\n\nInformamos que o seu cadastro como Coordenador(a) do Curso de ${cursoNome} foi oficialmente homologado e aprovado pelo Gabinete da Direção Geral da UEMG Unidade Carangola.\n\nE-mail Institucional: ${emailInstitucional}\nAlçada: Curadoria Editorial e Gestão Departamental do Colegiado\n\nSuas credenciais institucionais estão ativas. Acesse o painel pelo link:\n${siteUrl}/login\n\nUniversidade do Estado de Minas Gerais — Unidade Carangola`,
       }),
     });
 
