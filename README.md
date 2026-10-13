@@ -104,6 +104,7 @@ portal-uemg-carangola/
 │   │   ├── artigos/            # Catálogo geral e páginas individuais de artigos ([slug])
 │   │   ├── cursos/             # Catálogo de cursos e vitrines individuais por colegiado ([sigla])
 │   │   ├── fale-com-a-direcao/ # Canal de ouvidoria, consulta por protocolo e confirmação
+│   │   ├── guias/              # Central de Guias de Uso (/guias) e guias por perfil (/guias/[perfil])
 │   │   ├── mural-de-transparencia/ # Mural público de despachos e resoluções homologadas
 │   │   ├── meus-artigos/       # Área autoral e esteira de submissão de novos artigos
 │   │   ├── recuperar-senha/    # Solicitação de redefinição via e-mail alternativo
@@ -119,11 +120,12 @@ portal-uemg-carangola/
 │   │   └── sitemap.ts          # Sitemap dinâmico indexando 100% dos artigos e cursos
 │   ├── components/             # Componentes modulares desacoplados
 │   │   ├── editorial/          # FeaturedArticle, ArticleCard, MarkdownRenderer, AudioReader, PdfDownloadButton
+│   │   ├── guias/              # GuiaAccessGuard (RBAC), GuiasIndexView, GuiaPerfilNav
 │   │   ├── layout/             # Header institucional, Footer com selos clicáveis
 │   │   ├── ouvidoria/          # OuvidoriaForm, ConsultaProtocoloForm, ProtocoloTimeline, MuralCatalog
 │   │   ├── restrito/           # HomologacaoCoordenadores, RestritoNav
 │   │   ├── seguranca/          # CerimoniaChavesModal (Shamir SSS), PushNotificationToggle
-│   │   └── ui/                 # SkipLink e primitivas de acessibilidade
+│   │   └── ui/                 # SkipLink, PrintButton e primitivas de acessibilidade
 │   ├── hooks/                  # Custom Hooks desacopladores de regras de negócio
 │   │   ├── useArtigoSubmission.ts   # Orquestração da submissão autoral e rascunhos
 │   │   ├── useCerimoniaShamir.ts    # Orquestração matemática da Cerimônia de Chaves
@@ -133,8 +135,9 @@ portal-uemg-carangola/
 │   │   ├── useMuralTransparencia.ts # Filtragem reativa do catálogo público
 │   │   └── useOuvidoriaForm.ts      # Validação e cifragem client-side da manifestação
 │   ├── lib/
+│   │   ├── auth/               # guias-access.ts: controle de acesso por papel institucional (RBAC)
 │   │   ├── crypto/             # Envelope encryption (AES/RSA) e Shamir's Secret Sharing (CSPRNG)
-│   │   ├── data/               # Carga acadêmica representativa dos 8 cursos e ouvidoria
+│   │   ├── data/               # Carga acadêmica representativa dos 8 cursos, guias e ouvidoria
 │   │   ├── email/              # brevo.ts: despachante transacional REST v3 com suporte a e-mail secundário
 │   │   ├── notifications/      # Cliente Web Push e registro de service worker
 │   │   ├── pdf/                # print-service.ts puro com iframe isolado e sanitização HTML
