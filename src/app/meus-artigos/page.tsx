@@ -16,6 +16,7 @@ import {
   ExternalLink,
   BookOpen,
   ChevronRight,
+  UserCog,
 } from 'lucide-react';
 
 function MeusArtigosConteudo() {
@@ -76,13 +77,25 @@ function MeusArtigosConteudo() {
           </p>
         </div>
 
-        <Link
-          href="/meus-artigos/novo"
+        <div className="flex items-center gap-3 shrink-0">
+          <Link
+            href="/restrito/perfil"
+            id="btn-meus-dados-autor"
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#0B3B60] border border-slate-300/80 font-bold text-sm shadow-2xs transition-all whitespace-nowrap"
+            title="Visualizar ou editar meus dados cadastrais"
+          >
+            <UserCog className="w-4 h-4 text-[#0056B3]" aria-hidden="true" />
+            <span>Meus Dados</span>
+          </Link>
+
+          <Link
+            href="/meus-artigos/novo"
           className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0B3B60] hover:bg-[#0056B3] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0056B3]"
         >
           <PlusCircle className="w-5 h-5" aria-hidden="true" />
           Nova Submissão
         </Link>
+        </div>
       </div>
 
       {/* Cards de Métricas */}

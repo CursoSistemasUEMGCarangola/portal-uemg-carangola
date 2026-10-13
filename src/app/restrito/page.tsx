@@ -13,6 +13,7 @@ import {
   HelpCircle,
   Clock,
   Sparkles,
+  UserCog,
 } from 'lucide-react';
 
 import { redirect } from 'next/navigation';
@@ -47,19 +48,32 @@ export default async function AcessoRestritoHubPage() {
       <div className="bg-gradient-to-r from-[#0B3B60] via-[#082d4a] to-[#041a2e] text-white rounded-3xl p-6 sm:p-10 shadow-lg border border-blue-900/50 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/20 text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-            <span>Gabinete da Direção Geral • Gestão Soberana</span>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/20 text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+              <span>Gabinete da Direção Geral • Gestão Soberana</span>
+            </div>
+
+            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+              Painel Executivo da Direção
+            </h1>
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
+              Área restrita de governança institucional da UEMG Unidade Carangola.
+              Selecione abaixo a ação administrativa pertinente ao seu expediente.
+            </p>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
-            Painel Executivo da Direção
-          </h1>
-          <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
-            Área restrita de governança institucional da UEMG Unidade Carangola.
-            Selecione abaixo a ação administrativa pertinente ao seu expediente.
-          </p>
+          <div className="shrink-0">
+            <Link
+              href="/restrito/perfil"
+              id="btn-meus-dados-direcao"
+              className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold shadow-xs transition-all backdrop-blur-xs whitespace-nowrap"
+            >
+              <UserCog className="w-4 h-4 text-cyan-300" />
+              <span>Meus Dados Cadastrais</span>
+            </Link>
+          </div>
         </div>
       </div>
 

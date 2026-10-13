@@ -142,9 +142,9 @@ export const Header: React.FC = () => {
             <div className="ml-1 sm:ml-2 pl-2 border-l border-slate-200 flex items-center gap-1.5 min-h-[36px]">
               <div className="flex items-center gap-2">
                 <Link
-                  href="/restrito"
+                  href="/restrito/perfil"
                   className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs font-bold text-[#0B3B60] hover:bg-blue-100 transition-colors"
-                  title={`Conectado como ${user.email}`}
+                  title={`Conectado como ${user.email} • Clique para gerenciar seus dados cadastrais`}
                 >
                   <User className="w-3.5 h-3.5 text-[#0056B3]" />
                   <span className="max-w-[130px] truncate">{getRotuloPapel()}</span>
