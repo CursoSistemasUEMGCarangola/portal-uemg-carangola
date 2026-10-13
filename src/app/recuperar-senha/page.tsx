@@ -30,7 +30,10 @@ export default function RecuperarSenhaPage() {
       const response = await fetch('/api/auth/recuperar-senha', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ emailOrIdentifier: emailOrIdentifier.trim() }),
+        body: JSON.stringify({
+          email: emailOrIdentifier.trim(),
+          emailOrIdentifier: emailOrIdentifier.trim(),
+        }),
       });
 
       const data = await response.json();
@@ -41,7 +44,7 @@ export default function RecuperarSenhaPage() {
         return;
       }
 
-      setEmailDestinoMascarado(data.emailDestino || null);
+      setEmailDestinoMascarado(data.emailDestino || data.emailMascarado || null);
       setSucesso(true);
     } catch (err) {
       console.error('Erro na recuperação de senha:', err);

@@ -4,9 +4,20 @@ import crypto from 'crypto';
 import { z } from 'zod';
 import { enviarEmailRecuperacaoSenha } from '@/lib/email/brevo';
 
-const SolicitarRecuperacaoSchema = z.object({
-  email: z.string().email('Por favor, informe um endereço de e-mail válido.'),
-});
+export const dynamic = 'force-dynamic';
+
+const SolicitarRecuperacaoSchema = z
+  .object({
+    email: z.string().optional(),
+    emailOrIdentifier: z.string().optional(),
+    identificador: z.string().optional(),
+  })
+  .refine(
+    (data) => Boolean((data.email || data.emailOrIdentifier || data.identificador)?.trim()),
+    {
+      message: 'Por favor, informe seu e-mail institucional ou matrícula.',
+    }
+  );
 
 function mascararEmail(email: string): string {
   const [usuario, dominio] = email.split('@');
@@ -22,9 +33,16 @@ function mascararEmail(email: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email } = SolicitarRecuperacaoSchema.parse(body);
+    const dados = SolicitarRecuperacaoSchema.parse(body);
 
-    const emailLimpo = email.trim().toLowerCase();
+    const termo = (dados.email || dados.emailOrIdentifier || dados.identificador || '').trim().toLowerCase();
+
+    if (!termo) {
+      return NextResponse.json(
+        { error: 'Por favor, informe seu e-mail institucional ou matrícula.' },
+        { status: 400 }
+      );
+    }
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -43,7 +61,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // 1. Busca todos os usuários para localizar correspondência com e-mail institucional ou secundário
+    // 1. Busca todos os usuários para localizar correspondência com e-mail institucional, secundário ou matrícula
     const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
 
     if (listError) {
@@ -54,17 +72,31 @@ export async function POST(request: Request) {
       );
     }
 
-    const usuarioEncontrado = usersData.users.find((u) => {
+    let usuarioEncontrado = usersData.users.find((u) => {
       const emailInst = u.email?.toLowerCase();
       const emailSec = (u.user_metadata?.email_secundario as string | undefined)?.toLowerCase();
-      return emailInst === emailLimpo || emailSec === emailLimpo;
+      const matricula = (u.user_metadata?.matricula as string | undefined)?.toLowerCase();
+      return emailInst === termo || emailSec === termo || matricula === termo;
     });
+
+    // Se não encontrou no metadata direto, busca na tabela perfis_usuarios por e-mail ou matrícula
+    if (!usuarioEncontrado) {
+      const { data: perfilMatch } = await supabaseAdmin
+        .from('perfis_usuarios')
+        .select('id, email, matricula')
+        .or(`email.ilike.${termo},matricula.ilike.${termo}`)
+        .maybeSingle();
+
+      if (perfilMatch) {
+        usuarioEncontrado = usersData.users.find((u) => u.id === perfilMatch.id);
+      }
+    }
 
     // Defesa contra enumeração de e-mails: Se não encontrar, responde positivamente sem vazar detalhes
     if (!usuarioEncontrado) {
       return NextResponse.json({
         message:
-          'Se o e-mail informado estiver registrado no sistema, as orientações de redefinição de senha foram encaminhadas para o e-mail alternativo vinculado.',
+          'Se a identificação informada estiver registrada no sistema, as orientações de redefinição de senha foram encaminhadas para o e-mail alternativo vinculado.',
       });
     }
 
@@ -80,7 +112,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'Esta conta institucional não possui um e-mail alternativo cadastrado para receber links de recuperação. Entre em contato com a Secretaria Acadêmica.',
+            'Esta conta institucional não possui um e-mail alternativo cadastrado para receber links de recuperação. Entre em contato com o Gabinete da Direção ou Secretaria Acadêmica.',
         },
         { status: 400 }
       );
@@ -112,7 +144,11 @@ export async function POST(request: Request) {
     }
 
     // 5. Determina a URL base da aplicação
-    const origin = request.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const origin =
+      request.headers.get('origin') ||
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      'http://localhost:3000';
     const linkRecuperacao = `${origin}/redefinir-senha?token=${token}`;
 
     const nomeDestinatario =
@@ -124,7 +160,7 @@ export async function POST(request: Request) {
     const envioBrevo = await enviarEmailRecuperacaoSenha({
       destinatarioEmail: emailDestino,
       destinatarioNome: nomeDestinatario,
-      emailInstitucional: usuarioEncontrado.email || emailLimpo,
+      emailInstitucional: usuarioEncontrado.email || termo,
       linkRecuperacao,
     });
 
@@ -139,11 +175,12 @@ export async function POST(request: Request) {
       );
     }
 
+    const emailMascarado = mascararEmail(emailDestino);
+
     return NextResponse.json({
-      message: `Instruções de redefinição enviadas com sucesso para o e-mail alternativo: ${mascararEmail(
-        emailDestino
-      )}. Verifique sua caixa de entrada e spam.`,
-      emailMascarado: mascararEmail(emailDestino),
+      message: `Instruções de redefinição enviadas com sucesso para o e-mail alternativo: ${emailMascarado}. Verifique sua caixa de entrada e spam.`,
+      emailDestino: emailMascarado,
+      emailMascarado: emailMascarado,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
