@@ -37,8 +37,8 @@ export async function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Proteção obrigatória para rotas restritas de governança acadêmica
-  if (pathname.startsWith('/restrito')) {
+  // Proteção obrigatória para rotas restritas de governança acadêmica e área do autor
+  if (pathname.startsWith('/restrito') || pathname.startsWith('/meus-artigos')) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = '/login';
@@ -51,5 +51,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/restrito/:path*'],
+  matcher: ['/restrito/:path*', '/meus-artigos/:path*'],
 };

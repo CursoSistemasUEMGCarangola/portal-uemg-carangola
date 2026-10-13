@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { obterArtigosConsolidados } from '@/lib/data/mock-articles';
 import { Artigo, StatusArtigo } from '@/types/editorial';
 import { StatusBadge } from '@/components/editorial/StatusBadge';
@@ -22,7 +22,8 @@ import {
 import { useAuth } from '@/context/AuthContext';
 
 function MeusArtigosConteudo() {
-  const { user, perfil, signOut } = useAuth();
+  const router = useRouter();
+  const { user, perfil, isLoading, signOut } = useAuth();
   const searchParams = useSearchParams();
   const acabouDeSubmeter = searchParams.get('status') === 'sucesso';
 
@@ -30,12 +31,17 @@ function MeusArtigosConteudo() {
   const [filtroStatus, setFiltroStatus] = useState<'todos' | StatusArtigo>('todos');
 
   useEffect(() => {
-    const todos = obterArtigosConsolidados();
+    if (!isLoading && !user) {
+      router.push('/login?redirectTo=/meus-artigos');
+      return;
+    }
+
     if (!user) {
       setArtigos([]);
       return;
     }
 
+    const todos = obterArtigosConsolidados();
     const userId = user.id;
     const userEmail = user.email?.toLowerCase().trim();
     const userNome = (perfil?.nome_completo || (user.user_metadata?.nome_completo as string) || '').toLowerCase().trim();
@@ -51,7 +57,16 @@ function MeusArtigosConteudo() {
     });
 
     setArtigos(meus);
-  }, [user, perfil]);
+  }, [user, perfil, isLoading, router]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-slate-500 text-xs">
+        <div className="w-6 h-6 border-2 border-[#0B3B60] border-t-transparent rounded-full animate-spin mb-3" />
+        <span>Verificando credenciais de acesso...</span>
+      </div>
+    );
+  }
 
   // Filtragem
   const artigosFiltrados = artigos.filter((a) => {
