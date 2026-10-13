@@ -28,16 +28,22 @@ Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) 
 4. **Higiene e Segurança em Terminais Compartilhados:**
    * Proteção nativa para alunos em computadores de laboratórios da universidade através do modo "Computador Público", cabeçalho `Clear-Site-Data` no logout e expurgo de credenciais da memória volátil.
 
+5. **Identidade Institucional, Recuperação de Acesso & Homologação:**
+   * **Superação de Bloqueios de Rede:** Como os domínios corporativos `@uemg.br` rejeitam mensagens automáticas externas, o sistema adota e-mail alternativo pessoal obrigatório para notificações seguras.
+   * **Mensageria Transacional via Brevo API:** Disparo de links temporários de recuperação de senha (validade de 2 horas) e comunicados de homologação com design system oficial UEMG.
+   * **Homologação Monocrática de Coordenadores:** Gabinete da Direção Geral aprova ou indefere novos coordenadores antes da liberação do painel editorial.
+   * **Autoatendimento Protegido:** Módulo `/restrito/perfil` para edição de dados pessoais e alteração de senha sem risco de escalonamento indevido de privilégios (`role` e `curso_id` imutáveis pelo usuário).
+
 ---
 
 ## 📊 Status do Projeto & Métricas de Homologação
 
-* **Versão Consolidada:** `3.1.0` (Refatoração Arquitetural, Acessibilidade Sonora & Hardening)
-* **Build de Produção (SSG):** ✅ **40 rotas estáticas compiladas com 100% de sucesso**
+* **Versão Consolidada:** `3.2.0` (Gestão de Identidade, Autenticação Transacional, Homologação & Hardening)
+* **Build de Produção:** ✅ **39 rotas (estáticas e dinâmicas) compiladas com 100% de sucesso**
 * **First Load JS:** Otimizado em 87.3 kB (chunks compartilhados)
 * **Acessibilidade Governamental:** Auditada segundo as normas **WCAG 2.1 nível AA / AAA** e **eMAG** (contraste mínimo superior a 4.5:1, audiodescrição in-app, navegação por teclado e leitor de tela com Skip Links)
 * **Páginas de Governança Institucional:** Políticas de privacidade e conformidade LGPD em `/acessibilidade-e-privacidade` e Termos de Uso em `/termos-de-uso`
-* **Segurança de Schema:** **100% Row Level Security (RLS)** ativo em todas as tabelas, RPC `consultar_protocolo_seguro` blindada com `SET search_path = public, pg_temp;` e políticas de escrita com validação estrita de dados
+* **Segurança de Schema:** **100% Row Level Security (RLS)** ativo em todas as tabelas, RPC `consultar_protocolo_seguro` blindada com `SET search_path = public, pg_temp;` e cliente `getSupabaseAdmin()` centralizado server-side.
 
 ---
 
@@ -63,7 +69,8 @@ O portal abriga e categoriza a produção científica dos 8 cursos de graduaçã
 * **Framework:** [Next.js 14+](https://nextjs.org/) (App Router, Server Components e Client Boundaries estritos)
 * **Linguagem:** [TypeScript 5+](https://www.typescriptlang.org/) (Strict Mode ativado, `noImplicitAny: true`)
 * **Estilização:** [Tailwind CSS v3.4](https://tailwindcss.com/) com tokens institucionais da UEMG (`#002244`, `#0B3B60`, `#0056B3`) e Governo de Minas Gerais
-* **Banco de Dados & Auth:** [Supabase](https://supabase.com/) (PostgreSQL 15+, Data API PostgREST, RLS em todas as tabelas)
+* **Banco de Dados & Auth:** [Supabase](https://supabase.com/) (PostgreSQL 15+, Data API PostgREST, 100% RLS e Admin Singleton Server-Side)
+* **Mensageria Transacional:** [Brevo](https://www.brevo.com/) REST API v3 (despacho direto via `fetch` server-side para e-mails secundários pessoais)
 * **Criptografia:** [Web Crypto API nativa](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) (SubtleCrypto: AES-GCM 256, RSA-OAEP 4096, SHA-256) e algoritmo de Shamir com CSPRNG estrito
 * **Renderização Acadêmica:** `react-markdown`, `remark-gfm`, `remark-math`, `rehype-katex` e `katex`
 * **PWA & Notificações:** Service Worker nativo com cache seletivo, manifesto e Web Push VAPID opcional
@@ -91,7 +98,7 @@ portal-uemg-carangola/
 │   ├── icons/                  # Ícones PWA (192px e 512px)
 │   └── images/                 # Assets oficiais (Logotipo UEMG, fachada da unidade)
 ├── src/
-│   ├── app/                    # Rotas do Next.js App Router (40 rotas estáticas SSG)
+│   ├── app/                    # Rotas do Next.js App Router (39 rotas estáticas e dinâmicas)
 │   │   ├── (public)/           # Vitrine aberta: Home, /artigos, /cursos
 │   │   ├── acessibilidade-e-privacidade/ # Política de Privacidade e Padrão WCAG/eMAG
 │   │   ├── artigos/            # Catálogo geral e páginas individuais de artigos ([slug])
@@ -99,9 +106,11 @@ portal-uemg-carangola/
 │   │   ├── fale-com-a-direcao/ # Canal de ouvidoria, consulta por protocolo e confirmação
 │   │   ├── mural-de-transparencia/ # Mural público de despachos e resoluções homologadas
 │   │   ├── meus-artigos/       # Área autoral e esteira de submissão de novos artigos
-│   │   ├── restrito/           # Painéis administrativos: fila do Gabinete, coordenações e chaves
+│   │   ├── recuperar-senha/    # Solicitação de redefinição via e-mail alternativo
+│   │   ├── redefinir-senha/    # Redefinição com token criptográfico temporal
+│   │   ├── restrito/           # Painéis administrativos: Gabinete, coordenações, chaves e perfil (/perfil)
 │   │   ├── termos-de-uso/      # Termos de uso e diretrizes da plataforma
-│   │   ├── api/auth/logout/    # Endpoint com cabeçalho Clear-Site-Data para computadores públicos
+│   │   ├── api/auth/           # Handlers: cadastro, coordenadores, login, logout, perfil, recuperar e redefinir senha
 │   │   ├── globals.css         # Variáveis e design system UEMG
 │   │   ├── icon.jpg            # Favicon dinâmico nativo do App Router
 │   │   ├── layout.tsx          # RootLayout com metadados SEO, PWA e acessibilidade
@@ -112,6 +121,7 @@ portal-uemg-carangola/
 │   │   ├── editorial/          # FeaturedArticle, ArticleCard, MarkdownRenderer, AudioReader, PdfDownloadButton
 │   │   ├── layout/             # Header institucional, Footer com selos clicáveis
 │   │   ├── ouvidoria/          # OuvidoriaForm, ConsultaProtocoloForm, ProtocoloTimeline, MuralCatalog
+│   │   ├── restrito/           # HomologacaoCoordenadores, RestritoNav
 │   │   ├── seguranca/          # CerimoniaChavesModal (Shamir SSS), PushNotificationToggle
 │   │   └── ui/                 # SkipLink e primitivas de acessibilidade
 │   ├── hooks/                  # Custom Hooks desacopladores de regras de negócio
@@ -125,11 +135,12 @@ portal-uemg-carangola/
 │   ├── lib/
 │   │   ├── crypto/             # Envelope encryption (AES/RSA) e Shamir's Secret Sharing (CSPRNG)
 │   │   ├── data/               # Carga acadêmica representativa dos 8 cursos e ouvidoria
+│   │   ├── email/              # brevo.ts: despachante transacional REST v3 com suporte a e-mail secundário
 │   │   ├── notifications/      # Cliente Web Push e registro de service worker
 │   │   ├── pdf/                # print-service.ts puro com iframe isolado e sanitização HTML
 │   │   ├── storage/            # Compressão de imagens WebP e rascunhos de sessão
-│   │   ├── supabase/           # Clientes Data API SSR para navegador e servidor
-│   │   └── utils/              # Validações Zod (esquemas com superRefine) e formatadores
+│   │   ├── supabase/           # Clientes Data API: client, server e admin singleton server-side
+│   │   └── utils/              # formatters.ts, url.ts (resolução de domínio) e validações Zod
 │   └── types/                  # Tipagem estrita TypeScript (editorial, ouvidoria, cerimônia)
 └── supabase/
     └── migrations/             # Migrações declarativas SQL com auditoria de segurança
@@ -159,10 +170,15 @@ Copie o arquivo de exemplo e configure suas credenciais:
 ```bash
 cp .env.example .env.local
 ```
-Variáveis mínimas necessárias:
+Variáveis de ambiente requeridas:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-anonima-publica
+SUPABASE_SERVICE_ROLE_KEY=sua-chave-service-role-privada
+BREVO_API_KEY=sua-chave-api-v3-do-brevo
+BREVO_SENDER_EMAIL=cursosiuemgcarangola@gmail.com
+BREVO_SENDER_NAME=Portal UEMG Carangola
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### 3. Executar o servidor de desenvolvimento
