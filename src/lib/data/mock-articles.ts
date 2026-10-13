@@ -230,6 +230,8 @@ export function salvarArtigoSubmetido(input: SubmissaoArtigoInput): Artigo {
     corpoMarkdown: input.corpoMarkdown,
     capaUrl: input.capaBase64Webp,
     curso,
+    autorId: input.autorId,
+    autorEmail: input.autorEmail,
     autorNome: input.autorNome,
     autorMatricula: input.autorMatricula,
     autorRole: 'Autor Cadastrado',

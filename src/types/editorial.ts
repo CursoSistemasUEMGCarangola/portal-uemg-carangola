@@ -20,6 +20,8 @@ export interface Artigo {
   corpoMarkdown: string;
   capaUrl: string;
   curso: Curso;
+  autorId?: string;
+  autorEmail?: string;
   autorNome: string;
   autorMatricula?: string;
   autorRole?: string;
@@ -38,6 +40,8 @@ export interface SubmissaoArtigoInput {
   resumo: string;
   corpoMarkdown: string;
   cursoSigla: SiglaCurso;
+  autorId?: string;
+  autorEmail?: string;
   autorNome: string;
   autorMatricula: string;
   coautores?: string;

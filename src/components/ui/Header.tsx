@@ -11,34 +11,9 @@ import {
   FileText,
   CheckSquare,
   Scale,
-  LogOut,
-  User,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 
 export const Header: React.FC = () => {
-  const pathname = usePathname();
-  const { user, perfil, signOut } = useAuth();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const getRotuloPapel = () => {
-    if (!perfil) return 'Usuário Conectado';
-    switch (perfil.role) {
-      case 'direcao':
-        return 'Direção Geral';
-      case 'coordenador_curso':
-        return 'Coordenação';
-      case 'autor':
-        return 'Docente / Autor';
-      default:
-        return 'Autenticado';
-    }
-  };
 
   return (
     <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -136,32 +111,6 @@ export const Header: React.FC = () => {
             <ShieldCheck className="w-4 h-4 text-slate-500" aria-hidden="true" />
             <span>Acesso Restrito</span>
           </Link>
-
-          {/* Área de Autenticação: Exibida somente para usuários já conectados fora da área restrita */}
-          {!pathname?.startsWith('/restrito') && mounted && user && (
-            <div className="ml-1 sm:ml-2 pl-2 border-l border-slate-200 flex items-center gap-1.5 min-h-[36px]">
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/restrito/perfil"
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs font-bold text-[#0B3B60] hover:bg-blue-100 transition-colors"
-                  title={`Conectado como ${user.email} • Clique para gerenciar seus dados cadastrais`}
-                >
-                  <User className="w-3.5 h-3.5 text-[#0056B3]" />
-                  <span className="max-w-[130px] truncate">{getRotuloPapel()}</span>
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => signOut()}
-                  aria-label="Sair da sessão"
-                  title="Encerrar sessão com segurança"
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
         </nav>
       </div>
     </header>

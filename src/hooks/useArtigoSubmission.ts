@@ -14,6 +14,7 @@ import {
   limparRascunho,
 } from '@/lib/storage/draft-storage';
 import { esquemasSubmissaoArtigo } from '@/lib/utils/validations';
+import { useAuth } from '@/context/AuthContext';
 
 export interface UseArtigoSubmissionReturn {
   // Campos do formulário
@@ -61,6 +62,7 @@ export interface UseArtigoSubmissionReturn {
 export function useArtigoSubmission(): UseArtigoSubmissionReturn {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { user, perfil } = useAuth();
 
   // Estados dos campos
   const [titulo, setTitulo] = useState('');
@@ -83,7 +85,7 @@ export function useArtigoSubmission(): UseArtigoSubmissionReturn {
   const [rascunhoCarregado, setRascunhoCarregado] = useState(false);
   const [abaPreview, setAbaPreview] = useState<'editor' | 'preview'>('editor');
 
-  // Recuperação de rascunho anterior da sessão
+  // Recuperação de rascunho anterior da sessão ou dados do autor autenticado
   useEffect(() => {
     const rascunho = carregarRascunho();
     if (rascunho) {
@@ -96,8 +98,15 @@ export function useArtigoSubmission(): UseArtigoSubmissionReturn {
       if (rascunho.coautores) setCoautores(rascunho.coautores);
       if (rascunho.linkExternoMidia) setLinkExternoMidia(rascunho.linkExternoMidia);
       setRascunhoCarregado(true);
+    } else if (user) {
+      const nome = perfil?.nome_completo || (user.user_metadata?.nome_completo as string) || '';
+      const mat = perfil?.matricula || (user.user_metadata?.matricula as string) || '';
+      const sigla = (user.user_metadata?.curso_sigla as SiglaCurso) || 'SIS';
+      if (nome) setAutorNome(nome);
+      if (mat) setAutorMatricula(mat);
+      if (sigla) setCursoSigla(sigla);
     }
-  }, []);
+  }, [user, perfil]);
 
   // Salvamento automático contínuo
   useEffect(() => {
@@ -202,6 +211,8 @@ export function useArtigoSubmission(): UseArtigoSubmissionReturn {
         resumo,
         corpoMarkdown,
         cursoSigla,
+        autorId: user?.id,
+        autorEmail: user?.email,
         autorNome,
         autorMatricula,
         coautores: coautores || undefined,

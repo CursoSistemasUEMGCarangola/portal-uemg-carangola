@@ -17,9 +17,12 @@ import {
   BookOpen,
   ChevronRight,
   UserCog,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 function MeusArtigosConteudo() {
+  const { user, perfil, signOut } = useAuth();
   const searchParams = useSearchParams();
   const acabouDeSubmeter = searchParams.get('status') === 'sucesso';
 
@@ -27,8 +30,28 @@ function MeusArtigosConteudo() {
   const [filtroStatus, setFiltroStatus] = useState<'todos' | StatusArtigo>('todos');
 
   useEffect(() => {
-    setArtigos(obterArtigosConsolidados());
-  }, []);
+    const todos = obterArtigosConsolidados();
+    if (!user) {
+      setArtigos([]);
+      return;
+    }
+
+    const userId = user.id;
+    const userEmail = user.email?.toLowerCase().trim();
+    const userNome = (perfil?.nome_completo || (user.user_metadata?.nome_completo as string) || '').toLowerCase().trim();
+    const userMatricula = (perfil?.matricula || (user.user_metadata?.matricula as string) || '').toLowerCase().trim();
+
+    // Filtra exclusivamente os artigos pertencentes a este docente/autor
+    const meus = todos.filter((a) => {
+      if (a.autorId && a.autorId === userId) return true;
+      if (a.autorEmail && userEmail && a.autorEmail.toLowerCase().trim() === userEmail) return true;
+      if (userMatricula && a.autorMatricula && a.autorMatricula.toLowerCase().trim() === userMatricula) return true;
+      if (userNome && a.autorNome && a.autorNome.toLowerCase().trim() === userNome) return true;
+      return false;
+    });
+
+    setArtigos(meus);
+  }, [user, perfil]);
 
   // Filtragem
   const artigosFiltrados = artigos.filter((a) => {
@@ -77,7 +100,7 @@ function MeusArtigosConteudo() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
           <Link
             href="/restrito/perfil"
             id="btn-meus-dados-autor"
@@ -88,13 +111,24 @@ function MeusArtigosConteudo() {
             <span>Meus Dados</span>
           </Link>
 
+          <button
+            type="button"
+            onClick={() => signOut()}
+            id="btn-sair-autor"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-xs transition-all whitespace-nowrap cursor-pointer"
+            title="Encerrar sessão com segurança"
+          >
+            <LogOut className="w-4 h-4 text-white" aria-hidden="true" />
+            <span>Sair</span>
+          </button>
+
           <Link
             href="/meus-artigos/novo"
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0B3B60] hover:bg-[#0056B3] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0056B3]"
-        >
-          <PlusCircle className="w-5 h-5" aria-hidden="true" />
-          Nova Submissão
-        </Link>
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0B3B60] hover:bg-[#0056B3] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0056B3]"
+          >
+            <PlusCircle className="w-5 h-5" aria-hidden="true" />
+            <span>Nova Submissão</span>
+          </Link>
         </div>
       </div>
 
