@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { enviarEmailAprovacaoCoordenador } from '@/lib/email/brevo';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
+
+export const dynamic = 'force-dynamic';
 
 const CURSO_NOME_MAPA: Record<string, string> = {
   BIO: 'Ciências Biológicas',
@@ -14,19 +16,6 @@ const CURSO_NOME_MAPA: Record<string, string> = {
   SSO: 'Serviço Social',
   SIS: 'Sistemas de Informação',
 };
-
-function getAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Configuração do servidor Supabase incompleta.');
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-}
 
 // GET: Lista coordenadores e status de homologação (Exclusivo Gabinete da Direção)
 export async function GET() {
@@ -48,7 +37,7 @@ export async function GET() {
       );
     }
 
-    const supabaseAdmin = getAdminClient();
+    const supabaseAdmin = getSupabaseAdmin();
     const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
 
     if (listError) {
@@ -113,7 +102,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabaseAdmin = getAdminClient();
+    const supabaseAdmin = getSupabaseAdmin();
     const { data: targetData, error: getUserError } = await supabaseAdmin.auth.admin.getUserById(userId);
 
     if (getUserError || !targetData.user) {

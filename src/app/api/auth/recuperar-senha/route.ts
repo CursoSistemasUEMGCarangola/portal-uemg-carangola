@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { z } from 'zod';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { getBaseUrl } from '@/lib/utils/url';
+import { mascararEmail } from '@/lib/utils/formatters';
 import { enviarEmailRecuperacaoSenha } from '@/lib/email/brevo';
 
 export const dynamic = 'force-dynamic';
@@ -19,17 +21,6 @@ const SolicitarRecuperacaoSchema = z
     }
   );
 
-function mascararEmail(email: string): string {
-  const [usuario, dominio] = email.split('@');
-  if (!dominio) return email;
-  if (usuario.length <= 2) {
-    return `${usuario[0]}*@${dominio}`;
-  }
-  const visivelInicio = usuario.slice(0, 2);
-  const visivelFim = usuario.slice(-1);
-  return `${visivelInicio}${'*'.repeat(Math.max(2, usuario.length - 3))}${visivelFim}@${dominio}`;
-}
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -44,22 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json(
-        { error: 'Configuração do servidor Supabase incompleta.' },
-        { status: 500 }
-      );
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    const supabaseAdmin = getSupabaseAdmin();
 
     // 1. Busca todos os usuários para localizar correspondência com e-mail institucional, secundário ou matrícula
     const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
@@ -143,27 +119,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Determina a URL base da aplicação de forma dinâmica, suportando Vercel, domínios próprios e localhost
-    const originHeader = request.headers.get('origin');
-    const hostHeader = request.headers.get('x-forwarded-host') || request.headers.get('host');
-    const protoHeader = request.headers.get('x-forwarded-proto') || (hostHeader?.includes('localhost') ? 'http' : 'https');
-
-    let origin = 'https://carangola.uemg.br';
-
-    // Prioridade 1: Se a requisição veio do navegador, usa o endereço exato de onde o usuário está acessando (seja vercel.app, domínio próprio ou localhost)
-    if (originHeader) {
-      origin = originHeader;
-    } else if (hostHeader) {
-      origin = `${protoHeader}://${hostHeader}`;
-    } else if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-      origin = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-    } else if (process.env.VERCEL_URL) {
-      origin = `https://${process.env.VERCEL_URL}`;
-    } else if (process.env.NEXT_PUBLIC_SITE_URL) {
-      origin = process.env.NEXT_PUBLIC_SITE_URL;
-    }
-
-    const linkRecuperacao = `${origin}/redefinir-senha?token=${token}`;
+    // 5. Determina a URL base da aplicação de forma centralizada e pura
+    const baseUrl = getBaseUrl(request);
+    const linkRecuperacao = `${baseUrl}/redefinir-senha?token=${token}`;
 
     const nomeDestinatario =
       (usuarioEncontrado.user_metadata?.nome_completo as string) ||
@@ -189,12 +147,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const emailMascarado = mascararEmail(emailDestino);
+    const emailOfuscado = mascararEmail(emailDestino);
 
     return NextResponse.json({
-      message: `Instruções de redefinição enviadas com sucesso para o e-mail alternativo: ${emailMascarado}. Verifique sua caixa de entrada e spam.`,
-      emailDestino: emailMascarado,
-      emailMascarado: emailMascarado,
+      message: `Instruções de redefinição enviadas com sucesso para o e-mail alternativo: ${emailOfuscado}. Verifique sua caixa de entrada e spam.`,
+      emailDestino: emailOfuscado,
+      emailMascarado: emailOfuscado,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

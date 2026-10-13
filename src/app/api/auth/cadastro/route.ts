@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { z } from 'zod';
 
 const CURSOS_MAPA: Record<string, string> = {
@@ -42,22 +42,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const dados = CadastroSchema.parse(body);
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json(
-        { error: 'Configuração do servidor Supabase incompleta.' },
-        { status: 500 }
-      );
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    const supabaseAdmin = getSupabaseAdmin();
 
     const cursoId = CURSOS_MAPA[dados.cursoSigla.toUpperCase()];
     if (!cursoId) {

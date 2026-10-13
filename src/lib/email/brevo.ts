@@ -1,3 +1,5 @@
+import { getBaseUrl } from '@/lib/utils/url';
+
 /**
  * Serviço de Envio de E-mails Transacionais via Brevo REST API (v3)
  * Projetado para contornar restrições de domínios institucionais (@uemg.br)
@@ -290,13 +292,7 @@ export async function enviarEmailAprovacaoCoordenador({
   const apiKey = process.env.BREVO_API_KEY;
   const remetenteEmail = process.env.BREVO_SENDER_EMAIL || 'cursosiuemgcarangola@gmail.com';
   const remetenteNome = process.env.BREVO_SENDER_NAME || 'Portal UEMG Carangola';
-  const siteUrl =
-    siteUrlParam ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
-    (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
-      ? process.env.NEXT_PUBLIC_SITE_URL
-      : 'https://carangola.uemg.br');
+  const siteUrl = siteUrlParam || getBaseUrl();
 
   if (!apiKey) {
     return { sucesso: false, erro: 'Chave Brevo não configurada.' };

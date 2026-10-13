@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
+
+export const dynamic = 'force-dynamic';
 
 const RedefinirSenhaSchema = z.object({
   token: z.string().min(10, 'Token de recuperação inválido.'),
@@ -12,22 +14,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { token, novaSenha } = RedefinirSenhaSchema.parse(body);
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json(
-        { error: 'Configuração do servidor Supabase incompleta.' },
-        { status: 500 }
-      );
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    const supabaseAdmin = getSupabaseAdmin();
 
     // 1. Localiza usuário detentor do token de recuperação
     const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();

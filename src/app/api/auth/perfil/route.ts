@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { z } from 'zod';
 import { CURSOS_LISTA } from '@/lib/data/mock-articles';
 
@@ -57,14 +57,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Sessão não autorizada ou expirada.' }, { status: 401 });
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json({ error: 'Configuração do servidor ausente.' }, { status: 500 });
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+    const supabaseAdmin = getSupabaseAdmin();
 
     // Consulta perfil na tabela perfis_usuarios
     const { data: perfil } = await supabaseAdmin
@@ -125,14 +118,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json({ error: 'Configuração do servidor ausente.' }, { status: 500 });
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+    const supabaseAdmin = getSupabaseAdmin();
 
     // 1. Atualiza registro na tabela public.perfis_usuarios (apenas campos permitidos)
     const { error: perfilUpdateError } = await supabaseAdmin
