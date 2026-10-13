@@ -143,16 +143,24 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Determina a URL base da aplicação de forma dinâmica e segura
+    // 5. Determina a URL base da aplicação de forma dinâmica, suportando Vercel, domínios próprios e localhost
     const originHeader = request.headers.get('origin');
     const hostHeader = request.headers.get('x-forwarded-host') || request.headers.get('host');
     const protoHeader = request.headers.get('x-forwarded-proto') || (hostHeader?.includes('localhost') ? 'http' : 'https');
 
-    let origin = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://carangola.uemg.br';
+    let origin = 'https://carangola.uemg.br';
 
-    // Se a requisição partiu de um ambiente local (desenvolvimento), preserva localhost para testes locais
-    if (originHeader?.includes('localhost') || hostHeader?.includes('localhost')) {
-      origin = originHeader || (hostHeader ? `${protoHeader}://${hostHeader}` : 'http://localhost:3000');
+    // Prioridade 1: Se a requisição veio do navegador, usa o endereço exato de onde o usuário está acessando (seja vercel.app, domínio próprio ou localhost)
+    if (originHeader) {
+      origin = originHeader;
+    } else if (hostHeader) {
+      origin = `${protoHeader}://${hostHeader}`;
+    } else if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+      origin = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+    } else if (process.env.VERCEL_URL) {
+      origin = `https://${process.env.VERCEL_URL}`;
+    } else if (process.env.NEXT_PUBLIC_SITE_URL) {
+      origin = process.env.NEXT_PUBLIC_SITE_URL;
     }
 
     const linkRecuperacao = `${origin}/redefinir-senha?token=${token}`;

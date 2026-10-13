@@ -277,6 +277,7 @@ export interface EnviarEmailAprovacaoParams {
   destinatarioNome: string;
   emailInstitucional: string;
   cursoNome: string;
+  siteUrl?: string;
 }
 
 export async function enviarEmailAprovacaoCoordenador({
@@ -284,14 +285,18 @@ export async function enviarEmailAprovacaoCoordenador({
   destinatarioNome,
   emailInstitucional,
   cursoNome,
+  siteUrl: siteUrlParam,
 }: EnviarEmailAprovacaoParams): Promise<{ sucesso: boolean; messageId?: string; erro?: string }> {
   const apiKey = process.env.BREVO_API_KEY;
   const remetenteEmail = process.env.BREVO_SENDER_EMAIL || 'cursosiuemgcarangola@gmail.com';
   const remetenteNome = process.env.BREVO_SENDER_NAME || 'Portal UEMG Carangola';
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
+    siteUrlParam ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+    (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
       ? process.env.NEXT_PUBLIC_SITE_URL
-      : 'https://carangola.uemg.br';
+      : 'https://carangola.uemg.br');
 
   if (!apiKey) {
     return { sucesso: false, erro: 'Chave Brevo não configurada.' };
