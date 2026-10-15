@@ -91,18 +91,18 @@ CREATE TABLE IF NOT EXISTS public.chaves_gabinete (
 );
 
 -- ==============================================================================
--- SEED DOS 9 CURSOS OFICIAIS DA UEMG CARANGOLA
+-- SEED DOS 9 CURSOS OFICIAIS DA UEMG CARANGOLA (ORDEM ALFABÉTICA)
 -- ==============================================================================
 INSERT INTO public.cursos (nome, sigla, descricao) VALUES
-('Ciências Biológicas', 'BIO', 'Licenciatura em Ciências Biológicas — Formação científica e docente voltada à biodiversidade e conservação regional.'),
-('Geografia', 'GEO', 'Licenciatura em Geografia — Análise socioespacial, planejamento ambiental e práticas pedagógicas.'),
-('História', 'HIS', 'Licenciatura em História — Investigação do patrimônio histórico-cultural, memória e ensino.'),
-('Letras (Português/Inglês)', 'LET', 'Licenciatura em Letras — Estudos linguísticos, literários e formação bilingue intercultural.'),
-('Matemática', 'MAT', 'Licenciatura em Matemática — Fundamentos matemáticos puros e aplicados e tecnologias no ensino.'),
-('Pedagogia', 'PED', 'Licenciatura em Pedagogia — Gestão educacional, docência multidisciplinar e processos formativos comunitários.'),
-('Serviço Social', 'SSO', 'Bacharelado em Serviço Social — Políticas públicas, direitos humanos e intervenção social emancipatória.'),
-('Sistemas de Informação', 'SIS', 'Bacharelado em Sistemas de Informação — Engenharia de software, governança de TI e inovação tecnológica.'),
-('Administração', 'ADM', 'Bacharelado em Administração — O curso forma profissionais para atuar como empreendedores administrando recursos financeiros, materiais e de pessoas. Oferece formação técnica e humana de profissionais em um contexto local e global e construção de métodos e instrumentos para uma administração sistemática e organizada.')
+('Administração', 'ADM', 'Bacharelado em Administração — O curso forma profissionais para atuar como empreendedores administrando recursos financeiros, materiais e de pessoas. Oferece formação técnica e humana de profissionais em um contexto local e global e construção de métodos e instrumentos para uma administração sistemática e organizada.'),
+('Ciências Biológicas', 'BIO', 'Licenciatura em Ciências Biológicas — O curso forma professores com aptidão para desenvolver ações educativas em espaços escolares e não escolares, preparados para a análise da origem, evolução, estrutura, funcionamento e relação dos seres vivos; também podendo realizar pesquisas, principalmente nas áreas da Zoologia, Botânica, Genética e Ecologia.'),
+('Geografia', 'GEO', 'Licenciatura em Geografia — O curso prepara profissional para atuar na docência, com conhecimentos voltados para a relação entre elementos naturais (solo, clima, relevo e vegetação) e sociais (cultura, história e geopolítica), sua localização e impactos. Permite também o desenvolvimento de habilidades que priorizam a formação de cidadãos críticos, conhecedores da dinâmica do espaço e paisagens que os cercam em diversas escalas e temporalidades.'),
+('História', 'HIS', 'Licenciatura em História — O curso oferece ao aluno formação com clara ênfase na prática do ensino de História, mas concilia a educação superior e a prática pedagógica ao desenvolvimento de habilidades para execução de projetos de pesquisas em temáticas regionais. A utilização dos ricos acervos documentais da região do sul de Minas e da cidade de Campanha possibilita uma formação diferencial dos nossos alunos numa perspectiva articulada e dialética entre ensino e pesquisa.'),
+('Letras (Português/Inglês)', 'LET', 'Licenciatura em Letras — O curso forma profissional para atuar no ensino da língua inglesa e portuguesa e suas literaturas; na elaboração, revisão e correção de textos em editoras e órgãos da imprensa; criação de versões de um idioma para o outro de textos técnicos e literários; atuar em conferências e simpósios, efetuando interpretações simultâneas ou consecutivas.'),
+('Matemática', 'MAT', 'Licenciatura em Matemática — O curso tem como objetivo proporcionar uma sólida formação matemática para atuação em ensino fundamental e médio, bem como preparar profissionais críticos e criativos, possibilitando reflexões sobre o papel do professor no processo de ensino-aprendizagem, com foco em suas limitações e potencialidades.'),
+('Pedagogia', 'PED', 'Licenciatura em Pedagogia — O curso forma profissionais para atuar com a educação escolar na educação infantil e nos anos iniciais do ensino fundamental, em escolas públicas e privadas. Com base teórico-prática voltada para a compreensão do fenômeno educacional na contemporaneidade.'),
+('Serviço Social', 'SSO', 'Bacharelado em Serviço Social — O curso forma profissional para atuar na elaboração, execução e avaliação de planos, programas e projetos na área social, contribuindo para a viabilização da participação dos usuários nas decisões institucionais, planejando, organizando e administrando benefícios e serviços, bem como a realização de pesquisas que subsidiem formulação de políticas e ações profissionais.'),
+('Sistemas de Informação', 'SIS', 'Bacharelado em Sistemas de Informação — O curso tem por objetivo a formação de profissionais capacitados para atuar na busca de soluções nas diferentes áreas de aplicação, com uma visão dinâmica da complexidade organizacional, voltados para a atualização tecnológica e as demandas do mercado, podendo atuar também na inovação, planejamento, gerenciamento da infraestrutura, coordenação, desenvolvimento e evolução dos recursos e sistemas de informação.')
 ON CONFLICT (sigla) DO NOTHING;
 
 -- ==============================================================================
