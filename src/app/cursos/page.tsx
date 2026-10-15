@@ -7,7 +7,7 @@ import { GraduationCap, BookOpen, ArrowRight } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Cursos de Graduação — UEMG Carangola',
   description:
-    'Conheça os 8 cursos de graduação da Universidade do Estado de Minas Gerais — Unidade Carangola e suas respectivas produções acadêmicas.',
+    'Conheça os 9 cursos de graduação da Universidade do Estado de Minas Gerais — Unidade Carangola e suas respectivas produções acadêmicas.',
 };
 
 export default function CursosPage() {

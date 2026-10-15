@@ -15,6 +15,7 @@ const CURSO_NOME_MAPA: Record<string, string> = {
   PED: 'Pedagogia',
   SSO: 'Serviço Social',
   SIS: 'Sistemas de Informação',
+  ADM: 'Administração',
 };
 
 // GET: Lista coordenadores e status de homologação (Exclusivo Gabinete da Direção)

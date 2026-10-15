@@ -6,7 +6,7 @@ import { Scale, FileText, ArrowLeft, ShieldCheck, CheckCircle2, AlertCircle, Boo
 export const metadata: Metadata = {
   title: 'Termos de Uso do Portal Acadêmico — UEMG Carangola',
   description:
-    'Termos e condições gerais de uso do Portal UEMG Carangola, regendo o acesso às publicações acadêmicas dos 8 cursos e a utilização do canal de ouvidoria com o Gabinete da Direção.',
+    'Termos e condições gerais de uso do Portal UEMG Carangola, regendo o acesso às publicações acadêmicas dos 9 cursos e a utilização do canal de ouvidoria com o Gabinete da Direção.',
 };
 
 export default function TermosDeUsoPage() {
@@ -51,7 +51,7 @@ export default function TermosDeUsoPage() {
             </h2>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
               O Portal UEMG Carangola tem por finalidade constituir um repositório institucional e veículo unificado de
-              divulgação científica, cultural e de extensão para os 8 cursos de graduação da Unidade (Ciências Biológicas,
+              divulgação científica, cultural e de extensão para os 9 cursos de graduação da Unidade (Administração, Ciências Biológicas,
               Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação), bem como prover um
               canal autônomo e seguro para a governança participativa e ouvidoria junto ao Gabinete da Direção Geral.
             </p>

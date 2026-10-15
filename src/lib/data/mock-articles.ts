@@ -73,6 +73,15 @@ export const CURSOS_LISTA: Curso[] = [
     corFaixa: 'Azul Cobalto',
     corBadge: 'bg-blue-50 text-[#0B3B60] border-blue-300 hover:border-[#0056B3] hover:bg-blue-100/80',
   },
+  {
+    id: 'c9',
+    nome: 'Administração',
+    sigla: 'ADM',
+    grau: 'Bacharelado',
+    descricao: 'Bacharelado em Administração — O curso forma profissionais para atuar como empreendedores administrando recursos financeiros, materiais e de pessoas. Oferece formação técnica e humana de profissionais em um contexto local e global e construção de métodos e instrumentos para uma administração sistemática e organizada.',
+    corFaixa: 'Azul Índigo',
+    corBadge: 'bg-indigo-50 text-indigo-950 border-indigo-300 hover:border-indigo-400 hover:bg-indigo-100/80',
+  },
 ];
 
 export const ARTIGOS_MOCK: Artigo[] = [
@@ -80,12 +89,12 @@ export const ARTIGOS_MOCK: Artigo[] = [
     id: 'art-1',
     slug: 'arquitetura-autonoma-custo-zero-governanca-publica',
     titulo: 'Arquitetura de Software Autônoma e Custo Zero: Descentralização Tecnológica na UEMG Carangola',
-    resumo: 'Relato técnico e metodológico sobre a concepção e implementação do Portal UEMG Carangola. Descreve a engenharia de uma plataforma pública sustentável que unifica a divulgação científica dos 8 cursos e a ouvidoria institucional com Custo Zero, Criptografia de Envelope Client-Side, partição de chaves Shamir (2-de-3) e operação perpétua no Free Tier do Supabase.',
+    resumo: 'Relato técnico e metodológico sobre a concepção e implementação do Portal UEMG Carangola. Descreve a engenharia de uma plataforma pública sustentável que unifica a divulgação científica dos 9 cursos e a ouvidoria institucional com Custo Zero, Criptografia de Envelope Client-Side, partição de chaves Shamir (2-de-3) e operação perpétua no Free Tier do Supabase.',
     corpoMarkdown: `## Resumo Técnico
 
 Este artigo documenta a concepção, os fundamentos arquiteturais e as decisões de engenharia de software empregadas na construção do **Portal UEMG Carangola**, plataforma pública unificada concebida para atender à Universidade do Estado de Minas Gerais (UEMG) em sua Unidade Acadêmica de Carangola, localizada na Zona da Mata Mineira. O projeto responde a um duplo desafio comum às autarquias estaduais descentralizadas: a fragmentação da produção intelectual multicampi e a ausência de canais institucionais seguros e acessíveis para o diálogo entre a comunidade acadêmica e o Gabinete da Direção Geral. Em um cenário de fortes restrições orçamentárias públicas, onde a contratação de infraestrutura em nuvem de grande porte é inviabilizada por entraves licitatórios, foi formulada e executada uma **Arquitetura Autônoma em Custo Zero Absoluto**. 
 
-O sistema integra em uma única base de código a divulgação científica de oito cursos de graduação e um canal de ouvidoria blindado por Criptografia de Envelope no cliente (*Client-Side Zero-Trust*), distribuição de segredos mestres via algoritmo de Shamir (*2-de-3 Secret Sharing*), políticas estritas de segurança em nível de linha (*Row Level Security — RLS*) no PostgreSQL e mitigação ativa contra pausas de inatividade no plano gratuito do Supabase.
+O sistema integra em uma única base de código a divulgação científica de nove cursos de graduação e um canal de ouvidoria blindado por Criptografia de Envelope no cliente (*Client-Side Zero-Trust*), distribuição de segredos mestres via algoritmo de Shamir (*2-de-3 Secret Sharing*), políticas estritas de segurança em nível de linha (*Row Level Security — RLS*) no PostgreSQL e mitigação ativa contra pausas de inatividade no plano gratuito do Supabase.
 
 ---
 
@@ -93,7 +102,7 @@ O sistema integra em uma única base de código a divulgação científica de oi
 
 A interiorização do ensino superior público em Minas Gerais, consolidada pela expansão da UEMG, transformou a dinâmica socioeconômica de microrregiões históricas como a bacia do Rio Carangola. Contudo, a descentralização física frequentemente enfrenta a chamada *assimetria da visibilidade digital*: enquanto os campi sediados na capital concentram recursos tecnológicos e canais corporativos unificados, as unidades do interior tendem a conviver com repositórios isolados, publicações dispersas em redes sociais não oficiais e canais de governança dependentes de caixas de e-mail genéricas ou formulários desprovidos de garantias criptográficas.
 
-Em Carangola, oito cursos de graduação — Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação — geram continuadamente artigos de extensão, ensaios teóricos, monografias e relatórios de campo. Paralelamente, o Gabinete da Direção Geral necessitava de um mecanismo autônomo para o programa "Fale com a Direção", assegurando que denúncias, críticas, sugestões e elogios pudessem tramitar com garantia de sigilo ou anonimato inviolável, conforme preconizado pela Lei de Acesso à Informação (LAI — Lei 12.527/2011) e pela Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).
+Em Carangola, nove cursos de graduação — Administração, Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação — geram continuadamente artigos de extensão, ensaios teóricos, monografias e relatórios de campo. Paralelamente, o Gabinete da Direção Geral necessitava de um mecanismo autônomo para o programa "Fale com a Direção", assegurando que denúncias, críticas, sugestões e elogios pudessem tramitar com garantia de sigilo ou anonimato inviolável, conforme preconizado pela Lei de Acesso à Informação (LAI — Lei 12.527/2011) e pela Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).
 
 O desafio central imposto à equipe de desenvolvimento do curso de Sistemas de Informação consistiu em: **como construir uma infraestrutura perene, de alta fidelidade visual e rigor criptográfico, sem dispor de orçamento financeiro para servidores dedicados, bancos de dados pagos ou serviços corporativos de e-mail?**
 
@@ -107,7 +116,8 @@ Essa decisão manifesta-se em três soluções de engenharia primordiais:
 
 1. **Pipeline de Compressão Gráfica WebP Client-Side:** O upload direto de fotografias em alta resolução esgotaria o limite de 1 GB de armazenamento de arquivos oferecido pelo plano gratuito do Supabase Storage. Para contornar esse teto, implementou-se um pipeline no navegador baseado em \`OffscreenCanvas\` que redimensiona imagens para uma largura máxima de 1200 pixels e as converte em WebP com taxa de compressão de 80%. O resultado reduz arquivos de 8 MB para uma faixa entre 80 KB e 110 KB antes de qualquer tráfego de rede, viabilizando o suporte a milhares de artigos sem custos de storage.
 2. **A Regra Inviolável de Zero-Storage para Arquivos PDF:** No modelo editorial tradicional, cada artigo publicado gera um arquivo PDF binário armazenado permanentemente no servidor. No Portal UEMG Carangola, vigora a regra estrita de **Zero-Storage de PDFs**: nenhum arquivo binário \`.pdf\` é gravado no banco de dados. Os documentos oficiais são compilados sob demanda no navegador do leitor a partir do texto estruturado em Markdown e metadados institucionais, utilizando estilos CSS tipográficos de alta precisão calibrados para impressão A4 na memória volátil.
-3. **Comunicação Autônoma In-App (Zero-Email Architecture):** Servidores de correio eletrônico (SMTP) corporativos apresentam custos recorrentes e suscetibilidade a bloqueios de reputação e spam. Toda a comunicação do portal foi desenhada para operar de forma 100% autônoma dentro da aplicação (*In-App*), empregando comprovantes portáteis e notificações Web Push nativas via protocolo VAPID, sem qualquer dependência de fornecedores de e-mail externos.
+3. **Arquitetura de Mensageria Híbrida & Soberania da Ouvidoria:** Servidores corporativos de correio eletrônico (\`@uemg.br\`) possuem diretivas severas que descartam envios automáticos externos. A arquitetura respondeu com um modelo híbrido: a **Ouvidoria é 100% Zero-Email**, soberana e confidencial, operando exclusivamente via interface in-app, Web Push (VAPID) e comprovantes criptográficos portáteis em PDF. Paralelamente, para fluxos críticos de autenticação (recuperação de senhas e homologação de coordenadores), utiliza-se a API REST do Brevo (v3) no plano gratuito (300 envios/dia), despachando links temporários para e-mails pessoais secundários para contornar bloqueios corporativos de rede sem incorrer em custos.
+4. **Acessibilidade Sonora Nativa Client-Side:** Em conformidade estrita com o eMAG e a norma internacional WCAG 2.1 AA, implementou-se audiodescrição in-app via \`SpeechSynthesis\` (Web Speech API) nativa do navegador. O sintetizador processa o texto estruturado diretamente no dispositivo do leitor, permitindo audição de artigos com controle de velocidade e pausa, sem consumo de dados móveis e sem custos com APIs proprietárias de Text-to-Speech.
 
 ---
 
@@ -121,7 +131,7 @@ A solução adotada foi a implantação de uma arquitetura **Zero-Trust com Crip
 * **Envelopamento da Chave:** Em seguida, a DEK é cifrada assimetricamente com algoritmo RSA-OAEP de 4096 bits utilizando a chave pública institucional do Gabinete da Direção (KEK — *Key Encryption Key*).
 * **Armazenamento Cego:** O banco de dados PostgreSQL na nuvem recebe e persiste unicamente o payload cifrado (*ciphertext*), o vetor de inicialização (IV) e a chave envelopada (*wrapped_dek*). Monitores, invasores ou terceiros que inspecionem as tabelas visualizam apenas sequências aleatórias de bytes Base64 indecifráveis.
 
-Adicionalmente, concebeu-se uma defesa rigorosa contra ataques de enumeração (*Anti-Enumeration Defense*). Protocolos visuais sequenciais (no padrão \`#CAR-2025-XXXX\`) não são chaves de autorização de API. A consulta a manifestações exige obrigatoriamente a tupla composta pelo Código do Protocolo e um Token Secreto de 24 caracteres gerado via biblioteca NanoID com entropia criptográfica. Tentativas incorretas acionam uma rotina com retardo artificial constante de 400 milissegundos para neutralizar ataques de temporização (*timing attacks*).
+Adicionalmente, concebeu-se uma defesa rigorosa contra ataques de enumeração (*Anti-Enumeration Defense*). Protocolos visuais sequenciais (no padrão \`#CAR-2026-XXXX\`) não são chaves de autorização de API. A consulta a manifestações exige obrigatoriamente a tupla composta pelo Código do Protocolo e um Token Secreto de 24 caracteres gerado via biblioteca NanoID com entropia criptográfica. Tentativas incorretas acionam uma rotina com retardo artificial constante de 400 milissegundos para neutralizar ataques de temporização (*timing attacks*).
 
 A segregação física é mantida entre as tabelas: denúncias privadas residem em \`protocolos_internos\` (onde o acesso via \`SELECT\` direto é estritamente proibido ao público), enquanto deliberações homologadas em texto claro residem de forma totalmente desacoplada na tabela \`mural_publico\`.
 
@@ -133,7 +143,7 @@ Projetos de software desenvolvidos no setor público frequentemente sucumbem à 
 
 Para resolver essa vulnerabilidade humana, implementou-se a **Partição Criptográfica de Shamir (*Shamir's Secret Sharing*)** com quórum $(k, n) = (2, 3)$:
 
-* Durante a formalização de uma gestão, a chave privada mestra (KEK) é dividida matematicamente em três fragmentos desconexos sobre um corpo finito $\\mathbb{F}_p$.
+* Durante a formalização de uma gestão, a chave privada mestra (KEK) é dividida matematicamente em três fragmentos desconexos sobre o corpo de Galois $GF(2^8)$ com polinômio redutor $x^8 + x^4 + x^3 + x + 1$ e CSPRNG estrito (\`crypto.getRandomValues\`).
 * O **Fragmento 1** é entregue à posse exclusiva do Diretor Geral;
 * O **Fragmento 2** é custodiado pela Secretaria Geral e Vice-Direção;
 * O **Fragmento 3** é depositado formalmente sob a guarda da Congregação da Unidade Acadêmica.
@@ -177,7 +187,7 @@ Ao ancorar o ciclo de vida do software no Projeto de Extensão Contínuo do curs
 Mais do que um portal web, a plataforma consolida-se como um laboratório vivo de autonomia digital e tecnologia pública, onde a teoria de algoritmos, a segurança da informação e a ética pública convergem para fortalecer a cidadania universitária e a memória acadêmica da UEMG na Zona da Mata Mineira.
 `,
     capaUrl: '/icons/icon-512.png',
-    curso: CURSOS_LISTA[7], // SIS
+    curso: CURSOS_LISTA.find((c) => c.sigla === 'SIS') || CURSOS_LISTA[0],
     autorNome: 'Prof. Me. Nilton Freitas Junior',
     autorMatricula: 'SIS-UEMG-DOC-01',
     autorRole: 'Docente / Coordenador',
@@ -214,7 +224,7 @@ export function obterArtigosConsolidados(): Artigo[] {
 }
 
 export function salvarArtigoSubmetido(input: SubmissaoArtigoInput): Artigo {
-  const curso = CURSOS_LISTA.find((c) => c.sigla === input.cursoSigla) || CURSOS_LISTA[7];
+  const curso = CURSOS_LISTA.find((c) => c.sigla === input.cursoSigla) || CURSOS_LISTA.find((c) => c.sigla === 'SIS') || CURSOS_LISTA[0];
   const slug = input.titulo
     .toLowerCase()
     .normalize('NFD')

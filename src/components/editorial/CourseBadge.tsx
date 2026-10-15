@@ -16,6 +16,7 @@ const ESTILOS_CURSOS: Record<SiglaCurso, string> = {
   PED: 'bg-pink-50 text-[#831843] border-pink-300',
   SSO: 'bg-rose-50 text-[#881337] border-rose-300',
   SIS: 'bg-blue-50 text-[#1E40AF] border-blue-300',
+  ADM: 'bg-indigo-50 text-[#312E81] border-indigo-300',
 };
 
 export const CourseBadge: React.FC<CourseBadgeProps> = ({

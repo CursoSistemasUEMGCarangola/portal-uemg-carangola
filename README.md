@@ -1,14 +1,14 @@
 # Portal UEMG Carangola
 ## Publicações Acadêmicas & Canal Direto com a Direção
 
-Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) — Unidade Acadêmica de Carangola**, unificando a disseminação da produção científica, cultural e pedagógica dos seus 8 cursos de graduação ao canal direto de diálogo participativo e governança com o Gabinete da Direção Geral ("Fale com a Direção").
+Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) — Unidade Acadêmica de Carangola**, unificando a disseminação da produção científica, cultural e pedagógica dos seus 9 cursos de graduação ao canal direto de diálogo participativo e governança com o Gabinete da Direção Geral ("Fale com a Direção").
 
 ---
 
 ## 🌟 Pilares Estratégicos do Sistema
 
 1. **Disseminação do Conhecimento & Memória Científica:**
-   * Vitrine editorial indexada com destaque automatizado, páginas dedicadas aos 8 cursos de graduação e leitor de artigos em Markdown com suporte nativo a fórmulas matemáticas complexas em LaTeX/KaTeX e tabelas GFM.
+   * Vitrine editorial indexada com destaque automatizado, páginas dedicadas aos 9 cursos de graduação e leitor de artigos em Markdown com suporte nativo a fórmulas matemáticas complexas em LaTeX/KaTeX e tabelas GFM.
    * **Acessibilidade Sonora Nativa:** Audiodescrição integrada via Web Speech API (`SpeechSynthesis`) com controle de reprodução, velocidade e sem dependência obrigatória de softwares terceiros.
    * Citação padronizada no formato ABNT com cópia em 1 clique.
    * Geração e download de separatas oficiais em PDF compiladas diretamente na memória RAM do navegador (**Regra Zero-Storage de PDFs** via `print-service.ts` em iframe isolado com sanitização anti-XSS).
@@ -49,10 +49,11 @@ Plataforma institucional web da **Universidade do Estado de Minas Gerais (UEMG) 
 
 ## 🏛️ Cursos Contemplados (UEMG Carangola)
 
-O portal abriga e categoriza a produção científica dos 8 cursos de graduação da Unidade:
+O portal abriga e categoriza a produção científica dos 9 cursos de graduação da Unidade:
 
 | Sigla | Curso de Graduação | Grau | Área do Conhecimento |
 |:---:|:---|:---:|:---|
+| **ADM** | Administração | Bacharelado | Ciências Sociais Aplicadas & Gestão Organizacional |
 | **BIO** | Ciências Biológicas | Licenciatura | Ciências Biológicas & Biodiversidade |
 | **GEO** | Geografia | Licenciatura | Ciências Humanas & Geociências |
 | **HIS** | História | Licenciatura | Ciências Humanas & Memória Regional |

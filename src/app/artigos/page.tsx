@@ -7,7 +7,7 @@ import { BookOpen } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Catálogo de Publicações Acadêmicas — UEMG Carangola',
   description:
-    'Repositório e vitrine científica da produção acadêmica, cultural e técnica dos 8 cursos de graduação da UEMG Unidade Carangola.',
+    'Repositório e vitrine científica da produção acadêmica, cultural e técnica dos 9 cursos de graduação da UEMG Unidade Carangola.',
 };
 
 export default function ArtigosPage() {

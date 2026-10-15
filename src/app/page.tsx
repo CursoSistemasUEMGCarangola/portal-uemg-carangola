@@ -31,6 +31,7 @@ const FAIXA_CORES: Record<SiglaCurso, { borderTop: string }> = {
   PED: { borderTop: 'border-t-sky-500' },
   SSO: { borderTop: 'border-t-teal-700' },
   SIS: { borderTop: 'border-t-[#0056B3]' },
+  ADM: { borderTop: 'border-t-indigo-600' },
 };
 
 export default function HomePage() {
@@ -60,7 +61,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-base sm:text-xl text-white max-w-3xl leading-relaxed mb-10 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
-            Conectamos a produção acadêmica dos nossos 8 cursos de graduação ao canal direto
+            Conectamos a produção acadêmica dos nossos 9 cursos de graduação ao canal direto
             de diálogo com a Direção Geral, assegurando transparência ativa e engajamento comunitário.
           </p>
 
@@ -127,7 +128,7 @@ export default function HomePage() {
               Cursos da Unidade Carangola
             </h2>
             <p className="text-sm text-slate-600 mt-1">
-              Produção editorial e pedagógica dos 8 cursos de graduação do campus.
+              Produção editorial e pedagógica dos 9 cursos de graduação do campus.
             </p>
           </div>
           <Link

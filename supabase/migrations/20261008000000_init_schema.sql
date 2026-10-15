@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS public.chaves_gabinete (
 );
 
 -- ==============================================================================
--- SEED DOS 8 CURSOS OFICIAIS DA UEMG CARANGOLA
+-- SEED DOS 9 CURSOS OFICIAIS DA UEMG CARANGOLA
 -- ==============================================================================
 INSERT INTO public.cursos (nome, sigla, descricao) VALUES
 ('Ciências Biológicas', 'BIO', 'Licenciatura em Ciências Biológicas — Formação científica e docente voltada à biodiversidade e conservação regional.'),
@@ -101,7 +101,8 @@ INSERT INTO public.cursos (nome, sigla, descricao) VALUES
 ('Matemática', 'MAT', 'Licenciatura em Matemática — Fundamentos matemáticos puros e aplicados e tecnologias no ensino.'),
 ('Pedagogia', 'PED', 'Licenciatura em Pedagogia — Gestão educacional, docência multidisciplinar e processos formativos comunitários.'),
 ('Serviço Social', 'SSO', 'Bacharelado em Serviço Social — Políticas públicas, direitos humanos e intervenção social emancipatória.'),
-('Sistemas de Informação', 'SIN', 'Bacharelado em Sistemas de Informação — Engenharia de software, governança de TI e inovação tecnológica.')
+('Sistemas de Informação', 'SIS', 'Bacharelado em Sistemas de Informação — Engenharia de software, governança de TI e inovação tecnológica.'),
+('Administração', 'ADM', 'Bacharelado em Administração — O curso forma profissionais para atuar como empreendedores administrando recursos financeiros, materiais e de pessoas. Oferece formação técnica e humana de profissionais em um contexto local e global e construção de métodos e instrumentos para uma administração sistemática e organizada.')
 ON CONFLICT (sigla) DO NOTHING;
 
 -- ==============================================================================

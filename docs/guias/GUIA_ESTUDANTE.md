@@ -10,7 +10,7 @@
 
 * [1. Visão Geral do Perfil](#1-visão-geral-do-perfil)
 * [2. Como Pesquisar Artigos no Catálogo Geral (`/artigos`)](#2-como-pesquisar-artigos-no-catálogo-geral-artigos)
-* [3. Carga Inicial de Produção Acadêmica dos 8 Cursos](#3-carga-inicial-de-produção-acadêmica-dos-8-cursos)
+* [3. Carga Inicial de Produção Acadêmica dos 9 Cursos](#3-carga-inicial-de-produção-acadêmica-dos-9-cursos)
 * [4. Leitura Completa e Cópia de Citação ABNT](#4-leitura-completa-e-cópia-de-citação-abnt)
 * [5. Download do PDF Oficial da UEMG (Zero-Storage)](#5-download-do-pdf-oficial-da-uemg-zero-storage)
 * [6. Como Submeter seu Trabalho Acadêmico (`/meus-artigos/novo`)](#6-como-submeter-seu-trabalho-acadêmico-meus-artigosnovo)
@@ -26,15 +26,16 @@
 ---
 
 ## 1. Visão Geral do Perfil
-O discente da UEMG Carangola é o protagonista do portal. Aqui você pode pesquisar e ler gratuitamente artigos científicos produzidos pelos 8 cursos do campus, baixar documentos em PDF, submeter seus próprios trabalhos, enviar manifestações protegidas e consultar melhorias no Mural de Transparência.
+O discente da UEMG Carangola é o protagonista do portal. Aqui você pode pesquisar e ler gratuitamente artigos científicos produzidos pelos 9 cursos do campus, baixar documentos em PDF, submeter seus próprios trabalhos, enviar manifestações protegidas e consultar melhorias no Mural de Transparência.
 
 ## 2. Como Pesquisar Artigos no Catálogo Geral (`/artigos`)
 1. No menu superior, clique em **Artigos**.
 2. Digite termos de busca no campo superior (título, nome do professor/colega ou assunto).
-3. Utilize as pílulas de atalho dos cursos (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIN*) para filtrar produções da sua área.
+3. Utilize as pílulas de atalho dos cursos (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIS, ADM*) para filtrar produções da sua área.
 
-## 3. Carga Inicial de Produção Acadêmica dos 8 Cursos
-No lançamento oficial, o portal conta com acervo pré-carregado representativo de todos os 8 cursos de graduação da UEMG Carangola:
+## 3. Carga Inicial de Produção Acadêmica dos 9 Cursos
+No lançamento oficial, o portal conta com acervo pré-carregado representativo de todos os 9 cursos de graduação da UEMG Carangola:
+* **Administração (ADM):** Gestão estratégica, recursos financeiros e empreendedorismo regional.
 * **Ciências Biológicas (BIO):** Levantamento de epífitas e biodiversidade na Mata Atlântica regional.
 * **Geografia (GEO):** Vulnerabilidade socioambiental e dinâmica de encostas na Bacia do Rio Carangola.
 * **História (HIS):** Memória oral e patrimônio ferroviário na Zona da Mata mineira.

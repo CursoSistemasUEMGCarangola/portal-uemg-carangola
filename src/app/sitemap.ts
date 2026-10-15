@@ -58,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Páginas Dedicadas aos 8 Cursos de Graduação
+  // Páginas Dedicadas aos 9 Cursos de Graduação
   const rotasCursos: MetadataRoute.Sitemap = CURSOS_LISTA.map((curso) => ({
     url: `${BASE_URL}/cursos/${curso.sigla.toLowerCase()}`,
     lastModified: agora,

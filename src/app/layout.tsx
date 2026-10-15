@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Portal UEMG Carangola',
     description:
-      'Publicações acadêmicas dos 8 cursos de graduação e canal direto de governança e ouvidoria com o Gabinete da Direção.',
+      'Publicações acadêmicas dos 9 cursos de graduação e canal direto de governança e ouvidoria com o Gabinete da Direção.',
     url: 'https://carangola.uemg.br',
     siteName: 'Universidade do Estado de Minas Gerais - Unidade Carangola',
     locale: 'pt_BR',

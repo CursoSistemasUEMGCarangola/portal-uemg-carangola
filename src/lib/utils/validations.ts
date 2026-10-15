@@ -12,7 +12,7 @@ export const esquemasSubmissaoArtigo = z.object({
   corpoMarkdown: z
     .string()
     .min(50, 'O corpo do artigo deve conter pelo menos 50 caracteres formatados.'),
-  cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIS'], {
+  cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIS', 'ADM'], {
     errorMap: () => ({ message: 'Selecione um curso válido da UEMG Carangola.' }),
   }),
   autorNome: z
@@ -41,7 +41,7 @@ export const esquemaManifestacaoOuvidoria = z
     tipo: z.enum(['solicitacao', 'sugestao', 'elogio', 'denuncia'], {
       errorMap: () => ({ message: 'Selecione o tipo da manifestação.' }),
     }),
-    cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIS', 'GERAL'], {
+    cursoSigla: z.enum(['BIO', 'GEO', 'HIS', 'LET', 'MAT', 'PED', 'SSO', 'SIS', 'ADM', 'GERAL'], {
       errorMap: () => ({ message: 'Selecione um curso ou setor válido.' }),
     }),
     assunto: z

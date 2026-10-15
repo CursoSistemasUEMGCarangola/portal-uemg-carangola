@@ -9,7 +9,7 @@
 ## 📑 SUMÁRIO DO GUIA
 
 * [1. Visão Geral do Perfil](#1-visão-geral-do-perfil)
-* [2. A Vitrine Departamental dos 8 Cursos (`/cursos/:sigla`)](#2-a-vitrine-departamental-dos-8-cursos-cursossigla)
+* [2. A Vitrine Departamental dos 9 Cursos (`/cursos/:sigla`)](#2-a-vitrine-departamental-dos-9-cursos-cursossigla)
 * [3. Hub Administrativo Unificado (`/restrito`)](#3-hub-administrativo-unificado-restrito)
 * [4. Painel Editorial da Coordenação (`/restrito/publicacoes`)](#4-painel-editorial-da-coordenação-restritopublicacoes)
 * [5. Notificações Web Push e Modo Computador Compartilhado](#5-notificações-web-push-e-modo-computador-compartilhado)
@@ -25,8 +25,8 @@
 ## 1. Visão Geral do Perfil
 O Coordenador de Curso ou Chefe de Departamento é a autoridade máxima de curadoria acadêmica sobre os textos submetidos por discentes e docentes do seu curso na UEMG Carangola. A avaliação é **direta e simplificada**, sem necessidade de reuniões burocráticas ou despachos do Gabinete da Direção.
 
-## 2. A Vitrine Departamental dos 8 Cursos (`/cursos/:sigla`)
-* Cada um dos 8 cursos de Carangola (*Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação*) possui uma página exclusiva, indexável por buscadores (`sitemap.xml`) e atualizada em tempo real.
+## 2. A Vitrine Departamental dos 9 Cursos (`/cursos/:sigla`)
+* Cada um dos 9 cursos de Carangola (*Administração, Ciências Biológicas, Geografia, História, Letras, Matemática, Pedagogia, Serviço Social e Sistemas de Informação*) possui uma página exclusiva, indexável por buscadores (`sitemap.xml`) e atualizada em tempo real.
 * Os textos aprovados por você alimentam diretamente a contagem de produções científicas e o catálogo público do respectivo curso.
 
 ## 3. Hub Administrativo Unificado (`/restrito`)
@@ -34,7 +34,7 @@ O Coordenador de Curso ou Chefe de Departamento é a autoridade máxima de curad
 
 ## 4. Painel Editorial da Coordenação (`/restrito/publicacoes`)
 * **Acesso:** No menu superior, clique em **Coordenação** ou acesse via `/restrito/publicacoes`.
-* **Isolamento por RLS:** O sistema exibe unicamente a fila de artigos vinculados ao seu departamento (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIN*).
+* **Isolamento por RLS:** O sistema exibe unicamente a fila de artigos vinculados ao seu departamento (*BIO, GEO, HIS, LET, MAT, PED, SSO, SIS, ADM*).
 * **Filtros por Abas:**
   - *Fila de Decisão:* Artigos recém-submetidos ou que receberam nova versão após ajustes.
   - *Homologados:* Artigos publicados e em exibição no portal aberto.

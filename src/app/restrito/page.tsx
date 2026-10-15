@@ -169,7 +169,7 @@ export default async function AcessoRestritoHubPage() {
                   2. Coordenações & Cursos
                 </h3>
                 <p className="text-xs font-semibold text-slate-500 mb-3">
-                  Supervisão editorial dos 8 cursos de graduação
+                  Supervisão editorial dos 9 cursos de graduação
                 </p>
                 <div className="space-y-2 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                   <div className="flex items-start gap-2">

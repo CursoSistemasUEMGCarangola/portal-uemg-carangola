@@ -24,7 +24,7 @@
 ---
 
 ## 1. Visão Geral do Perfil
-O Docente da UEMG Carangola utiliza a plataforma para dar visibilidade científica a projetos de extensão, artigos revisados, ensaios teóricos e produções desenvolvidas em parceria com discentes e grupos de pesquisa nos 8 cursos do campus.
+O Docente da UEMG Carangola utiliza a plataforma para dar visibilidade científica a projetos de extensão, artigos revisados, ensaios teóricos e produções desenvolvidas em parceria com discentes e grupos de pesquisa nos 9 cursos do campus.
 
 ## 2. Visibilidade da Produção nas Páginas de Cursos (`/cursos/:sigla`)
 * Cada curso de graduação conta com uma vitrine exclusiva acessível no menu superior em **Cursos**.
