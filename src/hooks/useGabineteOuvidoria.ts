@@ -1,11 +1,16 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { ProtocoloInterno, DespachoDirecaoInput } from '@/types/ouvidoria';
+import {
+  ProtocoloInterno,
+  DespachoDirecaoInput,
+  PayloadCifradoEnvelope,
+} from '@/types/ouvidoria';
 import {
   obterProtocolosArmazenados,
   aplicarDespachoDirecao,
 } from '@/lib/data/mock-ouvidoria';
+import { createClient } from '@/lib/supabase/client';
 
 export type FiltroStatusGabinete =
   | 'todos'
@@ -49,8 +54,74 @@ export function useGabineteOuvidoria(): UseGabineteOuvidoriaReturn {
   const [protocoloEmAcao, setProtocoloEmAcao] = useState<ProtocoloInterno | null>(null);
   const [mensagemSucesso, setMensagemSucesso] = useState<string | null>(null);
 
-  const carregarProtocolos = useCallback(() => {
-    setProtocolos(obterProtocolosArmazenados());
+  const carregarProtocolos = useCallback(async () => {
+    // 1. Carrega dados de contingência local
+    const locais = obterProtocolosArmazenados();
+
+    // 2. Consulta dados reais do Supabase
+    try {
+      const supabase = createClient();
+      const { data: rowsDb, error } = await supabase
+        .from('protocolos_internos')
+        .select('*, cursos(sigla, nome)')
+        .order('criado_em', { ascending: false });
+
+      if (!error && rowsDb && rowsDb.length > 0) {
+        const mapeados: ProtocoloInterno[] = rowsDb.map((row: any) => {
+          let parsed: any = {};
+          try {
+            parsed = JSON.parse(row.payload_cifrado);
+          } catch {
+            parsed = { ciphertext: row.payload_cifrado };
+          }
+
+          const envelopeCifrado: PayloadCifradoEnvelope = {
+            ciphertextBase64: parsed.ciphertext || row.payload_cifrado,
+            ivBase64: parsed.iv || '',
+            wrappedDekBase64: row.wrapped_dek,
+            algoritmoSimetrico: parsed.algoritmoSimetrico || 'AES-GCM-256',
+            algoritmoAssimetrico: parsed.algoritmoAssimetrico || 'RSA-OAEP-4096',
+          };
+
+          const dataCriacao = row.criado_em
+            ? new Date(row.criado_em).toLocaleDateString('pt-BR') +
+              ' ' +
+              new Date(row.criado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            : '';
+
+          const dataAtualizacao = row.atualizado_em
+            ? new Date(row.atualizado_em).toLocaleDateString('pt-BR') +
+              ' ' +
+              new Date(row.atualizado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            : '';
+
+          return {
+            id: row.id,
+            codigoProtocolo: row.codigo_protocolo,
+            tokenHash: row.token_hash,
+            tipo: (parsed.tipo || 'solicitacao') as any,
+            cursoSigla: (row.cursos?.sigla || parsed.cursoSigla || 'GERAL') as any,
+            isAnonimo: row.is_anonimo,
+            envelopeCifrado,
+            status: row.status,
+            despachoOficial: row.despacho_cifrado || undefined,
+            numeroPortaria: row.numero_portaria || undefined,
+            criadoEm: dataCriacao,
+            atualizadoEm: dataAtualizacao,
+          };
+        });
+
+        // Unifica priorizando o Supabase e mesclando locais não sincronizados
+        const codigosDb = new Set(mapeados.map((m) => m.codigoProtocolo));
+        const unificados = [...mapeados, ...locais.filter((l) => !codigosDb.has(l.codigoProtocolo))];
+        setProtocolos(unificados);
+        return;
+      }
+    } catch (err) {
+      console.warn('Aviso: Falha ao carregar protocolos do Supabase, usando cache local:', err);
+    }
+
+    setProtocolos(locais);
   }, []);
 
   useEffect(() => {

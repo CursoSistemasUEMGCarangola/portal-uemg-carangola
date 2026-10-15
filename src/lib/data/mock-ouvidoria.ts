@@ -15,6 +15,7 @@ import {
   gerarTokenSecreto,
   calcularHashSha256,
 } from '@/lib/crypto/envelope-encryption';
+import { createClient } from '@/lib/supabase/client';
 
 const CHAVE_STORAGE_OUVIDORIA = 'portal_uemg_protocolos_ouvidoria_v1';
 
@@ -77,7 +78,49 @@ export async function registrarManifestacaoOuvidoria(
     atualizadoEm: dataFormatada,
   };
 
-  // 4. Persistência local segura
+  // 4. Persistência no Banco de Dados Supabase (Tabela protocolos_internos)
+  try {
+    const supabase = createClient();
+
+    let cursoId: string | null = null;
+    if (input.cursoSigla && input.cursoSigla !== 'GERAL') {
+      const { data: cursoRow } = await supabase
+        .from('cursos')
+        .select('id')
+        .eq('sigla', input.cursoSigla)
+        .maybeSingle();
+
+      if (cursoRow?.id) {
+        cursoId = cursoRow.id;
+      }
+    }
+
+    // Grava na tabela com política RLS pública (sem .select() para manter sigilo estrito)
+    const { error: dbError } = await supabase.from('protocolos_internos').insert({
+      codigo_protocolo: codigoProtocolo,
+      token_hash: tokenHash,
+      curso_id: cursoId,
+      is_anonimo: Boolean(input.isAnonimo),
+      payload_cifrado: JSON.stringify({
+        ciphertext: envelope.ciphertextBase64,
+        iv: envelope.ivBase64,
+        algoritmoSimetrico: envelope.algoritmoSimetrico,
+        algoritmoAssimetrico: envelope.algoritmoAssimetrico,
+        tipo: input.tipo,
+        cursoSigla: input.cursoSigla || 'GERAL',
+      }),
+      wrapped_dek: envelope.wrappedDekBase64,
+      status: 'pendente',
+    });
+
+    if (dbError) {
+      console.warn('Aviso: Falha ao persistir no Supabase (mantendo cache local):', dbError.message);
+    }
+  } catch (err) {
+    console.warn('Aviso: Erro de conexão ao salvar manifestação no Supabase:', err);
+  }
+
+  // 5. Persistência local segura (backup / comprovante no navegador do cidadão)
   if (typeof window !== 'undefined') {
     try {
       const atuais = obterProtocolosArmazenados();
@@ -88,7 +131,7 @@ export async function registrarManifestacaoOuvidoria(
     }
   }
 
-  // 5. Emissão do comprovante portátil
+  // 6. Emissão do comprovante portátil
   const comprovante: ComprovanteProtocolo = {
     codigoProtocolo,
     tokenSecreto,
@@ -132,22 +175,62 @@ export async function consultarProtocoloBlind(
     // Simulação de delay constante para neutralizar timing attacks
     await new Promise((r) => setTimeout(r, 400));
 
+    // 1. Tenta consulta via RPC de Segurança no Supabase (consultar_protocolo_seguro)
+    try {
+      const supabase = createClient();
+      const { data: rowsRpc, error: rpcError } = await supabase.rpc('consultar_protocolo_seguro', {
+        p_codigo: codigo,
+        p_token_hash: hashCalculado,
+      });
+
+      if (!rpcError && rowsRpc && rowsRpc.length > 0) {
+        const row = rowsRpc[0];
+        const dataEnvioFormatada = row.criado_em
+          ? new Date(row.criado_em).toLocaleDateString('pt-BR') +
+            ' ' +
+            new Date(row.criado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+          : undefined;
+
+        const dataRespostaFormatada = row.atualizado_em
+          ? new Date(row.atualizado_em).toLocaleDateString('pt-BR') +
+            ' ' +
+            new Date(row.atualizado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+          : undefined;
+
+        return {
+          encontrado: true,
+          codigoProtocolo: row.codigo_protocolo,
+          tipo: 'solicitacao',
+          status: row.status,
+          cursoSigla: (row.curso_sigla || 'GERAL') as any,
+          isAnonimo: true,
+          dataEnvio: dataEnvioFormatada,
+          dataResposta: dataRespostaFormatada,
+          despachoOficial: row.despacho_cifrado || undefined,
+          numeroPortaria: row.numero_portaria || undefined,
+        };
+      }
+    } catch (errRpc) {
+      console.warn('Aviso: RPC Supabase indisponível no momento, tentando cache local:', errRpc);
+    }
+
+    // 2. Fallback de contingência local (localStorage)
     const protocolos = obterProtocolosArmazenados();
 
-  // Comparação estrita da tupla Protocolo + TokenHash
-  const encontrado = protocolos.find(
-    (p) =>
-      p.codigoProtocolo.toUpperCase() === codigo &&
-      p.tokenHash.toLowerCase() === hashCalculado.toLowerCase()
-  );
+    // Comparação estrita da tupla Protocolo + TokenHash
+    const encontrado = protocolos.find(
+      (p) =>
+        p.codigoProtocolo.toUpperCase() === codigo &&
+        p.tokenHash.toLowerCase() === hashCalculado.toLowerCase()
+    );
 
-  if (!encontrado) {
-    // Retorno 404 estrito padronizado (sem expor se o código existe ou se o token está errado)
-    return {
-      encontrado: false,
-      mensagemErro: 'Protocolo ou chave secreta não localizados no sistema (404 Not Found).',
-    };
-  }
+    if (!encontrado) {
+      // Retorno 404 estrito padronizado (sem expor se o código existe ou se o token está errado)
+      return {
+        encontrado: false,
+        mensagemErro: 'Protocolo ou chave secreta não localizados no sistema (404 Not Found).',
+      };
+    }
 
     return {
       encontrado: true,
@@ -197,14 +280,19 @@ export function aplicarDespachoDirecao(
     protocolo.numeroPortaria = numeroPortaria || undefined;
     protocolo.atualizadoEm = dataHora;
 
+    let novoStatus: any = 'pendente';
     if (acao === 'analise_assessoria') {
-      protocolo.status = 'em_analise_assessoria';
+      novoStatus = 'em_analise_assessoria';
+      protocolo.status = novoStatus;
     } else if (acao === 'analise_diretoria') {
-      protocolo.status = 'em_analise_diretoria';
+      novoStatus = 'em_analise_diretoria';
+      protocolo.status = novoStatus;
     } else if (acao === 'responder_privado') {
-      protocolo.status = 'respondido_privado';
+      novoStatus = 'respondido_privado';
+      protocolo.status = novoStatus;
     } else if (acao === 'homologar_mural') {
-      protocolo.status = 'homologado_publico';
+      novoStatus = 'homologado_publico';
+      protocolo.status = novoStatus;
       protocolo.resumoSanitizadoMural = resumoSanitizadoMural;
 
       // Desacoplamento Físico: grava na tabela separada mural_publico
@@ -221,6 +309,25 @@ export function aplicarDespachoDirecao(
           dataManifestacao: protocolo.criadoEm.split(' ')[0],
         });
       }
+    }
+
+    // Sincroniza despacho no Supabase (se acessível pelo Diretor)
+    try {
+      const supabase = createClient();
+      supabase
+        .from('protocolos_internos')
+        .update({
+          status: novoStatus,
+          despacho_cifrado: despachoOficial,
+          numero_portaria: numeroPortaria || null,
+          atualizado_em: new Date().toISOString(),
+        })
+        .eq('codigo_protocolo', protocolo.codigoProtocolo)
+        .then(({ error }) => {
+          if (error) console.warn('Aviso: Sincronização Supabase de despacho:', error.message);
+        });
+    } catch (e) {
+      console.warn('Erro ao disparar update no Supabase:', e);
     }
 
     protocolos[index] = protocolo;
