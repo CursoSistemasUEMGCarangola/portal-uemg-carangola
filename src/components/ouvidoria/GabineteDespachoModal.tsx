@@ -37,26 +37,10 @@ function gerarResumoAnonimizadoLAI(
   const tema = assunto?.trim() || 'Demanda Institucional';
   const setor =
     cursoSigla && cursoSigla !== 'GERAL'
-      ? `do colegiado de ${cursoSigla}`
-      : 'do campus de Carangola';
+      ? ` (${cursoSigla})`
+      : '';
 
-  // Suprime qualquer nome próprio ou dado pessoal
-  let textoBase = (mensagem || '').trim();
-  if (autorNome && autorNome !== 'Anônimo' && autorNome !== 'Manifestação Anônima') {
-    const partesNome = autorNome.split(/\s+/).filter((p) => p.length > 2);
-    partesNome.forEach((parte) => {
-      const regex = new RegExp(`\\b${parte.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-      textoBase = textoBase.replace(regex, '[Manifestante]');
-    });
-  }
-
-  // Suprime e-mails, números de telefone, matrículas/MASP
-  textoBase = textoBase
-    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[e-mail suprimido]')
-    .replace(/\(?\d{2}\)?\s?\d{4,5}-?\d{4}/g, '[telefone suprimido]')
-    .replace(/\b\d{5,12}\b/g, '[matrícula suprimida]');
-
-  return `Demanda de interesse acadêmico (${setor}) quanto ao tema "${tema}". Registrou-se solicitação de melhoria e providências administrativas institucionais sem menção a dados pessoais.`;
+  return `Demanda de interesse acadêmico da Unidade Carangola${setor} quanto ao tema "${tema}".`;
 }
 
 export default function GabineteDespachoModal({

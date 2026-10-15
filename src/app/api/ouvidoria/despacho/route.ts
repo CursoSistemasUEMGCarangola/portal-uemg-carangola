@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     if (acao === 'homologar_mural') {
       const resumoFinal =
         resumoSanitizadoMural ||
-        `Manifestação de interesse institucional e acadêmico protocolada sob o registro ${codigoFinal} referente à Unidade de Carangola (dados pessoais preservados nos termos da LAI e LGPD).`;
+        `Demanda de interesse acadêmico da Unidade Carangola quanto ao tema "${codigoFinal}".`;
 
       // Verifica se já existe publicação para este código de protocolo
       const { data: muralExistente } = await supabase
