@@ -86,7 +86,11 @@ export async function POST(request: Request) {
     }
 
     // 3. Gerenciamento do Mural Público (Hard Box DNA #3 - Tabela Desacoplada)
-    if (acao === 'homologar_mural' && resumoSanitizadoMural) {
+    if (acao === 'homologar_mural') {
+      const resumoFinal =
+        resumoSanitizadoMural ||
+        `Manifestação de interesse institucional e acadêmico protocolada sob o registro ${codigoFinal} referente à Unidade de Carangola (dados pessoais preservados nos termos da LAI e LGPD).`;
+
       // Verifica se já existe publicação para este código de protocolo
       const { data: muralExistente } = await supabase
         .from('mural_publico')
@@ -99,7 +103,7 @@ export async function POST(request: Request) {
           .from('mural_publico')
           .update({
             curso_id: cursoIdFinal,
-            manifestacao_resumo: resumoSanitizadoMural,
+            manifestacao_resumo: resumoFinal,
             resposta_oficial: despachoOficial,
             numero_portaria: numeroPortaria || null,
             status_homologacao: 'Homologado e Respondido',
@@ -117,7 +121,7 @@ export async function POST(request: Request) {
           .insert({
             protocolo_referencia: codigoFinal,
             curso_id: cursoIdFinal,
-            manifestacao_resumo: resumoSanitizadoMural,
+            manifestacao_resumo: resumoFinal,
             resposta_oficial: despachoOficial,
             numero_portaria: numeroPortaria || null,
             status_homologacao: 'Homologado e Respondido',

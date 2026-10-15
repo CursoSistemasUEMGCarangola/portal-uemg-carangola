@@ -70,7 +70,6 @@ export default function GabineteDespachoModal({
 
   const [despachoOficial, setDespachoOficial] = useState('');
   const [numeroPortaria, setNumeroPortaria] = useState('');
-  const [resumoSanitizado, setResumoSanitizado] = useState('');
   const [textoDescriptografado, setTextoDescriptografado] = useState<Record<string, any> | null>(null);
   const [descriptografando, setDescriptografando] = useState(false);
   const [salvando, setSalvando] = useState(false);
@@ -79,7 +78,6 @@ export default function GabineteDespachoModal({
   useEffect(() => {
     setDespachoOficial(protocolo?.despachoOficial || '');
     setNumeroPortaria(protocolo?.numeroPortaria || '');
-    setResumoSanitizado(protocolo?.resumoSanitizadoMural || '');
     setErro(null);
     setSalvando(false);
 
@@ -89,34 +87,10 @@ export default function GabineteDespachoModal({
       descriptografarManifestacaoEnvelope(protocolo.envelopeCifrado)
         .then((dados) => {
           setTextoDescriptografado(dados);
-
-          // Se não houver resumo higienizado prévio, gera anonimização automática
-          if (!protocolo.resumoSanitizadoMural) {
-            const resumoAuto = gerarResumoAnonimizadoLAI(
-              dados?.assunto,
-              dados?.mensagem,
-              dados?.autorNome,
-              protocolo.cursoSigla
-            );
-            setResumoSanitizado(resumoAuto);
-          }
         })
         .finally(() => setDescriptografando(false));
     }
   }, [protocolo]);
-
-  // Se o Diretor alterar para homologar_mural e o campo estiver vazio, aplica anonimização automática
-  useEffect(() => {
-    if (acao === 'homologar_mural' && !resumoSanitizado) {
-      const auto = gerarResumoAnonimizadoLAI(
-        textoDescriptografado?.assunto,
-        textoDescriptografado?.mensagem,
-        textoDescriptografado?.autorNome,
-        protocolo?.cursoSigla
-      );
-      setResumoSanitizado(auto);
-    }
-  }, [acao, resumoSanitizado, textoDescriptografado, protocolo]);
 
   // Listener para fechar acessivelmente via tecla Escape
   useEffect(() => {
@@ -140,24 +114,24 @@ export default function GabineteDespachoModal({
       return;
     }
 
-    if (
-      acao === 'homologar_mural' &&
-      (!resumoSanitizado.trim() || resumoSanitizado.trim().length < 15)
-    ) {
-      setErro(
-        'Para homologar no Mural Público da LAI, forneça um resumo higienizado com ao menos 15 caracteres sem dados sensíveis.'
-      );
-      return;
-    }
-
     setSalvando(true);
     try {
+      const resumoAuto =
+        acao === 'homologar_mural'
+          ? gerarResumoAnonimizadoLAI(
+              textoDescriptografado?.assunto,
+              textoDescriptografado?.mensagem,
+              textoDescriptografado?.autorNome,
+              protocolo!.cursoSigla
+            )
+          : undefined;
+
       await aoConfirmar({
         protocoloId: protocolo!.id,
         acao,
         despachoOficial: despachoOficial.trim(),
         numeroPortaria: numeroPortaria.trim() || undefined,
-        resumoSanitizadoMural: acao === 'homologar_mural' ? resumoSanitizado.trim() : undefined,
+        resumoSanitizadoMural: resumoAuto,
       });
     } catch (err: any) {
       setErro(err?.message || 'Falha ao registrar despacho. Tente novamente.');
@@ -347,52 +321,17 @@ export default function GabineteDespachoModal({
               </div>
             </div>
 
-            {/* Seção 4: Sanitização e Anonimização Mandatória se Homologar no Mural (DNA #3) */}
+            {/* Notificação de Anonimização Automática ao Homologar no Mural (DNA #3) */}
             {acao === 'homologar_mural' && (
-              <div className="bg-amber-50/80 border border-amber-300 rounded-xl p-3.5 sm:p-4 space-y-2.5 animate-fade-in shadow-2xs">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-950">
-                    <Scale className="w-4 h-4 text-amber-700" aria-hidden="true" />
-                    <span>Higienização e Anonimização para o Mural (LAI 12.527 / LGPD)</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const auto = gerarResumoAnonimizadoLAI(
-                        textoDescriptografado?.assunto,
-                        textoDescriptografado?.mensagem,
-                        textoDescriptografado?.autorNome,
-                        protocolo.cursoSigla
-                      );
-                      setResumoSanitizado(auto);
-                    }}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-900 bg-amber-200/70 hover:bg-amber-200 px-2.5 py-1 rounded-md border border-amber-300 transition-colors shrink-0"
-                    title="Regenerar anonimização automática com supressão de nomes e PII"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-800" aria-hidden="true" />
-                    <span>Anonimizar Automaticamente</span>
-                  </button>
+              <div className="bg-emerald-50/90 border border-emerald-200 rounded-xl p-3 sm:p-3.5 flex items-center gap-3 animate-fade-in shadow-2xs">
+                <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4" aria-hidden="true" />
                 </div>
-
-                <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                  <span>Anonimização ativa: Qualquer menção ao nome do autor e dados de contato foram suprimidos do resumo público.</span>
-                </div>
-
-                <div>
-                  <label htmlFor="resumoSanitizado" className="block text-[11px] font-semibold text-amber-950 mb-1">
-                    Resumo Sanitizado para Publicação Aberta *
-                  </label>
-                  <textarea
-                    id="resumoSanitizado"
-                    rows={2}
-                    required
-                    value={resumoSanitizado}
-                    onChange={(e) => setResumoSanitizado(e.target.value)}
-                    placeholder="Resumo objetivo e anônimo da demanda para o público..."
-                    className="w-full text-xs px-3 py-2 border border-amber-300 bg-white rounded-lg focus:ring-2 focus:ring-[#0056B3] outline-none"
-                  />
+                <div className="space-y-0.5 text-xs text-emerald-950">
+                  <span className="font-bold block">Anonimização e Higienização 100% Automática</span>
+                  <p className="text-[11px] text-emerald-800 leading-relaxed">
+                    O resumo público da demanda será gerado e anonimizado em segundo plano pelo sistema. Nomes, contatos e quaisquer dados pessoais sensíveis são suprimidos automaticamente (LGPD / LAI).
+                  </p>
                 </div>
               </div>
             )}
