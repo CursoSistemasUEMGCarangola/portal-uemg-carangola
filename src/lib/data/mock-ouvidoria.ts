@@ -16,6 +16,7 @@ import {
   calcularHashSha256,
 } from '@/lib/crypto/envelope-encryption';
 import { createClient } from '@/lib/supabase/client';
+import { publicarNoMuralSanitizado } from './mock-mural';
 
 const CHAVE_STORAGE_OUVIDORIA = 'portal_uemg_protocolos_ouvidoria_v1';
 
@@ -322,7 +323,6 @@ export function aplicarDespachoDirecao(
 
       // Desacoplamento Físico: grava na tabela separada mural_publico
       if (resumoSanitizadoMural) {
-        const { publicarNoMuralSanitizado } = require('./mock-mural');
         publicarNoMuralSanitizado({
           protocoloId: protocolo.id,
           protocoloReferencia: protocolo.codigoProtocolo,

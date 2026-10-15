@@ -11,6 +11,7 @@ import {
   obterProtocolosArmazenados,
   aplicarDespachoDirecao,
 } from '@/lib/data/mock-ouvidoria';
+import { publicarNoMuralSanitizado } from '@/lib/data/mock-mural';
 import { createClient } from '@/lib/supabase/client';
 
 export type FiltroStatusGabinete =
@@ -144,54 +145,26 @@ export function useGabineteOuvidoria(): UseGabineteOuvidoriaReturn {
       else if (dados.acao === 'responder_privado') novoStatus = 'respondido_privado';
       else if (dados.acao === 'homologar_mural') novoStatus = 'homologado_publico';
 
-      // 2. Persistência remota prioritária no Supabase
+      // 2. Persistência remota prioritária via API do Servidor (Service Role / Supabase)
       try {
-        const supabase = createClient();
+        const resp = await fetch('/api/ouvidoria/despacho', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            protocoloId: dados.protocoloId,
+            acao: dados.acao,
+            despachoOficial: dados.despachoOficial,
+            numeroPortaria: dados.numeroPortaria,
+            resumoSanitizadoMural: dados.resumoSanitizadoMural,
+          }),
+        });
 
-        // Atualiza a tabela protocolos_internos
-        const { error: errUpdate } = await supabase
-          .from('protocolos_internos')
-          .update({
-            status: novoStatus,
-            despacho_cifrado: dados.despachoOficial,
-            numero_portaria: dados.numeroPortaria || null,
-            atualizado_em: new Date().toISOString(),
-          })
-          .or(`id.eq.${dados.protocoloId},codigo_protocolo.eq.${codigoProto}`);
-
-        if (errUpdate) {
-          console.warn('Aviso: Update no Supabase retornou erro:', errUpdate.message);
+        if (!resp.ok) {
+          const errJson = await resp.json().catch(() => ({}));
+          console.warn('Aviso: API de despacho retornou status:', resp.status, errJson);
         }
-
-        // Se a ação for homologar para o mural público (Hard Box DNA #3)
-        if (dados.acao === 'homologar_mural' && dados.resumoSanitizadoMural) {
-          let cursoId: string | null = null;
-          if (protocoloAlvo?.cursoSigla && protocoloAlvo.cursoSigla !== 'GERAL') {
-            const { data: cursoRow } = await supabase
-              .from('cursos')
-              .select('id')
-              .eq('sigla', protocoloAlvo.cursoSigla)
-              .maybeSingle();
-            if (cursoRow?.id) cursoId = cursoRow.id;
-          }
-
-          const { error: errMural } = await supabase.from('mural_publico').insert({
-            protocolo_referencia: codigoProto,
-            curso_id: cursoId,
-            manifestacao_resumo: dados.resumoSanitizadoMural,
-            resposta_oficial: dados.despachoOficial,
-            numero_portaria: dados.numeroPortaria || null,
-            status_homologacao: 'Homologado e Respondido',
-            is_active: true,
-            data_manifestacao: new Date().toISOString(),
-          });
-
-          if (errMural) {
-            console.warn('Aviso: Inserção no mural_publico Supabase falhou:', errMural.message);
-          }
-        }
-      } catch (err) {
-        console.warn('Erro ao atualizar no Supabase:', err);
+      } catch (errApi) {
+        console.warn('Erro ao chamar API de despacho:', errApi);
       }
 
       // 3. Persistência de contingência local (localStorage)
@@ -202,6 +175,21 @@ export function useGabineteOuvidoria(): UseGabineteOuvidoriaReturn {
         dados.numeroPortaria,
         dados.resumoSanitizadoMural
       );
+
+      if (dados.acao === 'homologar_mural' && dados.resumoSanitizadoMural) {
+        publicarNoMuralSanitizado({
+          protocoloId: protocoloAlvo?.id || dados.protocoloId,
+          protocoloReferencia: codigoProto,
+          cursoSigla: protocoloAlvo?.cursoSigla || 'GERAL',
+          tipo: protocoloAlvo?.tipo || 'solicitacao',
+          resumoSanitizado: dados.resumoSanitizadoMural,
+          respostaOficial: dados.despachoOficial,
+          numeroPortaria: dados.numeroPortaria,
+          dataManifestacao:
+            protocoloAlvo?.criadoEm?.split(' ')[0] ||
+            new Date().toLocaleDateString('pt-BR'),
+        });
+      }
 
       // 4. Feedback visual e fechamento do modal garantido
       setMensagemSucesso(

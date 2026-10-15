@@ -2,7 +2,11 @@ import React from 'react';
 import { Metadata } from 'next';
 import { MURAL_SEED } from '@/lib/data/mock-mural';
 import { MuralCatalog } from '@/components/ouvidoria/MuralCatalog';
-import { Scale, ShieldCheck, Info } from 'lucide-react';
+import { Scale, ShieldCheck } from 'lucide-react';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { ItemMuralPublico, TipoManifestacao } from '@/types/ouvidoria';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Mural de Transparência Institucional — UEMG Carangola',
@@ -10,7 +14,45 @@ export const metadata: Metadata = {
     'Mural público de manifestações sanitizadas e despachos oficiais do Gabinete da Direção Geral da UEMG Carangola, em conformidade com a Lei de Acesso à Informação (Lei 12.527/2011).',
 };
 
-export default function MuralTransparenciaPage() {
+async function carregarItensMuralServidor(): Promise<ItemMuralPublico[]> {
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data: rows, error } = await supabase
+      .from('mural_publico')
+      .select('*, cursos(sigla, nome)')
+      .eq('is_active', true)
+      .order('publicado_em', { ascending: false });
+
+    if (error || !rows || rows.length === 0) {
+      return MURAL_SEED;
+    }
+
+    return rows.map((r: any) => ({
+      id: r.id,
+      protocoloReferencia: r.protocolo_referencia,
+      cursoSigla: (r.cursos?.sigla || 'GERAL') as any,
+      tipo: 'solicitacao' as TipoManifestacao,
+      manifestacaoResumo: r.manifestacao_resumo,
+      respostaOficial: r.resposta_oficial,
+      numeroPortaria: r.numero_portaria || undefined,
+      statusHomologacao: 'Homologado e Respondido',
+      isActive: r.is_active,
+      dataManifestacao: r.data_manifestacao
+        ? new Date(r.data_manifestacao).toLocaleDateString('pt-BR')
+        : '',
+      publicadoEm: r.publicado_em
+        ? new Date(r.publicado_em).toLocaleDateString('pt-BR')
+        : '',
+    }));
+  } catch (err) {
+    console.warn('Fallback de inicialização do mural:', err);
+    return MURAL_SEED;
+  }
+}
+
+export default async function MuralTransparenciaPage() {
+  const itensIniciais = await carregarItensMuralServidor();
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-14 space-y-10">
       {/* Cabeçalho Oficial */}
@@ -47,7 +89,7 @@ export default function MuralTransparenciaPage() {
       </div>
 
       {/* Catálogo Interativo com Filtros */}
-      <MuralCatalog itensIniciais={MURAL_SEED} />
+      <MuralCatalog itensIniciais={itensIniciais} />
     </div>
   );
 }

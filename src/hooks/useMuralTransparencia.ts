@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { ItemMuralPublico } from '@/types/ouvidoria';
+import { ItemMuralPublico, TipoManifestacao } from '@/types/ouvidoria';
 import { obterItensMuralPublico } from '@/lib/data/mock-mural';
+import { createClient } from '@/lib/supabase/client';
 
 export interface UseMuralTransparenciaReturn {
   itens: ItemMuralPublico[];
@@ -14,6 +15,7 @@ export interface UseMuralTransparenciaReturn {
   tipoSelecionado: string;
   setTipoSelecionado: (tipo: string) => void;
   limparFiltros: () => void;
+  carregarMural: () => Promise<void>;
 }
 
 /**
@@ -28,10 +30,59 @@ export function useMuralTransparencia(
   const [cursoSelecionado, setCursoSelecionado] = useState<string>('TODOS');
   const [tipoSelecionado, setTipoSelecionado] = useState<string>('TODOS');
 
-  // Atualiza com dados persistidos no cliente (localStorage)
-  useEffect(() => {
-    setItens(obterItensMuralPublico());
+  const carregarMural = useCallback(async () => {
+    // 1. Carrega dados de contingência local primeiro
+    const locais = obterItensMuralPublico();
+    const mapa = new Map<string, ItemMuralPublico>();
+
+    for (const item of locais) {
+      if (item.protocoloReferencia) mapa.set(item.protocoloReferencia, item);
+      else mapa.set(item.id, item);
+    }
+
+    // 2. Consulta tabela pública desacoplada mural_publico no Supabase (RLS SELECT liberado)
+    try {
+      const supabase = createClient();
+      const { data: rowsDb, error } = await supabase
+        .from('mural_publico')
+        .select('*, cursos(sigla, nome)')
+        .eq('is_active', true)
+        .order('publicado_em', { ascending: false });
+
+      if (!error && rowsDb && rowsDb.length > 0) {
+        for (const row of rowsDb) {
+          const itemRemoto: ItemMuralPublico = {
+            id: row.id,
+            protocoloReferencia: row.protocolo_referencia,
+            cursoSigla: (row.cursos?.sigla || 'GERAL') as any,
+            tipo: 'solicitacao' as TipoManifestacao,
+            manifestacaoResumo: row.manifestacao_resumo,
+            respostaOficial: row.resposta_oficial,
+            numeroPortaria: row.numero_portaria || undefined,
+            statusHomologacao: 'Homologado e Respondido',
+            isActive: row.is_active,
+            dataManifestacao: row.data_manifestacao
+              ? new Date(row.data_manifestacao).toLocaleDateString('pt-BR')
+              : '',
+            publicadoEm: row.publicado_em
+              ? new Date(row.publicado_em).toLocaleDateString('pt-BR')
+              : '',
+          };
+          mapa.set(row.protocolo_referencia, itemRemoto);
+        }
+      }
+    } catch (errSupabase) {
+      console.warn('Aviso: Falha ao carregar mural do Supabase, operando com cache:', errSupabase);
+    }
+
+    if (mapa.size > 0) {
+      setItens(Array.from(mapa.values()));
+    }
   }, []);
+
+  useEffect(() => {
+    carregarMural();
+  }, [carregarMural]);
 
   const limparFiltros = useCallback(() => {
     setBusca('');
@@ -80,5 +131,6 @@ export function useMuralTransparencia(
     tipoSelecionado,
     setTipoSelecionado,
     limparFiltros,
+    carregarMural,
   };
 }
