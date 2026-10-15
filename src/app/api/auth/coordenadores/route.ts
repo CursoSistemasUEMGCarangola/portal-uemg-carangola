@@ -46,7 +46,11 @@ export async function GET() {
     }
 
     const coordenadores = (usersData.users || [])
-      .filter((u) => u.user_metadata?.role === 'coordenador_curso')
+      .filter(
+        (u) =>
+          u.user_metadata?.role === 'coordenador_curso' ||
+          u.user_metadata?.status === 'mandato_encerrado'
+      )
       .map((u) => {
         const meta = u.user_metadata || {};
         const sigla = (meta.curso_sigla || 'SIS').toUpperCase();
@@ -60,7 +64,9 @@ export async function GET() {
           cursoNome: CURSO_NOME_MAPA[sigla] || sigla,
           status: meta.status || 'ativo',
           solicitadoEm: meta.solicitado_em || u.created_at,
-          aprovadoEm: meta.aprovado_em || null,
+          aprovadoEm: meta.homologado_em || meta.aprovado_em || null,
+          substituidoPorNome: meta.substituido_por_nome || null,
+          mandatoEncerradoEm: meta.mandato_encerrado_em || null,
         };
       })
       .sort((a, b) => new Date(b.solicitadoEm).getTime() - new Date(a.solicitadoEm).getTime());
@@ -75,7 +81,7 @@ export async function GET() {
   }
 }
 
-// POST: Homologar ou Rejeitar acesso de Coordenador de Curso
+// POST: Homologar ou Rejeitar acesso de Coordenador de Curso (com Transição de Mandato)
 export async function POST(request: Request) {
   try {
     const supabaseUserClient = createServerSupabaseClient();
@@ -151,27 +157,66 @@ export async function POST(request: Request) {
     }
 
     // Ação: Aprovar ou Rejeitar
-    const novoStatus = acao === 'aprovar' ? 'ativo' : 'rejeitado';
+    const sigla = (currentMeta.curso_sigla || 'SIS').toUpperCase();
+    const cursoNome = CURSO_NOME_MAPA[sigla] || sigla;
+    let nomesSubstituidos: string[] = [];
 
-    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-      user_metadata: {
-        ...currentMeta,
-        status: novoStatus,
-        homologado_em: new Date().toISOString(),
-        homologado_por: callerUser.email,
-      },
-    });
-
-    if (updateError) {
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
-    }
-
-    // Se aprovado, dispara e-mail de notificação de homologação via Brevo exclusivamente para o e-mail secundário
-    let emailStatus = '';
     if (acao === 'aprovar') {
-      const sigla = (currentMeta.curso_sigla || 'SIS').toUpperCase();
-      const cursoNome = CURSO_NOME_MAPA[sigla] || sigla;
+      // 1. Localiza titulares ativos anteriores do mesmo colegiado para realizar a transição
+      const { data: allUsers } = await supabaseAdmin.auth.admin.listUsers();
+      const coordenadoresAnteriores = (allUsers?.users || []).filter(
+        (u) =>
+          u.id !== userId &&
+          u.user_metadata?.status === 'ativo' &&
+          u.user_metadata?.role === 'coordenador_curso' &&
+          (u.user_metadata?.curso_sigla || '').toUpperCase() === sigla
+      );
 
+      // 2. Encerra o mandato de cada coordenador anterior e converte seu perfil para autor/docente
+      for (const anterior of coordenadoresAnteriores) {
+        const nomeAnt = anterior.user_metadata?.nome_completo || anterior.email || 'Titular anterior';
+        nomesSubstituidos.push(nomeAnt);
+
+        await supabaseAdmin.auth.admin.updateUserById(anterior.id, {
+          user_metadata: {
+            ...anterior.user_metadata,
+            role: 'autor',
+            status: 'mandato_encerrado',
+            mandato_encerrado_em: new Date().toISOString(),
+            substituido_por: targetUser.email,
+            substituido_por_nome: currentMeta.nome_completo || 'Novo Coordenador',
+          },
+        });
+
+        // Sincroniza tabela pública perfis_usuarios
+        await supabaseAdmin
+          .from('perfis_usuarios')
+          .update({ role: 'autor' })
+          .eq('id', anterior.id);
+      }
+
+      // 3. Ativa o novo coordenador como titular exclusivo
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+        user_metadata: {
+          ...currentMeta,
+          role: 'coordenador_curso',
+          status: 'ativo',
+          homologado_em: new Date().toISOString(),
+          homologado_por: callerUser.email,
+        },
+      });
+
+      if (updateError) {
+        return NextResponse.json({ error: updateError.message }, { status: 500 });
+      }
+
+      // Sincroniza tabela pública perfis_usuarios
+      await supabaseAdmin
+        .from('perfis_usuarios')
+        .update({ role: 'coordenador_curso' })
+        .eq('id', userId);
+
+      // 4. Dispara e-mail de notificação de homologação via Brevo
       const envioRes = await enviarEmailAprovacaoCoordenador({
         destinatarioEmail: emailSecundario,
         destinatarioNome: currentMeta.nome_completo || 'Coordenador',
@@ -179,24 +224,48 @@ export async function POST(request: Request) {
         cursoNome,
       });
 
-      if (envioRes.sucesso) {
-        emailStatus = ` E-mail de confirmação enviado com sucesso para o e-mail alternativo: ${emailSecundario}.`;
-      } else {
-        emailStatus = ` (Atenção: Acesso ativado, porém houve falha de envio no Brevo: ${envioRes.erro})`;
-      }
-    }
+      let avisoEnvio = envioRes.sucesso
+        ? ` E-mail de confirmação enviado para: ${emailSecundario}.`
+        : ` (Atenção: Acesso ativado, falha temporária no Brevo: ${envioRes.erro})`;
 
-    return NextResponse.json(
-      {
-        message:
-          acao === 'aprovar'
-            ? `Acesso de Coordenador homologado com sucesso!${emailStatus}`
-            : 'Solicitação de acesso indeferida pela Direção Geral.',
-        status: novoStatus,
-        emailDestino: emailSecundario,
-      },
-      { status: 200 }
-    );
+      let mensagemFinal = `Acesso de Coordenador homologado com sucesso!${avisoEnvio}`;
+      if (nomesSubstituidos.length > 0) {
+        mensagemFinal = `Transição de mandato concluída com sucesso! O mandato de ${nomesSubstituidos.join(', ')} foi encerrado (convertido para Docente/Autor) e o colegiado de ${cursoNome} agora está sob titularidade de ${currentMeta.nome_completo}.${avisoEnvio}`;
+      }
+
+      return NextResponse.json(
+        {
+          message: mensagemFinal,
+          status: 'ativo',
+          emailDestino: emailSecundario,
+          substituidos: nomesSubstituidos,
+        },
+        { status: 200 }
+      );
+    } else {
+      // Rejeitar solicitação
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+        user_metadata: {
+          ...currentMeta,
+          status: 'rejeitado',
+          homologado_em: new Date().toISOString(),
+          homologado_por: callerUser.email,
+        },
+      });
+
+      if (updateError) {
+        return NextResponse.json({ error: updateError.message }, { status: 500 });
+      }
+
+      return NextResponse.json(
+        {
+          message: `Solicitação de acesso para a coordenação de ${cursoNome} indeferida pela Direção Geral.`,
+          status: 'rejeitado',
+          emailDestino: emailSecundario,
+        },
+        { status: 200 }
+      );
+    }
   } catch (error: any) {
     console.error('Erro ao homologar coordenador:', error);
     return NextResponse.json(

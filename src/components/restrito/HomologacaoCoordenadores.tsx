@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   ShieldAlert,
   CheckCircle2,
@@ -10,8 +10,12 @@ import {
   GraduationCap,
   BadgeAlert,
   Clock,
-  Sparkles,
   Send,
+  AlertTriangle,
+  ArrowRight,
+  RefreshCw,
+  X,
+  Building,
 } from 'lucide-react';
 
 interface CoordenadorItem {
@@ -22,9 +26,16 @@ interface CoordenadorItem {
   matricula: string;
   cursoSigla: string;
   cursoNome: string;
-  status: 'pendente_aprovacao' | 'ativo' | 'rejeitado';
+  status: 'pendente_aprovacao' | 'ativo' | 'rejeitado' | 'mandato_encerrado';
   solicitadoEm: string;
   aprovadoEm?: string | null;
+  substituidoPorNome?: string | null;
+  mandatoEncerradoEm?: string | null;
+}
+
+interface SubstituicaoAlvo {
+  solicitante: CoordenadorItem;
+  titularAtual: CoordenadorItem;
 }
 
 export function HomologacaoCoordenadores() {
@@ -32,6 +43,7 @@ export function HomologacaoCoordenadores() {
   const [loading, setLoading] = useState(true);
   const [processandoId, setProcessandoId] = useState<string | null>(null);
   const [mensagemAviso, setMensagemAviso] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const [substituicaoAlvo, setSubstituicaoAlvo] = useState<SubstituicaoAlvo | null>(null);
 
   const carregarCoordenadores = useCallback(async () => {
     try {
@@ -52,9 +64,21 @@ export function HomologacaoCoordenadores() {
     carregarCoordenadores();
   }, [carregarCoordenadores]);
 
+  // Mapa de Coordenadores Ativos por Colegiado
+  const coordenadorAtivoPorCurso = useMemo(() => {
+    const mapa: Record<string, CoordenadorItem> = {};
+    coordenadores.forEach((c) => {
+      if (c.status === 'ativo') {
+        mapa[c.cursoSigla.toUpperCase()] = c;
+      }
+    });
+    return mapa;
+  }, [coordenadores]);
+
   const handleDecisao = async (userId: string, acao: 'aprovar' | 'rejeitar' | 'reenviar_email') => {
     setProcessandoId(userId);
     setMensagemAviso(null);
+    setSubstituicaoAlvo(null);
 
     try {
       const res = await fetch('/api/auth/coordenadores', {
@@ -104,7 +128,7 @@ export function HomologacaoCoordenadores() {
             Homologação de Coordenações de Curso
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            Controle de governança para liberação direta de acesso a coordenadores de colegiado.
+            Controle de governança para liberação e transição de mandato de coordenadores de colegiado.
           </p>
         </div>
 
@@ -166,77 +190,113 @@ export function HomologacaoCoordenadores() {
           </h3>
 
           <div className="grid grid-cols-1 gap-4">
-            {pendentes.map((coord) => (
-              <div
-                key={coord.id}
-                className="p-5 rounded-2xl border-2 border-amber-300 bg-amber-50/20 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-5 transition-all hover:border-amber-400"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-base font-extrabold text-[#0B3B60]">
-                      {coord.nomeCompleto}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#0B3B60] text-white">
-                      {coord.cursoSigla} — {coord.cursoNome}
-                    </span>
-                    <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {new Date(coord.solicitadoEm).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
+            {pendentes.map((coord) => {
+              const titularAtual = coordenadorAtivoPorCurso[coord.cursoSigla.toUpperCase()];
+              const temTitularAtivo = !!titularAtual && titularAtual.id !== coord.id;
+
+              return (
+                <div
+                  key={coord.id}
+                  className="p-5 rounded-2xl border-2 border-amber-300 bg-amber-50/20 shadow-xs flex flex-col gap-4 transition-all hover:border-amber-400"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-base font-extrabold text-[#0B3B60]">
+                          {coord.nomeCompleto}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#0B3B60] text-white">
+                          {coord.cursoSigla} — {coord.cursoNome}
+                        </span>
+                        <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {new Date(coord.solicitadoEm).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
+                        <div className="flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span className="truncate" title={coord.emailInstitucional}>
+                            {coord.emailInstitucional}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-amber-900 font-medium">
+                          <Send className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span className="truncate" title={`E-mail de recuperação: ${coord.emailSecundario}`}>
+                            Alt: {coord.emailSecundario}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5">
+                          <BadgeAlert className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>MASP/Matrícula: <strong>{coord.matricula}</strong></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Botões de Ação Direta da Direção */}
+                    <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-amber-200">
+                      <button
+                        type="button"
+                        disabled={processandoId === coord.id}
+                        onClick={() => {
+                          if (temTitularAtivo) {
+                            setSubstituicaoAlvo({ solicitante: coord, titularAtual });
+                          } else {
+                            handleDecisao(coord.id, 'aprovar');
+                          }
+                        }}
+                        className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow-xs transition-colors disabled:opacity-50 cursor-pointer ${
+                          temTitularAtivo
+                            ? 'bg-amber-600 hover:bg-amber-700'
+                            : 'bg-emerald-600 hover:bg-emerald-700'
+                        }`}
+                      >
+                        {temTitularAtivo ? (
+                          <>
+                            <RefreshCw className="w-4 h-4" />
+                            <span>Substituir Titular</span>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>Homologar Acesso</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={processandoId === coord.id}
+                        onClick={() => handleDecisao(coord.id, 'rejeitar')}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold bg-white border border-red-300 text-red-700 hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer"
+                      >
+                        <XCircle className="w-4 h-4 text-red-600" />
+                        <span>Indeferir</span>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
-                    <div className="flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate" title={coord.emailInstitucional}>
-                        {coord.emailInstitucional}
-                      </span>
+                  {/* Alerta de Transição de Mandato caso já exista titular ativo */}
+                  {temTitularAtivo && (
+                    <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-100/70 border border-amber-300 text-amber-950 text-xs">
+                      <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                      <div className="leading-relaxed">
+                        <strong>Transição de Mandato:</strong> O colegiado de {coord.cursoNome} já possui o(a) <strong>{titularAtual.nomeCompleto}</strong> (MASP: {titularAtual.matricula}) como titular ativo. A homologação desta solicitação encerrará o mandato anterior e o transferirá para {coord.nomeCompleto}.
+                      </div>
                     </div>
-
-                    <div className="flex items-center gap-1.5 text-amber-900 font-medium">
-                      <Send className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                      <span className="truncate" title={`E-mail de recuperação: ${coord.emailSecundario}`}>
-                        Alt: {coord.emailSecundario}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <BadgeAlert className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>MASP/Matrícula: <strong>{coord.matricula}</strong></span>
-                    </div>
-                  </div>
+                  )}
                 </div>
-
-                {/* Botões de Ação Direta da Direção */}
-                <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-amber-200">
-                  <button
-                    type="button"
-                    disabled={processandoId === coord.id}
-                    onClick={() => handleDecisao(coord.id, 'aprovar')}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Homologar Acesso</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={processandoId === coord.id}
-                    onClick={() => handleDecisao(coord.id, 'rejeitar')}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold bg-white border border-red-300 text-red-700 hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer"
-                  >
-                    <XCircle className="w-4 h-4 text-red-600" />
-                    <span>Indeferir</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -254,7 +314,7 @@ export function HomologacaoCoordenadores() {
         <div className="pt-4 border-t border-slate-100">
           <details className="text-xs group" open>
             <summary className="font-bold text-slate-500 hover:text-[#0B3B60] cursor-pointer flex items-center gap-1.5 select-none py-1">
-              <span>Coordenações homologadas / cadastradas ({historico.length})</span>
+              <span>Coordenações homologadas / histórico departamental ({historico.length})</span>
             </summary>
             <div className="mt-3 space-y-2 pt-2">
               {historico.map((coord) => (
@@ -272,10 +332,16 @@ export function HomologacaoCoordenadores() {
                         className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
                           coord.status === 'ativo'
                             ? 'bg-emerald-100 text-emerald-800'
+                            : coord.status === 'mandato_encerrado'
+                            ? 'bg-slate-200 text-slate-700 border border-slate-300'
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
-                        {coord.status === 'ativo' ? 'Homologado / Ativo' : 'Indeferido'}
+                        {coord.status === 'ativo'
+                          ? 'Homologado / Titular Ativo'
+                          : coord.status === 'mandato_encerrado'
+                          ? 'Mandato Encerrado (Docente/Autor)'
+                          : 'Indeferido'}
                       </span>
                     </div>
 
@@ -285,6 +351,14 @@ export function HomologacaoCoordenadores() {
                       <span className="text-amber-900 font-medium">
                         E-mail de Envio: <strong>{coord.emailSecundario}</strong>
                       </span>
+                      {coord.substituidoPorNome && (
+                        <>
+                          <span>•</span>
+                          <span className="text-slate-600 font-semibold">
+                            Substituído(a) por: {coord.substituidoPorNome}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -304,6 +378,106 @@ export function HomologacaoCoordenadores() {
               ))}
             </div>
           </details>
+        </div>
+      )}
+
+      {/* Modal de Confirmação e Validação da Transição de Mandato pela Direção */}
+      {substituicaoAlvo && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="titulo-modal-substituicao"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+        >
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 border border-slate-200 shadow-2xl">
+            {/* Topo do Modal */}
+            <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
+                  <RefreshCw className="w-5 h-5 text-amber-700 animate-spin-slow" />
+                </div>
+                <div>
+                  <h3 id="titulo-modal-substituicao" className="text-base font-bold text-slate-900">
+                    Validação de Transição de Mandato
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    Colegiado de {substituicaoAlvo.solicitante.cursoNome} ({substituicaoAlvo.solicitante.cursoSigla})
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSubstituicaoAlvo(null)}
+                className="text-slate-400 hover:text-slate-700 p-1 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Comparativo de Titularidade */}
+            <div className="space-y-3 text-xs">
+              <div className="p-3.5 rounded-xl bg-red-50/60 border border-red-200 space-y-1 text-slate-700">
+                <span className="font-bold text-red-900 uppercase tracking-wider text-[10px] block">
+                  Mandato Atual a Ser Encerrado
+                </span>
+                <p className="font-bold text-slate-900 text-sm">
+                  {substituicaoAlvo.titularAtual.nomeCompleto}
+                </p>
+                <p className="text-slate-500">
+                  MASP: {substituicaoAlvo.titularAtual.matricula} • {substituicaoAlvo.titularAtual.emailInstitucional}
+                </p>
+                <span className="text-[11px] text-red-700 font-semibold block pt-1">
+                  → Perfil será convertido para Docente/Autor (acesso editorial ao curso será revogado).
+                </span>
+              </div>
+
+              <div className="flex justify-center text-slate-400">
+                <ArrowRight className="w-5 h-5 rotate-90" />
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-1 text-slate-700">
+                <span className="font-bold text-emerald-900 uppercase tracking-wider text-[10px] block">
+                  Novo(a) Coordenador(a) Titular
+                </span>
+                <p className="font-bold text-slate-900 text-sm">
+                  {substituicaoAlvo.solicitante.nomeCompleto}
+                </p>
+                <p className="text-slate-500">
+                  MASP: {substituicaoAlvo.solicitante.matricula} • {substituicaoAlvo.solicitante.emailInstitucional}
+                </p>
+                <span className="text-[11px] text-emerald-700 font-semibold block pt-1">
+                  → Receberá credencial ativa exclusiva para moderar e homologar artigos de {substituicaoAlvo.solicitante.cursoSigla}.
+                </span>
+              </div>
+            </div>
+
+            {/* Aviso Institucional */}
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
+              Esta ação assegura a unicidade da gestão departamental conforme as normas acadêmicas da UEMG. A notificação oficial será despachada para o e-mail alternativo do novo titular via Brevo.
+            </div>
+
+            {/* Ações do Modal */}
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setSubstituicaoAlvo(null)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                disabled={processandoId === substituicaoAlvo.solicitante.id}
+                onClick={() => handleDecisao(substituicaoAlvo.solicitante.id, 'aprovar')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-xs transition-colors cursor-pointer"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Confirmar Substituição de Mandato</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
