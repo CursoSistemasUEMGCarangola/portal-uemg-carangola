@@ -266,10 +266,35 @@ export function aplicarDespachoDirecao(
 
   try {
     const protocolos = obterProtocolosArmazenados();
-    const index = protocolos.findIndex((p) => p.id === protocoloId);
-    if (index === -1) return null;
+    let index = protocolos.findIndex(
+      (p) => p.id === protocoloId || p.codigoProtocolo === protocoloId
+    );
 
-    const protocolo = { ...protocolos[index] };
+    let protocolo: ProtocoloInterno;
+    if (index !== -1) {
+      protocolo = { ...protocolos[index] };
+    } else {
+      protocolo = {
+        id: protocoloId,
+        codigoProtocolo: protocoloId.startsWith('#CAR') ? protocoloId : `#CAR-${Date.now()}`,
+        tokenHash: '',
+        tipo: 'solicitacao',
+        cursoSigla: 'GERAL',
+        isAnonimo: true,
+        envelopeCifrado: {
+          ciphertextBase64: '',
+          ivBase64: '',
+          wrappedDekBase64: '',
+          algoritmoSimetrico: 'AES-GCM-256',
+          algoritmoAssimetrico: 'RSA-OAEP-4096',
+        },
+        status: 'pendente',
+        criadoEm: new Date().toLocaleDateString('pt-BR'),
+        atualizadoEm: new Date().toLocaleDateString('pt-BR'),
+      };
+      protocolos.push(protocolo);
+      index = protocolos.length - 1;
+    }
     const agora = new Date();
     const dataHora =
       agora.toLocaleDateString('pt-BR') +

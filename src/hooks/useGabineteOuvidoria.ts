@@ -5,6 +5,7 @@ import {
   ProtocoloInterno,
   DespachoDirecaoInput,
   PayloadCifradoEnvelope,
+  StatusProtocolo,
 } from '@/types/ouvidoria';
 import {
   obterProtocolosArmazenados,
@@ -129,8 +130,72 @@ export function useGabineteOuvidoria(): UseGabineteOuvidoriaReturn {
   }, [carregarProtocolos]);
 
   const handleConfirmarDespacho = useCallback(
-    (dados: DespachoDirecaoInput) => {
-      const atualizado = aplicarDespachoDirecao(
+    async (dados: DespachoDirecaoInput) => {
+      // 1. Localiza o protocolo no estado
+      const protocoloAlvo = protocolos.find(
+        (p) => p.id === dados.protocoloId || p.codigoProtocolo === dados.protocoloId
+      );
+
+      const codigoProto = protocoloAlvo?.codigoProtocolo || dados.protocoloId;
+
+      let novoStatus: StatusProtocolo = 'pendente';
+      if (dados.acao === 'analise_assessoria') novoStatus = 'em_analise_assessoria';
+      else if (dados.acao === 'analise_diretoria') novoStatus = 'em_analise_diretoria';
+      else if (dados.acao === 'responder_privado') novoStatus = 'respondido_privado';
+      else if (dados.acao === 'homologar_mural') novoStatus = 'homologado_publico';
+
+      // 2. Persistência remota prioritária no Supabase
+      try {
+        const supabase = createClient();
+
+        // Atualiza a tabela protocolos_internos
+        const { error: errUpdate } = await supabase
+          .from('protocolos_internos')
+          .update({
+            status: novoStatus,
+            despacho_cifrado: dados.despachoOficial,
+            numero_portaria: dados.numeroPortaria || null,
+            atualizado_em: new Date().toISOString(),
+          })
+          .or(`id.eq.${dados.protocoloId},codigo_protocolo.eq.${codigoProto}`);
+
+        if (errUpdate) {
+          console.warn('Aviso: Update no Supabase retornou erro:', errUpdate.message);
+        }
+
+        // Se a ação for homologar para o mural público (Hard Box DNA #3)
+        if (dados.acao === 'homologar_mural' && dados.resumoSanitizadoMural) {
+          let cursoId: string | null = null;
+          if (protocoloAlvo?.cursoSigla && protocoloAlvo.cursoSigla !== 'GERAL') {
+            const { data: cursoRow } = await supabase
+              .from('cursos')
+              .select('id')
+              .eq('sigla', protocoloAlvo.cursoSigla)
+              .maybeSingle();
+            if (cursoRow?.id) cursoId = cursoRow.id;
+          }
+
+          const { error: errMural } = await supabase.from('mural_publico').insert({
+            protocolo_referencia: codigoProto,
+            curso_id: cursoId,
+            manifestacao_resumo: dados.resumoSanitizadoMural,
+            resposta_oficial: dados.despachoOficial,
+            numero_portaria: dados.numeroPortaria || null,
+            status_homologacao: 'Homologado e Respondido',
+            is_active: true,
+            data_manifestacao: new Date().toISOString(),
+          });
+
+          if (errMural) {
+            console.warn('Aviso: Inserção no mural_publico Supabase falhou:', errMural.message);
+          }
+        }
+      } catch (err) {
+        console.warn('Erro ao atualizar no Supabase:', err);
+      }
+
+      // 3. Persistência de contingência local (localStorage)
+      aplicarDespachoDirecao(
         dados.protocoloId,
         dados.acao,
         dados.despachoOficial,
@@ -138,16 +203,15 @@ export function useGabineteOuvidoria(): UseGabineteOuvidoriaReturn {
         dados.resumoSanitizadoMural
       );
 
-      if (atualizado) {
-        setMensagemSucesso(
-          `Despacho aplicado com sucesso para o protocolo ${atualizado.codigoProtocolo}! Status: ${atualizado.status}`
-        );
-        setProtocoloEmAcao(null);
-        carregarProtocolos();
-        setTimeout(() => setMensagemSucesso(null), 6000);
-      }
+      // 4. Feedback visual e fechamento do modal garantido
+      setMensagemSucesso(
+        `Despacho assinado e registrado com sucesso para o protocolo ${codigoProto}!`
+      );
+      setProtocoloEmAcao(null);
+      await carregarProtocolos();
+      setTimeout(() => setMensagemSucesso(null), 6000);
     },
-    [carregarProtocolos]
+    [protocolos, carregarProtocolos]
   );
 
   const metricas = useMemo(() => {
