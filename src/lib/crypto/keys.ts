@@ -3,16 +3,46 @@
  * Suporta Web Crypto API nativa do navegador (Zero external dependencies).
  */
 
-// Chave pública em formato SPKI (SubjectPublicKeyInfo) Base64 do Gabinete da Direção
-// Em produção, esta chave é auditada e homologada pelo Conselho Departamental
+// Chave pública institucional (SPKI PEM) do Gabinete da Direção
 export const GABINETE_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyN6J0V1vL8O0r2d0hZ6+
-3kG6X8y1Y2w9e4T7v5Q3A1B8C5D2E9F6G3H0I7J4K1L8M5N2O9P6Q3R0S7T4U1V8
-W5X2Y9Z6A3B0C7D4E1F8G5H2I9J6K3L0M7N4O1P8Q5R2S9T6U3V0W7X4Y1Z8A5B2
-C9D6E3F0G7H4I1J8K5L2M9N6O3P0Q7R4S1T8U5V2W9X6Y3Z0A7B4C1D8E5F2G9H6
-I3J0K7L4M1N8O5P2Q9R6S3T0U7V4W1X8Y5Z2A9B6C3D0E7F4G1H8I5J2K9L6M3N0
-O7P4Q1R8S5T2U9V6W3Z0AwIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAluorYPOiezwqY3rL8bMW
+4VuaGJ9qP+u7ALx2UymrHnnmuh22wALrvgU/o/uTZYN0PjD9VoIZA+1auQp7xK96
+zxtryU9JTPLO3Ib0ClAedrV7zXa1HeNE/qJOdD+lRVi1hwsiegW7Rr2cuMruooh0
+MyaO0FlvJ8nniqLmc9NgpyHKAzXJQABmXHFq+h6gBFLP8wejHj2bXA11vCgSGIui
+K1sIo2DDbcYYWs7Q1AU2gjg5MEskCWnyqoFQjSpSh3qOn5iYNZmzQ94zrZEt2B7R
+jNdA3hi2giRPHTivAWiPTpP+bq+NJU4d42JUbA5+mUxG5seoMnNM7pf6NTHkLCP7
+RwIDAQAB
 -----END PUBLIC KEY-----`;
+
+// Chave privada institucional (PKCS#8 PEM) do Gabinete da Direção (para decodificação estrita na RAM do Diretor)
+export const GABINETE_PRIVATE_KEY_PEM = `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCW6itg86J7PCpj
+esvxsxbhW5oYn2o/67sAvHZTKaseeea6HbbAAuu+BT+j+5Nlg3Q+MP1WghkD7Vq5
+CnvEr3rPG2vJT0lM8s7chvQKUB52tXvNdrUd40T+ok50P6VFWLWHCyJ6BbtGvZy4
+yu6iiHQzJo7QWW8nyeeKouZz02CnIcoDNclAAGZccWr6HqAEUs/zB6MePZtcDXW8
+KBIYi6IrWwijYMNtxhhaztDUBTaCODkwSyQJafKqgVCNKlKHeo6fmJg1mbND3jOt
+kS3YHtGM10DeGLaCJE8dOK8BaI9Ok/5ur40lTh3jYlRsDn6ZTEbmx6gyc0zul/o1
+MeQsI/tHAgMBAAECggEALEOyBoVffoL2segGIrYTO3VpPNihSu9jEcO1dw4NPWqm
+5Kcrf6U7rSgP8xKquIc2lLk8zV9qY+7+AbFT/Sw1OsMBufGx/8pmJ2PD97RpQwtX
+LTwowoPzLDbCCTHT0YPD9sCq05yTwhuCeOc42F5qqsgf8neQ9VwwuEawjn+M5Wg9
+8HKpsEvhctbFYXkfmTXExDYJIz7zWIFlnoctRmUoKPuALQ0xa7A7/9KGDEvTU5He
+xAc0RUf8poDJ1c0ohu0zv4yNcQ4ol8zNX0Dl97/rJR5c4ouRaQ3e1DZpo0U496bD
+nn5figHu6VugTt74jgt6KAQzf4Ee6iJUhOi7dZclrQKBgQDFzV5wKTPiKYJm6CMX
+bNTaMZf6SMOPnNHxLhezrDpXIgmd6prpUDwrpAuh7GTYkZhFa+a+kOPB29p8Rru0
+qMJ32+WrR3N2JfwdS9vGLDsDqKBN5ZnEETdj4CA5cd3EjM+MT++S5YtWlCLlOvj0
+3yoTRxOW+M/c8OS0/P8PW9fCkwKBgQDDUTHHu7fRQJ1cq3nYNsmBTkD4NeA8/Wjj
+vpArGjAjTRVJBUPU19hUjS1ydGc0pJ/k/F+mulSOcAllVlcX2/dHejN35ITyHlZc
+uaRXjhYX6TBPZ1Hp6ohU6DSD127f+UXG++Cm8sIUmFkpd4Eqi4qF/Ma2P7/rIvrg
+tRvcJ3KQ/QKBgCtmwI4DvGqniQFjdi+xpZKqxxoX1TExy68L2g+GftaXlVydGZiQ
+DmPU/uhsokQSzkKNRngR+qeSwgH60zz0upbqHR7T8rW95+/VsUdudRR8b5AoDPFE
+hc7YYrm4Dl0OOIwlDgBBda1tm6qIog+419abBeVeet2TzdsYmC6ajGEZAoGAN/13
+mr0qRZcTRTR22k9iVmn7X+v52yH9xoOjSmfYctYvCt6ygjpZ7msGIzBRQZsLpxXd
+yarSgH6HgwBMOS+6ZEgYpv7gSZP+x9gDz4GQvcwAKFMC/V5ZNJXYMA863oPTx+X+
+kX03u7WsoaF7apnT3PMId8gwmRRO/MmOMf8w7XUCgYEAvbtH8nl/qX6DOBLw0r1M
+V8TrSr+Cg/wgoaA8yv8IXpR8pocZwhi3IXpsvA1chl1q+aBYf6Jyigke6rsg17h+
+NbjLmS3Vkecc6OdyHJMUhJLyp45Su1CzeFAghA6Nz7bmFNzJEXNokioTE17q586F
+b7nhEwcIOhDn4GJmvBUg46U=
+-----END PRIVATE KEY-----`;
 
 export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
@@ -33,6 +63,7 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
 }
 
 let chavePublicaEmCache: CryptoKey | null = null;
+let chavePrivadaEmCache: CryptoKey | null = null;
 
 /**
  * Obtém ou importa a CryptoKey pública do Gabinete da Direção para RSA-OAEP
@@ -46,42 +77,56 @@ export async function obterChavePublicaGabinete(): Promise<CryptoKey> {
     throw new Error('Web Crypto API não disponível neste ambiente.');
   }
 
-  try {
-    // Normaliza PEM removendo cabeçalhos e quebras de linha
-    const pemLimpo = GABINETE_PUBLIC_KEY_PEM
-      .replace(/-----BEGIN PUBLIC KEY-----/, '')
-      .replace(/-----END PUBLIC KEY-----/, '')
-      .replace(/\s+/g, '');
+  const pemLimpo = GABINETE_PUBLIC_KEY_PEM
+    .replace(/-----BEGIN PUBLIC KEY-----/, '')
+    .replace(/-----END PUBLIC KEY-----/, '')
+    .replace(/\s+/g, '');
 
-    const binaryDer = base64ToArrayBuffer(pemLimpo);
+  const binaryDer = base64ToArrayBuffer(pemLimpo);
 
-    chavePublicaEmCache = await window.crypto.subtle.importKey(
-      'spki',
-      binaryDer,
-      {
-        name: 'RSA-OAEP',
-        hash: 'SHA-256',
-      },
-      true,
-      ['wrapKey', 'encrypt']
-    );
+  chavePublicaEmCache = await window.crypto.subtle.importKey(
+    'spki',
+    binaryDer,
+    {
+      name: 'RSA-OAEP',
+      hash: 'SHA-256',
+    },
+    true,
+    ['wrapKey', 'encrypt']
+  );
 
-    return chavePublicaEmCache;
-  } catch (err) {
-    // Caso a importação do PEM estático falhe em algum navegador com restrição de chave,
-    // gera um par RSA-OAEP efêmero para manter a operação segura e ininterrupta
-    const keyPair = await window.crypto.subtle.generateKey(
-      {
-        name: 'RSA-OAEP',
-        modulusLength: 2048,
-        publicExponent: new Uint8Array([1, 0, 1]),
-        hash: 'SHA-256',
-      },
-      true,
-      ['wrapKey', 'unwrapKey', 'encrypt', 'decrypt']
-    );
+  return chavePublicaEmCache;
+}
 
-    chavePublicaEmCache = keyPair.publicKey;
-    return chavePublicaEmCache;
+/**
+ * Obtém ou importa a CryptoKey privada do Gabinete da Direção para decodificação na RAM
+ */
+export async function obterChavePrivadaGabinete(): Promise<CryptoKey> {
+  if (chavePrivadaEmCache) {
+    return chavePrivadaEmCache;
   }
+
+  if (typeof window === 'undefined' || !window.crypto || !window.crypto.subtle) {
+    throw new Error('Web Crypto API não disponível neste ambiente.');
+  }
+
+  const pemLimpo = GABINETE_PRIVATE_KEY_PEM
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+
+  const binaryDer = base64ToArrayBuffer(pemLimpo);
+
+  chavePrivadaEmCache = await window.crypto.subtle.importKey(
+    'pkcs8',
+    binaryDer,
+    {
+      name: 'RSA-OAEP',
+      hash: 'SHA-256',
+    },
+    true,
+    ['unwrapKey', 'decrypt']
+  );
+
+  return chavePrivadaEmCache;
 }

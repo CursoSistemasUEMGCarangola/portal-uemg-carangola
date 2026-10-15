@@ -145,21 +145,33 @@ export default function GabineteDespachoModal({
                 Decodificando envelope AES-GCM com chave RSA local...
               </div>
             ) : textoDescriptografado ? (
-              <div className="space-y-1.5 text-xs text-slate-800">
+              <div className="space-y-2 text-xs text-slate-800">
                 {textoDescriptografado.assunto && (
-                  <p>
-                    <strong className="text-slate-900">Assunto:</strong> {textoDescriptografado.assunto}
-                  </p>
-                )}
-                {textoDescriptografado.mensagem && (
-                  <div className="bg-white p-3 rounded-lg border border-slate-200 font-sans text-slate-700 leading-relaxed max-h-36 overflow-y-auto">
-                    {textoDescriptografado.mensagem}
+                  <div className="p-2.5 bg-blue-50/60 rounded-lg border border-blue-100">
+                    <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">Assunto da Demanda</span>
+                    <span className="text-sm font-bold text-slate-900 mt-0.5 block">{textoDescriptografado.assunto}</span>
                   </div>
                 )}
-                {textoDescriptografado.autorNome && !protocolo.isAnonimo && (
-                  <p className="text-[11px] text-slate-500">
-                    Autor: <strong>{textoDescriptografado.autorNome}</strong>
-                  </p>
+                {textoDescriptografado.mensagem && (
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Teor da Manifestação</span>
+                    <div className="bg-white p-3.5 rounded-lg border border-slate-200 font-sans text-slate-800 text-xs sm:text-sm leading-relaxed max-h-48 overflow-y-auto whitespace-pre-wrap shadow-2xs">
+                      {textoDescriptografado.mensagem}
+                    </div>
+                  </div>
+                )}
+                {!protocolo.isAnonimo && (textoDescriptografado.autorNome || textoDescriptografado.autorMatricula || textoDescriptografado.autorEmail) && (
+                  <div className="pt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-600 bg-white p-2 rounded-lg border border-slate-200">
+                    {textoDescriptografado.autorNome && (
+                      <span><strong>Autor:</strong> {textoDescriptografado.autorNome}</span>
+                    )}
+                    {textoDescriptografado.autorMatricula && (
+                      <span><strong>Matrícula:</strong> {textoDescriptografado.autorMatricula}</span>
+                    )}
+                    {textoDescriptografado.autorEmail && (
+                      <span><strong>E-mail:</strong> {textoDescriptografado.autorEmail}</span>
+                    )}
+                  </div>
                 )}
               </div>
             ) : (

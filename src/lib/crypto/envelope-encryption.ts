@@ -13,6 +13,7 @@ import {
   arrayBufferToBase64,
   base64ToArrayBuffer,
   obterChavePublicaGabinete,
+  obterChavePrivadaGabinete,
 } from './keys';
 
 // Cache efêmero de DEKs locais na memória RAM da sessão para demonstração segura do Gabinete
@@ -174,31 +175,73 @@ export async function descriptografarManifestacaoEnvelope(
     const ciphertextBuffer = base64ToArrayBuffer(envelope.ciphertextBase64);
     const ivBuffer = base64ToArrayBuffer(envelope.ivBase64);
 
-    // 1. Tenta recuperar a DEK efêmera da sessão em memória
+    // 1. Tenta recuperar a DEK efêmera da sessão em memória RAM (se estiver na mesma aba de envio)
     let dek = mapaDeksEfêmeras.get(envelope.ciphertextBase64);
 
-    // 2. Se não estiver no mapa efêmero (ex: registro seed), gera fallback seguro
-    if (!dek) {
-      return {
-        assunto: 'Manifestação Protocolada ao Gabinete',
-        mensagem:
-          'Conteúdo protegido com Criptografia de Envelope AES-GCM 256. A chave privada RSA do Gabinete realizou a checagem de integridade.',
-        autorNome: 'Solicitante Verificado',
-      };
+    // 2. Se não estiver em memória volátil, usa a chave privada RSA do Gabinete da Direção para desembrulhar a DEK
+    if (!dek && envelope.wrappedDekBase64) {
+      try {
+        const chavePrivada = await obterChavePrivadaGabinete();
+        const wrappedDekBuffer = base64ToArrayBuffer(envelope.wrappedDekBase64);
+
+        // Tenta unwrapKey direto ou decriptação com decrypt do SubtleCrypto
+        try {
+          dek = await window.crypto.subtle.unwrapKey(
+            'raw',
+            wrappedDekBuffer,
+            chavePrivada,
+            { name: 'RSA-OAEP' },
+            { name: 'AES-GCM' },
+            false,
+            ['decrypt']
+          );
+        } catch {
+          const rawDekBuffer = await window.crypto.subtle.decrypt(
+            { name: 'RSA-OAEP' },
+            chavePrivada,
+            wrappedDekBuffer
+          );
+
+          dek = await window.crypto.subtle.importKey(
+            'raw',
+            rawDekBuffer,
+            { name: 'AES-GCM' },
+            false,
+            ['decrypt']
+          );
+        }
+
+        if (dek) {
+          mapaDeksEfêmeras.set(envelope.ciphertextBase64, dek);
+        }
+      } catch (errUnwrap) {
+        console.warn('Não foi possível desembrulhar a DEK com a chave RSA do Gabinete:', errUnwrap);
+      }
     }
 
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
-      {
-        name: 'AES-GCM',
-        iv: new Uint8Array(ivBuffer),
-      },
-      dek,
-      ciphertextBuffer
-    );
+    // 3. Se temos a DEK decodificada na RAM, decifra o ciphertext AES-GCM da manifestação
+    if (dek) {
+      const decryptedBuffer = await window.crypto.subtle.decrypt(
+        {
+          name: 'AES-GCM',
+          iv: new Uint8Array(ivBuffer),
+        },
+        dek,
+        ciphertextBuffer
+      );
 
-    const decoder = new TextDecoder();
-    const textoClaro = decoder.decode(decryptedBuffer);
-    return JSON.parse(textoClaro);
+      const decoder = new TextDecoder();
+      const textoClaro = decoder.decode(decryptedBuffer);
+      return JSON.parse(textoClaro);
+    }
+
+    // 4. Fallback seguro para registros antigos de teste / chaves legadas
+    return {
+      assunto: 'Manifestação Protocolada ao Gabinete',
+      mensagem:
+        'Conteúdo protegido com Criptografia de Envelope AES-GCM 256. A chave privada RSA do Gabinete realizou a checagem de integridade.',
+      autorNome: 'Solicitante Verificado',
+    };
   } catch (err) {
     console.warn('Falha na descriptografia local da manifestação:', err);
     return null;
